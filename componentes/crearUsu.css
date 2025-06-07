@@ -1,11 +1,13 @@
 :root {
-    --color-primario: #4CAF50;
-    --color-secundario: #2E7D32;
+    --color-primario: #63B8CB;
+    --color-secundario: #395886;
     --texto: #333;
-    --bg-color: #1e7413d7;
+    --bg-color: #F0F3FA;
+    --color-borde: #D5DEEF;
+    --texto-secundario: #B1C9EF;
+    --color-enlace: #8AAEE0;
     --color-error: #e74c3c;
     --color-correcto: #27ae60;
-    --color-borde: #ddd;
 }
 
 * {
@@ -16,7 +18,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, var(--bg-color), #0d6605);
+    background-color: var(--bg-color);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -87,7 +89,7 @@ body {
 .input-form:focus {
     outline: none;
     border-color: var(--color-primario);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 0 3px rgba(99, 184, 203, 0.2);
 }
 
 .password-toggle {
@@ -132,7 +134,7 @@ body {
 }
 
 .txt-olvidado {
-    color: var(--color-primario);
+    color: var(--color-enlace);
     text-decoration: none;
     font-size: 0.9rem;
 }
