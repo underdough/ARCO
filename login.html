@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iniciar Sesión - ARCO</title>
-  <link rel="stylesheet" href="componentes/login.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="componentes/login.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body>
 
   <div class="contenedor-login">
@@ -14,40 +16,42 @@
       <div>
         <h2>ARCO</h2>
         <p>Gestión de Inventarios</p>
-        <img src="componentes/img/logo2.png" alt="Logo ARCO" style="max-width: 150px;"/>
+        <img src="componentes/img/logo2.png" alt="Logo ARCO" style="max-width: 150px;" />
       </div>
     </div>
 
     <div class="panel-formulario">
       <h3>Iniciar Sesión</h3>
-    
+
       <div id="alertContainer"></div>
 
       <form id="loginForm" action="servicios/autenticador.php" method="POST">
         <input type="hidden" name="action" value="login" />
 
         <label for="numeroDocumento">Número de Documento</label>
-        <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[0-9]+" minlength="6" maxlength="12" required />
+        <input type="text" id="numeroDocumento" name="numeroDocumento" pattern="[0-9]+" minlength="6" maxlength="12"
+          required />
 
-       
+
         <label for="contrasena">Contraseña</label>
         <div class="password-container">
-          <input type="password" id="contrasena" name="contrasena" minlength="8" maxlength="20" pattern="[a-zA-Z0-9\-\_\@\!]+" required />
-          <i class="fa-solid fa-eye toggle-icon" onclick="togglePassword('contrasena', this)"></i> <!-- Este es icono del ojo que se toma de la libreria -->
+          <input type="password" id="contrasena" name="contrasena" minlength="8" maxlength="20"
+            pattern="[a-zA-Z0-9\-\_\@\!]+" required />
+          <i class="fa-solid fa-eye toggle-icon" onclick="togglePassword('contrasena', this)"></i>
+          <!-- Este es icono del ojo que se toma de la libreria -->
         </div>
 
         <div class="checkbox">
-          <input type="checkbox" id="recuerdame" name="recuerdame" />
-          <label for="recuerdame">Recordarme</label>
+          <input type="checkbox" id="recordarme" name="recordarme" />
+          <label for="recordarme">Recordarme</label>
         </div>
 
-        
+
         <button type="submit" class="btn">Ingresar</button>
 
 
         <div class="enlaces">
           <a href="vistas/recuperar-contra.html">¿Olvidaste tu contraseña?</a>
-          <a href="crearUsu.html">¿No tienes cuenta? Regístrate</a>
         </div>
       </form>
     </div>
@@ -78,4 +82,5 @@
     });
   </script>
 </body>
+
 </html>

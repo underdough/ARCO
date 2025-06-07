@@ -143,6 +143,12 @@ input:focus {
   font-size: 0.95rem;
 }
 
+.alert.info {
+  background-color: #e3f2fd;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
 .alert.success {
   background-color: var(--success);
   color: #155724;
