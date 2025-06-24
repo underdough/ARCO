@@ -1,5 +1,5 @@
 :root {
-    --color-primario: #3D5DEF; /* Azul principal */
+    --color-primario: #395886; /* Azul principal */
     --color-secundario: #395886; /* Azul oscuro */
     --texto: #333;
     --bg-color: #638ECB; /* Azul intermedio para fondo */
@@ -18,7 +18,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, var(--bg-color) , #0d6605);
+    background: var(--light-bg);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -183,13 +183,6 @@ body {
     margin-bottom: 1rem;
     position: relative;
 }
-
-.alerta-info {
-    background-color: #e3f2fd;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
-}
-
 .alert-danger {
     background-color: #f8d7da;
     color: #721c24;
