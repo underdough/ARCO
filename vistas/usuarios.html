@@ -57,9 +57,9 @@
     <div class="main-content" id="mainContent">
         <div class="header">
             <h2>Gestión de Usuarios</h2>
-            <div class="user-info">
+            <div class="user-info" onclick="showUserMenu()">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
-                <span>Bienvenido, <strong>Administrador</strong></span>
+                <span>Bienvenido, <strong id="userName">Usuario</strong></span>
             </div>
         </div>
 
@@ -90,6 +90,9 @@
                 sidebar.classList.remove('collapsed');
             }
         });
+         function showUserMenu() {
+            window.location.href = 'menuUsu.html';
+        };
     </script>
 </body>
 </html>

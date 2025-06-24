@@ -24,7 +24,7 @@
         <div class="sidebar-menu">
             <a href="dashboard.html" class="menu-item active">
                 <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Dashboard</span>
+                <span class="menu-text">Inicio</span>
             </a>
             <a href="productos.html" class="menu-item">
                 <i class="fas fa-box"></i>
@@ -59,7 +59,7 @@
     
     <div class="main-content" id="mainContent">
         <div class="header">
-            <h2>Dashboard</h2>
+            <h2>Panel de control</h2>
             <div class="user-info" onclick="showUserMenu()">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
                 <span>Bienvenido, <strong id="userName">Usuario</strong></span>
@@ -274,7 +274,7 @@
         }
         
         function showUserMenu() {
-            alert('Menú de usuario - Funcionalidad por implementar');
+            window.location.href = 'menuUsu.html';
         }
         
         function showAlerts() {
