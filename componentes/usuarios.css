@@ -181,26 +181,17 @@
     box-shadow: var(--shadow-lg);
 }
 
-/* Form control improvements */
 .form-control {
-    padding: 10px 15px;
-    border: 2px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 16px;
-    transition: all var(--transition-speed) var(--transition-timing);
-    background-color: white;
     width: 40%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
 .form-control:hover {
     border-color: var(--tertiary-color);
-}
-
-.form-control:focus {
-    transform: scale(1.02);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 15px rgba(57, 88, 134, 0.3);
-    outline: none;
 }
 
 .form-control::placeholder {
