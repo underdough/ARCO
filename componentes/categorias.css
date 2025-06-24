@@ -130,7 +130,7 @@ body {
     display: flex;
     align-items: center;
     background: #f5f5f5;
-    border-radius: 4px;
+    border-radius: 25px; /* Increased border radius for more rounded corners */
     padding: 8px 15px;
     width: 300px;
     transition: opacity 0.3s ease;
@@ -147,6 +147,7 @@ body {
     flex: 1;
     outline: none;
     transition: background-color 0.3s ease;
+    border-radius: 25px; /* Matching border radius for input */
 }
 
 .search-bar input:focus {

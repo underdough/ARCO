@@ -74,8 +74,8 @@
                         <i class="fas fa-box"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalProducts">1,250</div>
-                <div class="card-footer">+12% desde el mes pasado</div>
+                <div class="card-value" id="totalProducts"></div>
+                <div class="card-footer"></div>
             </div>
             
             <div class="card" onclick="navigateTo('categorias.html')">
@@ -85,8 +85,8 @@
                         <i class="fas fa-tags"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalCategories">32</div>
-                <div class="card-footer">+3 nuevas categorías</div>
+                <div class="card-value" id="totalCategories"></div>
+                <div class="card-footer"></div>
             </div>
             
             <div class="card" onclick="navigateTo('movimientos.html')">
@@ -96,8 +96,8 @@
                         <i class="fas fa-exchange-alt"></i>
                     </div>
                 </div>
-                <div class="card-value" id="todayMovements">48</div>
-                <div class="card-footer">15 entradas, 33 salidas</div>
+                <div class="card-value" id="todayMovements"></div>
+                <div class="card-footer"></div>
             </div>
             
             <div class="card" onclick="showAlerts()">
@@ -107,8 +107,8 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalAlerts">7</div>
-                <div class="card-footer">Stock bajo en 7 productos</div>
+                <div class="card-value" id="totalAlerts"></div>
+                <div class="card-footer"></div>
             </div>
         </div>
         
@@ -124,8 +124,8 @@
                         <i class="fas fa-plus"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Se agregaron 50 unidades de Producto A</div>
-                        <div class="activity-time">Hace 2 horas - por Juan Pérez</div>
+                        <div class="activity-title">Se agrego productos</div>
+                        <div class="activity-time">tiempo en que se agrego</div>
                     </div>
                 </li>
                 
@@ -134,8 +134,8 @@
                         <i class="fas fa-minus"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Se retiraron 25 unidades de Producto B</div>
-                        <div class="activity-time">Hace 3 horas - por María López</div>
+                        <div class="activity-title">Se retiro de productos</div>
+                        <div class="activity-time">tiempo en que se retiro</div>
                     </div>
                 </li>
                 
@@ -144,8 +144,8 @@
                         <i class="fas fa-edit"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Se actualizó la información del Producto C</div>
-                        <div class="activity-time">Hace 5 horas - por Carlos Rodríguez</div>
+                        <div class="activity-title">Se actualizó de productos</div>
+                        <div class="activity-time">tiempo</div>
                     </div>
                 </li>
                 
@@ -154,8 +154,8 @@
                         <i class="fas fa-user-plus"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Nuevo usuario registrado: Ana Martínez</div>
-                        <div class="activity-time">Hace 1 día - por Sistema</div>
+                        <div class="activity-title">Nuevo usuario registrado</div>
+                        <div class="activity-time">tiempo en que se creo</div>
                     </div>
                 </li>
                 
@@ -164,8 +164,8 @@
                         <i class="fas fa-tag"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Nueva categoría creada: Electrónicos</div>
-                        <div class="activity-time">Hace 2 días - por Admin</div>
+                        <div class="activity-title">Nueva categoría creada</div>
+                        <div class="activity-time">tienpo en que se creo</div>
                     </div>
                 </li>
             </ul>
@@ -239,10 +239,10 @@
         
         function animateCounters() {
             // Animar contadores
-            animateCounter('totalProducts', 1250);
-            animateCounter('totalCategories', 32);
-            animateCounter('todayMovements', 48);
-            animateCounter('totalAlerts', 7);
+            animateCounter('totalProducts', );
+            animateCounter('totalCategories', );
+            animateCounter('todayMovements', );
+            animateCounter('totalAlerts', );
         }
         
         function animateCounter(elementId, targetValue) {
