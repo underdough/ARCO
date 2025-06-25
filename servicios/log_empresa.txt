@@ -1,0 +1,8 @@
+Insertando empresa con: pipeeeeee, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
+Insertando empresa con: ARCO Inventarios S.A., B12345678, Calle Principal 123, Madrid, +34 912 345 678, contacto@arcoinventarios.com
+Insertando empresa con: ARCO Inventarios S.A., iweiweiwie, calle 11, Cali, +34 912 345 678, contacto@arcoinventarios.com
+Insertando empresa con: pipeeeeee, iewe8q8e, Calle 11, Colombia, 4374274274, pipe@gmail.com
+Procesando empresa: Posada, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
+Procesando empresa: Posada, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
+Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
+Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Cali, 4374274274, contacto@arcoinventarios.com

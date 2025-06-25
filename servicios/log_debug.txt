@@ -1,0 +1,18 @@
+Entrando a guardar_notificaciones.php
+Error: sesión no contiene usuario_id
+Entrando a guardar_notificaciones.php
+Error: sesión no contiene usuario_id
+Entrando a guardar_notificaciones.php
+Error: sesión no contiene usuario_id
+Entrando a guardar_notificaciones.php
+Error: sesión no contiene usuario_id
+Entrando a guardar_notificaciones.php
+Error: sesión no contiene usuario_id
+Login correcto - usuario_id: 
+Login correcto - usuario_id: 4
+Entrando a guardar_notificaciones.php
+usuario_id activo en notificaciones: 4
+Entrando a guardar_notificaciones.php
+usuario_id activo en notificaciones: 4
+Entrando a guardar_notificaciones.php
+usuario_id activo en notificaciones: 1

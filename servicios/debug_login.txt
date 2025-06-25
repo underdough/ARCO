@@ -1,0 +1,12 @@
+Intentando login con: 100000001 / admin1234
+Login fallido para documento: 100000001
+Intentando login con: 100000001 / c93ccd78b2076528346216b3b2f701e6
+Login correcto - usuario_id: 1
+Intentando login con: 100000001 / c93ccd78b2076528346216b3b2f701e6
+Login correcto - usuario_id: 1
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
