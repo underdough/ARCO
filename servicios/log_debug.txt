@@ -16,3 +16,5 @@ Entrando a guardar_notificaciones.php
 usuario_id activo en notificaciones: 4
 Entrando a guardar_notificaciones.php
 usuario_id activo en notificaciones: 1
+Entrando a guardar_notificaciones.php
+usuario_id activo en notificaciones: 3
