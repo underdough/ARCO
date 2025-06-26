@@ -46,7 +46,7 @@ if ($result && $result->num_rows > 0) {
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="dashboard.html" class="menu-item">
+            <a href="dashboard.php" class="menu-item">
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Dashboard</span>
             </a>
@@ -70,7 +70,7 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
-            <a href="configuracion.html" class="menu-item active">
+            <a href="configuracion.php" class="menu-item active">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>

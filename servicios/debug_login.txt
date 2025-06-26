@@ -10,3 +10,19 @@ Intentando login con: 1112150198 / 123456789
 Login correcto - usuario_id: 4
 Intentando login con: 1112150198 / 123456789
 Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 1112150198 / 123456789
+Login correcto - usuario_id: 4
+Intentando login con: 100000001 / c93ccd78b20765283462
+Login fallido para documento: 100000001
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3
