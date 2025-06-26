@@ -52,7 +52,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
-            <a href="reportes.html" class="menu-item">
+            <a href="reportes.php" class="menu-item">
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
