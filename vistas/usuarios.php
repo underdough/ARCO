@@ -58,7 +58,7 @@ try {
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="../vistas/dashboard.html" class="menu-item">
+            <a href="../vistas/dashboard.php" class="menu-item">
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Dashboard</span>
             </a>
@@ -82,7 +82,7 @@ try {
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
-            <a href="../vistas/configuracion.html" class="menu-item">
+            <a href="../vistas/configuracion.php" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>

@@ -33,6 +33,15 @@ function obtenerDatosEnTiempoReal($conexion, $tipo = 'movimientos') {
                      WHERE m.stock <= 10 
                      ORDER BY m.stock ASC";
             break;
+        case 'categorias':
+            $query = "SELECT c.id_categorias, c.nombre_cat, c.descripcion, 
+                     COUNT(m.id_material) as total_productos,
+                     COALESCE(SUM(m.stock), 0) as stock_total
+                     FROM categorias c 
+                     LEFT JOIN materiales m ON c.id_categorias = m.id_categorias 
+                     GROUP BY c.id_categorias, c.nombre_cat, c.descripcion
+                     ORDER BY c.nombre_cat";
+            break;
         default:
             return [];
     }
@@ -313,27 +322,35 @@ if (isset($_POST['generar_reporte'])) {
         <div class="reports-grid" id="reportesGuardados">
             <?php
             // Obtener reportes guardados de la base de datos
-            $queryReportes = "SELECT * FROM reportes_generados ORDER BY fecha_generado DESC LIMIT 8";
+            $queryReportes = "SELECT id, titulo, descripcion, tipo_reporte, formato, fecha_inicio, fecha_fin, fecha_generado, archivo_url FROM reportes_generados ORDER BY fecha_generado DESC LIMIT 8";
             $resultReportes = $conexion->query($queryReportes);
             
             if ($resultReportes && $resultReportes->num_rows > 0) {
                 while ($reporte = $resultReportes->fetch_assoc()) {
-                    $fechaGenerado = date('d/m/Y', strtotime($reporte['fecha_generado']));
+                    $fechaGenerado = date('d/m/Y H:i', strtotime($reporte['fecha_generado']));
+                    $fechaRango = '';
+                    if ($reporte['fecha_inicio'] && $reporte['fecha_fin']) {
+                        $fechaRango = ' (' . date('d/m/Y', strtotime($reporte['fecha_inicio'])) . ' - ' . date('d/m/Y', strtotime($reporte['fecha_fin'])) . ')';
+                    }
                     echo '<div class="report-card">';
                     echo '<div class="report-header">';
                     echo '<h4 class="report-title">' . htmlspecialchars($reporte['titulo']) . '</h4>';
                     echo '</div>';
                     echo '<div class="report-body">';
                     echo '<p class="report-description">' . htmlspecialchars($reporte['descripcion'] ?: 'Reporte generado automáticamente') . '</p>';
-                    echo '<span class="report-type">Tipo: ' . ucfirst($reporte['tipo_reporte']) . '</span>';
+                    echo '<span class="report-type">Tipo: ' . ucfirst(str_replace('_', ' ', $reporte['tipo_reporte'])) . '</span>';
+                    echo '<span class="report-format">Formato: ' . strtoupper($reporte['formato']) . '</span>';
+                    if ($fechaRango) {
+                        echo '<span class="report-range">Período: ' . $fechaRango . '</span>';
+                    }
                     echo '</div>';
                     echo '<div class="report-footer">';
                     echo '<span class="report-date">Generado: ' . $fechaGenerado . '</span>';
                     echo '<div class="report-actions">';
-                    echo '<button class="btn btn-secondary" onclick="verReporte(' . $reporte['id'] . ')">';
+                    echo '<button class="btn btn-secondary" onclick="verReporte(' . $reporte['id'] . ')" title="Ver reporte">';
                     echo '<i class="fas fa-eye"></i>';
                     echo '</button>';
-                    echo '<button class="btn btn-secondary" onclick="descargarReporte(' . $reporte['id'] . ')">';
+                    echo '<button class="btn btn-secondary" onclick="descargarReporte(' . $reporte['id'] . ')" title="Descargar reporte">';
                     echo '<i class="fas fa-download"></i>';
                     echo '</button>';
                     echo '</div>';
@@ -342,7 +359,7 @@ if (isset($_POST['generar_reporte'])) {
                 }
             } else {
                 echo '<div class="no-reports">';
-                echo '<p>No hay reportes guardados. Genera tu primer reporte usando el botón "Generar Nuevo Reporte".</p>';
+                echo '<p>No hay reportes generados. Genera tu primer reporte usando el botón "Generar Nuevo Reporte".</p>';
                 echo '</div>';
             }
             ?>
@@ -447,6 +464,14 @@ if (isset($_POST['generar_reporte'])) {
                                 html += '</tbody></table></div>';
                                 break;
                                 
+                            case 'categorias':
+                                html = '<div class="data-table"><table class="table"><thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Total Productos</th><th>Stock Total</th></tr></thead><tbody>';
+                                data.forEach(item => {
+                                    html += `<tr><td>${item.id_categorias}</td><td>${item.nombre_cat}</td><td>${item.descripcion || 'Sin descripción'}</td><td>${item.total_productos}</td><td>${item.stock_total || 0}</td></tr>`;
+                                });
+                                html += '</tbody></table></div>';
+                                break;
+                                
                             case 'stock_bajo':
                                 html = '<div class="data-table"><table class="table"><thead><tr><th>Material</th><th>Stock Actual</th><th>Categoría</th><th>Estado</th></tr></thead><tbody>';
                                 data.forEach(item => {
@@ -468,13 +493,13 @@ if (isset($_POST['generar_reporte'])) {
             
             // Cargar datos iniciales
             cargarDatosEnTiempoReal('movimientos', 'movimientosContainer', 'lastUpdateMovimientos');
-            cargarDatosEnTiempoReal('productos_categoria', 'categoriasContainer', 'lastUpdateCategorias');
+            cargarDatosEnTiempoReal('categorias', 'categoriasContainer', 'lastUpdateCategorias');
             cargarDatosEnTiempoReal('stock_bajo', 'stockBajoContainer', 'lastUpdateStock');
             
             // Actualización automática cada 30 segundos
             setInterval(() => {
                 cargarDatosEnTiempoReal('movimientos', 'movimientosContainer', 'lastUpdateMovimientos');
-                cargarDatosEnTiempoReal('productos_categoria', 'categoriasContainer', 'lastUpdateCategorias');
+                cargarDatosEnTiempoReal('categorias', 'categoriasContainer', 'lastUpdateCategorias');
                 cargarDatosEnTiempoReal('stock_bajo', 'stockBajoContainer', 'lastUpdateStock');
             }, 30000);
             
@@ -484,7 +509,7 @@ if (isset($_POST['generar_reporte'])) {
             });
             
             document.getElementById('refreshCategorias').addEventListener('click', () => {
-                cargarDatosEnTiempoReal('productos_categoria', 'categoriasContainer', 'lastUpdateCategorias');
+                cargarDatosEnTiempoReal('categorias', 'categoriasContainer', 'lastUpdateCategorias');
             });
             
             document.getElementById('refreshStockBajo').addEventListener('click', () => {
@@ -526,13 +551,15 @@ if (isset($_POST['generar_reporte'])) {
             });
         });
         
-        // Funciones globales para los botones de reportes guardados
+        // Funciones para manejar reportes
         function verReporte(id) {
-            alert(`Funcionalidad de visualización del reporte ${id} - En desarrollo`);
+            // Abrir reporte en nueva ventana
+            window.open(`../servicios/ver_reporte.php?id=${id}`, '_blank');
         }
         
         function descargarReporte(id) {
-            alert(`Funcionalidad de descarga del reporte ${id} - En desarrollo`);
+            // Descargar reporte
+            window.location.href = `../servicios/descargar_reporte.php?id=${id}`;
         }
     </script>
 </body>

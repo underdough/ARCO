@@ -6,4 +6,8 @@ Procesando empresa: Posada, Y7743743, calle 11, Colombia, 4374274274, contacto@a
 Procesando empresa: Posada, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
 Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Colombia, 4374274274, contacto@arcoinventarios.com
 Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Cali, 4374274274, contacto@arcoinventarios.com
+<<<<<<< HEAD
 Procesando empresa: siii, 312321, Carrera 14, Barcelona, 3166678284, k3vinch3nl1@gmail.com
+=======
+Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Cali, 22222222222222, contacto@arcoinventarios.com
+>>>>>>> ceed78d3e422654a7029ea57329f5075910c334e
