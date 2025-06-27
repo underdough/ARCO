@@ -33,8 +33,8 @@ if ($result->num_rows > 0) {
     $hashBD = $usuario['contrasena'];
 
 if (
-    password_verify($contrasena, $hashBD) || // para nuevos usuarios
-    $contrasena === $hashBD                  // para antiguos en texto plano
+    password_verify($contrasena, $hashBD) || 
+    $contrasena === $hashBD                  
 ) {
     $_SESSION['usuario_id'] = $usuario['id_usuarios'];
     $_SESSION['nombre'] = $usuario['nombre'];

@@ -40,12 +40,12 @@ if ($stmt->num_rows > 0) {
 }
 $stmt->close();
 
-// Separar nombre y apellido si vienen juntos
+// sirve para separar nombre y apellido si vienen juntos
 $partes = explode(" ", $nombreCompleto, 2);
 $nombre = $partes[0];
 $apellido = isset($partes[1]) ? $partes[1] : "";
 
-// Hash de la contraseña
+
 $hash = password_hash($contrasena, PASSWORD_BCRYPT);
 
 // Insertar nuevo usuario
