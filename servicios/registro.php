@@ -75,7 +75,7 @@ $stmt->bind_param(
 );
 
 if ($stmt->execute()) {
-    header('Location: ../vistas/usuarios.html?success=' . urlencode('Usuario registrado con éxito.'));
+    header('Location: ../vistas/Usuario.php?success=' . urlencode('Usuario registrado con éxito.'));
     exit;
 } else {
     die("Error al registrar usuario: " . $stmt->error);
