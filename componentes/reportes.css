@@ -78,6 +78,7 @@ i>a.menu-item>.fas.fa-sign-out-alt {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-direction: row-reverse;
     margin-bottom: 30px;
     background: white;
     padding: 15px 20px;
@@ -170,7 +171,11 @@ i>a.menu-item>.fas.fa-sign-out-alt {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+    max-width: 1200px;
+    width: 95%;
+    overflow: hidden;
+    position: relative;
 }
 
 .chart-header {
@@ -195,7 +200,6 @@ i>a.menu-item>.fas.fa-sign-out-alt {
 .chart-body {
     height: 300px;
     display: flex;
-    align-items: center;
     justify-content: center;
     border: 1px dashed #ddd;
     border-radius: 4px;
@@ -372,35 +376,63 @@ i>a.menu-item>.fas.fa-sign-out-alt {
 }
 
 .data-table {
-    max-height: 400px;
+    max-height: 600px;
     overflow-y: auto;
+    overflow-x: auto;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     background: white;
+    margin: 20px auto;
+    min-height: 400px;
+    width: 90%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    text-align: center;
+}
+
+table{
+    align-items: center;
+    width: 100%;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin: 0;
+    margin: 0 auto;
+    font-size: 14px;
+    table-layout: auto;
+    max-width: 100%;
+    display: flex;
 }
 
 .table th {
     background: #f8f9fa;
-    padding: 12px;
-    text-align: left;
+    padding: 18px 12px;
+    text-align: center;
     font-weight: 600;
     color: #333;
     border-bottom: 2px solid #dee2e6;
     position: sticky;
     top: 0;
     z-index: 10;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .table td {
-    padding: 10px 12px;
+    padding: 16px 12px;
     border-bottom: 1px solid #dee2e6;
     color: #555;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .table tr:hover {
@@ -413,6 +445,31 @@ i>a.menu-item>.fas.fa-sign-out-alt {
     font-size: 0.8em;
     font-weight: bold;
     text-transform: uppercase;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
 }
 
 .badge.entrada {
@@ -473,11 +530,59 @@ i>a.menu-item>.fas.fa-sign-out-alt {
     margin-right: 10px;
 }
 
+/* Estilos mejorados para tablas más grandes */
+.chart-container {
+    margin: 0 auto 30px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 95%;
+    max-width: 1200px;
+    position: relative;
+}
+
+.chart-header {
+    padding: 20px 25px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+}
+
+.chart-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.data-table {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    width: 100%;
+    max-width: 100%;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table th:first-child,
+.table td:first-child {
+    padding-left: 15px;
+}
+
+.table th:last-child,
+.table td:last-child {
+    padding-right: 15px;
+}
+
 /* Responsive para tiempo real */
 @media (max-width: 768px) {
     .chart-header {
         flex-direction: column;
         align-items: flex-start;
+        padding: 20px;
     }
     
     .chart-filters {
@@ -487,11 +592,22 @@ i>a.menu-item>.fas.fa-sign-out-alt {
     
     .data-table {
         font-size: 0.9em;
+        max-height: 600px;
     }
     
     .table th,
     .table td {
-        padding: 8px;
+        padding: 12px 15px;
+    }
+    
+    .table th:first-child,
+    .table td:first-child {
+        padding-left: 15px;
+    }
+    
+    .table th:last-child,
+    .table td:last-child {
+        padding-right: 15px;
     }
     
     .update-indicator {

@@ -37,3 +37,13 @@ Login fallido para documento: 100000001
 Intentando login con: 1234567890 / 0987654321
 Login correcto - usuario_id: 3
 >>>>>>> ceed78d3e422654a7029ea57329f5075910c334e
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3
+Intentando login con: 1234567890 / 0987654321
+Login correcto - usuario_id: 3

@@ -33,7 +33,12 @@ CREATE TABLE `categorias` (
   `subcategoria` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-INSERT INTO `categorias`(`id_categorias`, `nombre_cat`, `subcategoria`) VALUES ('1','Electronicos','Telefono');
+INSERT INTO `categorias`(`id_categorias`, `nombre_cat`, `subcategoria`) VALUES 
+('1','Electronicos','Telefono'),
+('2','Oficina','Papeleria'),
+('3','Herramientas','Manuales'),
+('4','Limpieza','Detergentes'),
+('5','Seguridad','EPP');
 
 
 -- --------------------------------------------------------
@@ -141,6 +146,22 @@ CREATE TABLE `materiales` (
   `conf_recibido` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `materiales`
+--
+
+INSERT INTO `materiales` (`id_material`, `id_categorias`, `nombre_material`, `stock`, `disponibilidad`, `minimo_alarma`, `fk_reporte`, `fk_ubicacion`, `conf_recibido`) VALUES
+(1, 1, 'Smartphone Samsung Galaxy', 2, 1, 5, NULL, NULL, 'recibido'),
+(2, 1, 'Laptop Dell Inspiron', 15, 1, 10, NULL, NULL, 'recibido'),
+(3, 2, 'Papel Bond A4', 8, 1, 20, NULL, NULL, 'recibido'),
+(4, 2, 'Marcadores Permanentes', 25, 1, 15, NULL, NULL, 'recibido'),
+(5, 3, 'Martillo de Acero', 12, 1, 8, NULL, NULL, 'recibido'),
+(6, 3, 'Destornillador Phillips', 3, 1, 10, NULL, NULL, 'recibido'),
+(7, 4, 'Detergente Líquido', 18, 1, 12, NULL, NULL, 'recibido'),
+(8, 4, 'Escoba Industrial', 4, 1, 8, NULL, NULL, 'recibido'),
+(9, 5, 'Casco de Seguridad', 22, 1, 15, NULL, NULL, 'recibido'),
+(10, 5, 'Guantes de Protección', 6, 1, 20, NULL, NULL, 'recibido');
+
 -- --------------------------------------------------------
 
 --
@@ -163,11 +184,16 @@ CREATE TABLE `movimientos` (
 --
 
 INSERT INTO `movimientos` (`id`, `tipo`, `fecha`, `producto_id`, `cantidad`, `usuario_id`, `notas`, `creado_en`) VALUES
-(1, 'salida', '2025-06-26', 3, 23, 2, 'dsasfasfaf', '2025-06-26 00:24:24'),
-(2, 'salida', '2025-06-26', 3, 23, 4, 'qeewqeqwe', '2025-06-26 00:31:37'),
-(3, 'ajuste', '2025-06-30', 5, 12, 4, 'qqqq', '2025-06-26 00:32:13'),
-(4, 'salida', '2025-06-26', 2, 12, 4, 'asdasdasd', '2025-06-26 00:40:18'),
-(5, 'salida', '2025-06-30', 3, 23, 4, 'sdsdsd', '2025-06-26 00:43:46');
+(1, 'entrada', '2025-06-26', 1, 10, 2, 'Compra de smartphones Samsung', '2025-06-26 00:24:24'),
+(2, 'salida', '2025-06-26', 1, 8, 4, 'Venta de smartphones a cliente corporativo', '2025-06-26 00:31:37'),
+(3, 'entrada', '2025-06-26', 3, 50, 4, 'Recepción de papel bond A4', '2025-06-26 00:32:13'),
+(4, 'salida', '2025-06-26', 3, 42, 4, 'Consumo de papel en oficinas', '2025-06-26 00:40:18'),
+(5, 'ajuste', '2025-06-26', 6, 7, 4, 'Corrección de inventario destornilladores', '2025-06-26 00:43:46'),
+(6, 'entrada', '2025-06-27', 2, 5, 2, 'Compra de laptops Dell', '2025-06-27 08:15:30'),
+(7, 'transferencia', '2025-06-27', 5, 3, 4, 'Traslado de martillos a almacén B', '2025-06-27 10:22:15'),
+(8, 'salida', '2025-06-27', 8, 4, 2, 'Uso de escobas en limpieza', '2025-06-27 14:30:45'),
+(9, 'entrada', '2025-06-28', 10, 30, 4, 'Recepción de guantes de protección', '2025-06-28 09:45:20'),
+(10, 'salida', '2025-06-28', 10, 24, 2, 'Distribución de guantes a trabajadores', '2025-06-28 16:20:10');
 
 
 

@@ -32,7 +32,7 @@ if (!isset($_SESSION['usuario_id'])) {
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="dashboard.html" class="menu-item active">
+            <a href="dashboard.php" class="menu-item active">
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Dashboard</span>
             </a>
