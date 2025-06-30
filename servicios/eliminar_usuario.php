@@ -30,7 +30,7 @@ $stmt = $conexion->prepare($sql);
 $stmt->bind_param("i", $id_usuario);
 
 if ($stmt->execute()) {
-    header("Location: ../vistas/Usuario.php?eliminado=1");
+    header("Location: ../vistas/usuario.php?eliminado=1");
     exit;
 } else {
     echo "Error al eliminar el usuario: " . $stmt->error;

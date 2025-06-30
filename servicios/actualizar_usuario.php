@@ -42,7 +42,7 @@ $stmt->bind_param("ssssssi", $nombre, $apellido, $correo, $num_doc, $rol, $estad
 
 if ($stmt->execute()) {
     // Redirigir exitosamente
-    header("Location: ../vistas/Usuario.php?success=1");
+    header("Location: ../vistas/usuario.php?success=1");
     exit;
 } else {
     echo "Error al actualizar el usuario: " . $stmt->error;

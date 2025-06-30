@@ -62,7 +62,7 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="Usuario.php" class="menu-item">
+            <a href="usuario.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>

@@ -34,7 +34,7 @@ if (!isset($_SESSION['usuario_id'])) {
         <div class="sidebar-menu">
             <a href="dashboard.php" class="menu-item active">
                 <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Dashboard</span>
+                <span class="menu-text">Inicio</span>
             </a>
             <a href="productos.html" class="menu-item">
                 <i class="fas fa-box"></i>
@@ -48,7 +48,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="Usuario.php" class="menu-item">
+            <a href="usuario.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>

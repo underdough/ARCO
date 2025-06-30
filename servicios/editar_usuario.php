@@ -70,7 +70,7 @@ $usuario = $resultado->fetch_assoc();
 
                 <br><br>
                 <button type="submit">Actualizar</button>
-                <a href="../vistas/Usuario.php" class="btn-cancelar">Cancelar</a>
+                <a href="../vistas/usuario.php" class="btn-cancelar">Cancelar</a>
 
             </form>
         </div>

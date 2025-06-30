@@ -397,7 +397,7 @@ if (isset($_POST['generar_reporte'])) {
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuarios.html" class="menu-item">
+            <a href="usuario.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
