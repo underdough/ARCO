@@ -1,6 +1,7 @@
 <?php
-require_once 'conexion.php';
 session_start();
+require_once 'conexion.php';
+
 
 $conexion = conectarDB();
 $usuarioId = $_SESSION['usuario_id'] ?? null;

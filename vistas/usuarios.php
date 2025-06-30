@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 // Verificar acceso de administrador
 try {
-    require_once '../servicios/verificar_admin.php';
+    //require_once '../servicios/verificar_admin.php';
     
     // Verificar si hay una sesión activa
     if (!isset($_SESSION['id_usuario'])) {
@@ -22,7 +22,7 @@ try {
         exit();
     } else {
         // Si es administrador, permitir el acceso
-        header('Location:../vistas/usuarios.html');
+        header('Location:../vistas/Usuario.php');
     }
     
 } catch (Exception $e) {

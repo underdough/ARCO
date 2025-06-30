@@ -1,3 +1,19 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../login.html?error=Debe iniciar sesión para acceder al sistema");
+    exit;
+}
+
+require_once '../servicios/conexion.php';  // usar require_once
+
+$nombre = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
+$apellido = isset($_SESSION['apellido']) ? $_SESSION['apellido'] : '';
+$nombreCompleto = $nombre . ' ' . $apellido;
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,7 +51,7 @@
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuarios.html" class="menu-item active">
+            <a href="Usuario.php" class="menu-item active">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
@@ -43,7 +59,7 @@
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
-              <a href="configuracion.php" class="menu-item active">
+            <a href="configuracion.php" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
@@ -59,21 +75,26 @@
             <h2>Gestión de Usuarios</h2>
             <div class="user-info" onclick="showUserMenu()">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
-                <span>Bienvenido, <strong id="userName">Usuario</strong></span>
+                <span>Bienvenido, <strong id="userName"><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
             </div>
         </div>
 
-        <div class="users-section">
-            <div class="users-actions">
-                <input type="text" class="form-control" placeholder="Agregar usuario..." />
-                <button class="btn-login">
-                    <i class="fas fa-user-plus"></i> Nuevo Usuario
-                </button>
-            </div>
+        <div class="users-actions">
+            <input type="text" class="form-control" placeholder="Buscar usuario..." />
+            <a href="crearUsu.html" class="btn-login">
+                <i class="fas fa-user-plus"></i> Nuevo Usuario
+            </a>
+        </div>
 
-            <div class="users-table">
-                <?php include 'usuarios.php'; ?>
-            </div>
+        <div class="users-table">
+        <?php
+if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
+    echo "<p style='color: green; font-weight: bold;'>Usuario eliminado correctamente.</p>";
+}
+?>
+
+        <?php include '../servicios/listar_usuarios.php'; ?>
+
         </div>
     </div>
 
@@ -90,7 +111,8 @@
                 sidebar.classList.remove('collapsed');
             }
         });
-         function showUserMenu() {
+
+        function showUserMenu() {
             window.location.href = 'menuUsu.html';
         };
     </script>
