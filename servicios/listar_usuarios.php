@@ -6,7 +6,7 @@ $sql = "SELECT id_usuarios, nombre, apellido, rol, correo, estado FROM usuarios"
 $resultado = $conexion->query($sql);
 
 if ($resultado->num_rows > 0): ?>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table class="users-table">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -25,25 +25,17 @@ if ($resultado->num_rows > 0): ?>
                     <td>
                         <?php 
                             $rol = strtolower($fila['rol']);
-                            if ($rol === 'admin' || $rol === 'administrador') {
-                                echo 'Administrador';
-                            } elseif ($rol === 'usuario') {
-                                echo 'Usuario';
-                            } else {
-                                echo 'No definido';
-                            }
+                            echo $rol === 'admin' || $rol === 'administrador' ? 'Administrador' : ($rol === 'usuario' ? 'Usuario' : 'No definido');
                         ?>
                     </td>
-
                     <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                     <td><?php echo strtoupper(htmlspecialchars($fila['estado'])); ?></td>
                     <td>
-                        <a href="../servicios/editar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-editar">
-                            <i class="fas fa-edit"></i> Editar
+                        <a href="../servicios/editar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-editar" title="Editar usuario">
+                            <i class="fas fa-edit"></i>
                         </a>
-                        |
-                        <a href="../servicios/eliminar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-eliminar" onclick="return confirm('¿Está seguro de eliminar este usuario?');">
-                            <i class="fas fa-trash"></i> Eliminar
+                        <a href="../servicios/eliminar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-eliminar" title="Eliminar usuario" onclick="return confirm('¿Está seguro de eliminar este usuario?');">
+                            <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>

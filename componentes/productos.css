@@ -284,36 +284,30 @@ body {
     border-radius: 4px;
 }
 
+/* Table improvements */
 table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
 }
 
-th, td {
-    padding: 12px 15px;
+th,
+td {
+    padding: 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
-    transition: all 0.3s ease;
 }
 
 th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-tbody tr {
-    transition: all 0.3s ease;
-    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
 }
 
 tbody tr:hover {
-    background: #f8f9fa;
-    transform: scale(1.01);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--light-bg);
 }
 
 .status {
@@ -411,26 +405,22 @@ tbody tr:hover {
     border-color: var(--primary-color);
 }
 
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
-    inset: 0; /* Shorthand for top/right/bottom/left: 0 */
+    inset: 0;
     z-index: 2000;
     background-color: rgba(0, 0, 0, 0.6);
     animation: fadeIn 0.3s ease;
     padding: 1rem;
-    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Modal visibility state */
 .modal.show {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
+
 
 /* Modal container */
 .modal-content {
