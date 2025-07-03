@@ -8,6 +8,13 @@
     --light-bg: #F0F3FA; /* Fondo claro */
     --text-color: #333333;
     --shadow-color: rgba(61, 93, 238, 0.15);
+    --transition-speed: 0.3s; /* Igual que productos.css */
+    --transition-timing: ease; /* Igual que productos.css */
+}
+
+* {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
 }
 
 body {
@@ -27,6 +34,21 @@ body {
     left: 0;
     top: 0;
     overflow-y: auto;
+    transition: width var(--transition-speed) var(--transition-timing);
+    z-index: 1000;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
 }
 
 .sidebar-header {
@@ -38,29 +60,63 @@ body {
 .sidebar-header h1 {
     margin: 0;
     font-size: 1.8rem;
+    transition: opacity var(--transition-speed) var(--transition-timing);
 }
 
 .sidebar-menu {
     padding: 20px 0;
 }
 
-.menu-item {
+.menu-cerrar, .menu-item {
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    transition: all 0.3s;
+    transition: all var(--transition-speed) var(--transition-timing);
     text-decoration: none;
     color: white;
+    position: relative;
+    overflow: hidden;
 }
 
+.menu-cerrar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    min-height: 40px;
+}
+
+.menu-cerrar::before, .menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s var(--transition-timing);
+}
+
+.menu-cerrar:hover::before, .menu-cerrar.active::before,
+.menu-item:hover::before, .menu-item.active::before {
+    left: 100%;
+}
+
+.menu-cerrar:hover, .menu-cerrar.active,
 .menu-item:hover, .menu-item.active {
     background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); /* Igual que productos.css */
 }
 
-.menu-item i {
+.menu-cerrar i, .menu-item i {
     margin-right: 10px;
     width: 20px;
     text-align: center;
+    transition: transform var(--transition-speed) var(--transition-timing);
+}
+
+.menu-cerrar:hover i, .menu-item:hover i {
+    transform: scale(1.1); /* Igual que productos.css */
 }
 
 .main-content {
@@ -70,6 +126,8 @@ body {
     overflow-y: auto;
     height: 100vh;
     scroll-behavior: smooth;
+    transition: margin-left var(--transition-speed) var(--transition-timing);
+    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
 .main-content::-webkit-scrollbar {
@@ -87,7 +145,7 @@ body {
 }
 
 .main-content::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-color);
+    background: var(--tertiary-color); /* Ajustado para consistencia */
 }
 
 .header {
@@ -98,28 +156,62 @@ body {
     background: white;
     padding: 15px 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-color);
+    animation: slideInDown 0.5s var(--transition-timing); /* Igual que productos.css */
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .btn {
-    padding: 8px 15px;
-    border-radius: 4px;
+    padding: 10px 20px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
-    font-weight: 500;
+    font-size: 14px;
+    transition: all var(--transition-speed) var(--transition-timing);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s var(--transition-timing); /* Igual que productos.css */
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    background: var(--primary-color);
     color: white;
 }
 
+.btn-primary:hover {
+    background: var(--tertiary-color); /* Igual que productos.css */
+    transform: translateY(-2px); /* Igual que productos.css */
+    box-shadow: 0 4px 12px rgba(57, 88, 134, 0.3);
+}
+
 .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+    transform: translateY(-2px); /* Igual que productos.css */
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
 }
 
 .config-section {
@@ -127,39 +219,41 @@ body {
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px var(--shadow-color);
+    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
 .config-section h3 {
     margin-top: 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
-    color: #333;
+    color: var(--text-color);
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: 500;
-    color: #555;
+    color: #333;
 }
 
 .form-control {
-    width: 100%;
-    padding: 10px;
+    width: 95%;
+    padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
+    font-size: 14px;
+    transition: all var(--transition-speed) var(--transition-timing); /* Igual que productos.css */
 }
 
 .form-control:focus {
-    border-color: var(--primary-color);
     outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(57, 88, 134, 0.3); /* Igual que productos.css */
 }
 
 .form-row {
@@ -192,7 +286,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: background-color var(--transition-speed) var(--transition-timing);
     border-radius: 24px;
 }
 
@@ -204,7 +298,7 @@ body {
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    transition: transform var(--transition-speed) var(--transition-timing);
     border-radius: 50%;
 }
 
@@ -220,21 +314,22 @@ input:checked + .slider:before {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
 .permission-table th, .permission-table td {
-    padding: 10px;
+    padding: 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
 }
 
 .permission-table th {
+    background-color: var(--primary-color);
+    color: white;
     font-weight: 500;
-    color: #555;
-}
-
-.permission-table tr:last-child td {
-    border-bottom: none;
 }
 
 .section-actions {
@@ -244,9 +339,13 @@ input:checked + .slider:before {
     gap: 10px;
 }
 
-/* Estilos para secciones específicas de administrador */
+.admin-only, .advanced-config, .system-config {
+    border-left: 4px solid;
+    padding-left: 15px;
+}
+
 .admin-only {
-    border-left: 4px solid var(--primary-color);
+    border-color: var(--primary-color);
     background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
 }
 
@@ -254,57 +353,47 @@ input:checked + .slider:before {
     color: var(--primary-color);
 }
 
-.admin-badge {
-    background: var(--primary-color);
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    margin-left: 10px;
-    font-weight: 500;
-}
-
-/* Estilos para configuraciones avanzadas */
 .advanced-config {
+    border-color: #ff9500;
     background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
-    border-left: 4px solid #ff9500;
 }
 
 .advanced-config h3 {
     color: #ff9500;
 }
 
-.warning-badge {
-    background: #ff9500;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    margin-left: 10px;
-    font-weight: 500;
-}
-
-/* Estilos para configuraciones de sistema */
 .system-config {
+    border-color: #28a745;
     background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
-    border-left: 4px solid #28a745;
 }
 
 .system-config h3 {
     color: #28a745;
 }
 
-.system-badge {
-    background: #28a745;
-    color: white;
+.admin-badge, .warning-badge, .system-badge {
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.75rem;
-    margin-left: 10px;
     font-weight: 500;
+    margin-left: 10px;
 }
 
-/* Estilos para alertas y notificaciones */
+.admin-badge {
+    background: var(--primary-color);
+    color: white;
+}
+
+.warning-badge {
+    background: #ff9500;
+    color: white;
+}
+
+.system-badge {
+    background: #28a745;
+    color: white;
+}
+
 .alert {
     padding: 12px 15px;
     border-radius: 6px;
@@ -330,7 +419,6 @@ input:checked + .slider:before {
     color: #2e7d32;
 }
 
-/* Estilos para configuraciones en tiempo real */
 .real-time-indicator {
     display: inline-block;
     width: 8px;
@@ -338,16 +426,9 @@ input:checked + .slider:before {
     background: #4caf50;
     border-radius: 50%;
     margin-right: 8px;
-    animation: pulse 2s infinite;
+    animation: spin 1s linear infinite; /* Usar spin de productos.css */
 }
 
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-/* Estilos para configuraciones de tema */
 .theme-selector {
     display: flex;
     gap: 10px;
@@ -360,13 +441,12 @@ input:checked + .slider:before {
     border-radius: 8px;
     cursor: pointer;
     border: 3px solid transparent;
-    transition: all 0.3s;
-    position: relative;
+    transition: all var(--transition-speed) var(--transition-timing);
 }
 
 .theme-option.selected {
     border-color: var(--primary-color);
-    transform: scale(1.1);
+    transform: scale(1.1); /* Igual que productos.css */
 }
 
 .theme-option::after {
@@ -378,7 +458,7 @@ input:checked + .slider:before {
     color: white;
     font-weight: bold;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity var(--transition-speed) var(--transition-timing);
 }
 
 .theme-option.selected::after {
@@ -390,7 +470,6 @@ input:checked + .slider:before {
 .theme-purple { background: linear-gradient(135deg, #9c27b0, #ba68c8); }
 .theme-orange { background: linear-gradient(135deg, #ff9800, #ffb74d); }
 
-/* Estilos para configuraciones de seguridad */
 .security-level {
     display: flex;
     align-items: center;
@@ -408,43 +487,91 @@ input:checked + .slider:before {
 
 .security-bar {
     height: 100%;
-    transition: width 0.3s, background-color 0.3s;
+    transition: width var(--transition-speed) var(--transition-timing);
 }
 
-.security-low .security-bar {
-    width: 33%;
-    background: #f44336;
+.security-low .security-bar { width: 33%; background: #f44336; }
+.security-medium .security-bar { width: 66%; background: #ff9800; }
+.security-high .security-bar { width: 100%; background: #4caf50; }
+
+.spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite; /* Igual que productos.css */
+    display: inline-block;
+    margin-right: 10px;
 }
 
-.security-medium .security-bar {
-    width: 66%;
-    background: #ff9800;
+/* Animaciones de productos.css */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.security-high .security-bar {
-    width: 100%;
-    background: #4caf50;
+@keyframes slideInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 @media (max-width: 768px) {
     .sidebar {
         width: 70px;
+        transform: translateX(-100%);
     }
-    
+
+    .sidebar.collapsed {
+        transform: translateX(0);
+    }
+
     .sidebar-header h1, .menu-text {
-        display: none;
+        opacity: 0;
+        pointer-events: none;
     }
-    
+
     .main-content {
-        margin-left: 70px;
+        margin-left: 0;
     }
-    
+
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        transition: all var(--transition-speed) var(--transition-timing);
+    }
+
+    .sidebar-toggle:hover {
+        background: var(--tertiary-color); /* Igual que productos.css */
+        transform: scale(1.1); /* Igual que productos.css */
+    }
+
     .header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
-    
+
     .form-row {
         flex-direction: column;
         gap: 0;

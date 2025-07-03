@@ -370,7 +370,6 @@ if (isset($_POST['generar_reporte'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCO - Reportes</title>
     <link rel="stylesheet" href="../componentes/reportes.css">
-    <link rel="stylesheet" href="../public/componentes/global.css">
     <!-- Añadir FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -409,7 +408,7 @@ if (isset($_POST['generar_reporte'])) {
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
-            <a href="../login.html" class="menu-item">
+            <a href="../login.html" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>

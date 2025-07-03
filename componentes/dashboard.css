@@ -1,4 +1,8 @@
-/* Estilos específicos para el dashboard */
+* {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
 body {
     height: 100vh;
     display: flex;
@@ -19,6 +23,21 @@ body {
     transition: width 0.3s ease;
     z-index: 1000;
 }
+
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
 
 .sidebar::-webkit-scrollbar {
     width: 6px;
@@ -46,6 +65,54 @@ body {
 
 .sidebar-menu {
     padding: 20px 0;
+}
+
+.menu-cerrar {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    text-decoration: none;
+    color: white;
+    position: absolute;
+    /* Fija el botón en la parte inferior */
+    bottom: 0;
+    /* Lo coloca en la parte inferior */
+    left: 0;
+    width: 100%;
+    /* Ocupa todo el ancho de la sidebar */
+    height: auto;
+    min-height: 40px;
+    /* Ajusta la altura mínima */
+    overflow: hidden;
+}
+
+.menu-cerrar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: rgba(255, 255, 255, 0.1);
+    transition: width 0.3s ease;
+}
+
+.menu-cerrar:hover::before,
+.menu-cerrar.active::before {
+    width: 100%;
+}
+
+.menu-cerrar:hover,
+.menu-cerrar.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 0.9;
+}
+
+.menu-cerrar i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
 }
 
 .menu-item {
