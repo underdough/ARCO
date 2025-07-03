@@ -13,7 +13,7 @@ if (!isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCO - Dashboard</title>
+    <title>ARCO - Inicio</title>
     <link rel="stylesheet" href="../componentes/dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,7 +69,7 @@ if (!isset($_SESSION['usuario_id'])) {
     
     <div class="main-content" id="mainContent">
         <div class="header">
-            <h2>Dashboard</h2>
+            <h2>Panel de control</h2>
             <div class="user-info" onclick="showUserMenu()">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
                 <span>Bienvenido, <strong id="userName">Usuario</strong></span>
