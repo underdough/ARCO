@@ -66,6 +66,7 @@ body {
     padding: 20px 0;
 }
 
+
 .menu-cerrar {
     padding: 12px 20px;
     display: flex;
@@ -114,11 +115,13 @@ body {
     text-align: center;
 }
 
+
+
 .menu-item {
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
     text-decoration: none;
     color: white;
     position: relative;
@@ -128,32 +131,27 @@ body {
 .menu-item::before {
     content: '';
     position: absolute;
-    left: 0;
     top: 0;
+    left: -100%;
+    width: 100%;
     height: 100%;
-    width: 0;
-    background: rgba(255, 255, 255, 0.1);
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
 }
 
-.menu-item:hover::before, .menu-item.active::before {
-    width: 100%;
+.menu-item:hover::before {
+    left: 100%;
 }
 
 .menu-item:hover, .menu-item.active {
     background-color: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+    opacity: 0.9;
 }
 
 .menu-item i {
     margin-right: 10px;
     width: 20px;
     text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.menu-item:hover i {
-    transform: scale(1.1);
 }
 
 .main-content {
