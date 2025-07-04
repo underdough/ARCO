@@ -33,12 +33,7 @@ if ($resultado && $resultado->num_rows > 0) {
 <head>
     <meta charset="UTF-8">
     <title>Imprimir Movimiento</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        h1 { text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td { padding: 10px; border: 1px solid #ccc; }
-    </style>
+    <link rel="stylesheet" href="../componentes/imprimir_mov.css">
 </head>
 <body onload="window.print()">
     <h1>Detalle del Movimiento</h1>
