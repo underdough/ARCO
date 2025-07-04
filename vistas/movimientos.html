@@ -188,108 +188,31 @@
             </form>
         </div>
     </div>
+    <!-- Modal para ver detalles del movimiento -->
+<div class="modal" id="viewMovementModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Detalle del Movimiento</h3>
+            <button class="close-modal" id="closeViewModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p><strong>ID:</strong> <span id="detalleId"></span></p>
+            <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
+            <p><strong>Tipo:</strong> <span id="detalleTipo"></span></p>
+            <p><strong>Producto:</strong> <span id="detalleProducto"></span></p>
+            <p><strong>Cantidad:</strong> <span id="detalleCantidad"></span></p>
+            <p><strong>Usuario:</strong> <span id="detalleUsuario"></span></p>
+            <p><strong>Notas:</strong> <span id="detalleNotas"></span></p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-cerrar" id="cerrarDetalleBtn">Cerrar</button>
+        </div>
+    </div>
+</div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('movementModal');
-            const btnAddMovement = document.getElementById('btnAddMovement');
-            const btnCancelMovement = document.getElementById('btnCancelMovement');
-            const closeModal = document.querySelector('.close-modal');
-
-            // Abrir modal
-            btnAddMovement.addEventListener('click', function () {
-                modal.style.display = 'flex';
-                document.getElementById('movementForm').reset();
-                const today = new Date().toISOString().split('T')[0];
-                document.getElementById('movementDate').value = today;
-            });
-
-            // Filtro
-            const btnFiltrar = document.querySelector('.btn-secondary');
-            const filterPanel = document.getElementById('filterPanel');
-            const filterForm = document.getElementById('filterForm');
-            const btnResetFilter = document.getElementById('btnResetFilter');
-
-            btnFiltrar.addEventListener('click', () => {
-                filterPanel.style.display = filterPanel.style.display === 'none' ? 'block' : 'none';
-            });
-
-            filterForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                const tipo = document.getElementById('filterTipo').value.toLowerCase();
-                const usuario = document.getElementById('filterUsuario').value.toLowerCase();
-                const fecha = document.getElementById('filterFecha').value;
-
-                const rows = document.querySelectorAll('.movements-table tbody tr');
-                rows.forEach(row => {
-                    const tipoText = row.children[2]?.innerText.toLowerCase();
-                    const usuarioText = row.children[5]?.innerText.toLowerCase();
-                    const fechaText = row.children[1]?.innerText;
-
-                    const matchTipo = tipo === "" || tipoText.includes(tipo);
-                    const matchUsuario = usuario === "" || usuarioText.includes(usuario);
-                    const matchFecha = fecha === "" || fechaText === fecha;
-
-                    row.style.display = (matchTipo && matchUsuario && matchFecha) ? '' : 'none';
-                });
-            });
-
-            btnResetFilter.addEventListener('click', () => {
-                filterForm.reset();
-                document.querySelectorAll('.movements-table tbody tr').forEach(row => {
-                    row.style.display = '';
-                });
-            });
-
-            // Cerrar modal
-            function closeMovementModal() {
-                modal.style.display = 'none';
-            }
-
-            btnCancelMovement.addEventListener('click', closeMovementModal);
-            closeModal.addEventListener('click', closeMovementModal);
-
-            window.addEventListener('click', function (event) {
-                if (event.target === modal) {
-                    closeMovementModal();
-                }
-            });
-
-            // Enviar formulario
-            document.getElementById('movementForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const data = {
-                    tipo: document.getElementById('movementType').value,
-                    fecha: document.getElementById('movementDate').value,
-                    producto: document.getElementById('movementProduct').value,
-                    cantidad: document.getElementById('movementQuantity').value,
-                    usuario: document.getElementById('movementUser').value,
-                    notas: document.getElementById('movementNotes').value
-                };
-
-                fetch('../servicios/guardar_movimiento.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data)
-                })
-                    .then(res => res.json())
-                    .then(response => {
-                        if (response.status === 'success') {
-                            alert(response.message);
-                            document.getElementById('movementForm').reset();
-                            modal.style.display = 'none';
-                            cargarMovimientos();
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error en la solicitud: ' + error);
-                    });
-            });
-
-            // Cargar movimientos
             function cargarMovimientos() {
                 fetch('../servicios/obtener_movimientos.php')
                     .then(res => res.json())
@@ -299,18 +222,18 @@
                         data.forEach(mov => {
                             const fila = document.createElement('tr');
                             fila.innerHTML = `
-                            <td>${mov.id}</td>
-                            <td>${mov.fecha}</td>
-                            <td><span class="status status-${mov.tipo}">${mov.tipo}</span></td>
-                            <td>${mov.producto}</td>
-                            <td>${mov.cantidad}</td>
-                            <td>${mov.usuario_nombre || 'Sin nombre'}</td>
-                            <td>${mov.notas}</td>
-                            <td class="actions">
-                                <div class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></div>
-                                <div class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></div>
-                            </td>
-                        `;
+                                <td>${mov.id}</td>
+                                <td>${mov.fecha}</td>
+                                <td><span class="status status-${mov.tipo}">${mov.tipo}</span></td>
+                                <td>${mov.producto}</td>
+                                <td>${mov.cantidad}</td>
+                                <td>${mov.usuario_nombre || 'Sin nombre'}</td>
+                                <td>${mov.notas}</td>
+                                <td class="actions">
+                                    <div class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></div>
+                                    <div class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></div>
+                                </td>
+                            `;
                             tbody.appendChild(fila);
 
                             // Evento Ver
@@ -320,21 +243,18 @@
                                 fetch(`../servicios/obtener_detalle_movimiento.php?id=${id}`)
                                     .then(res => res.json())
                                     .then(mov => {
-                                        alert(
-                                            `Movimiento #${mov.id}\n` +
-                                            `Fecha: ${mov.fecha}\n` +
-                                            `Tipo: ${mov.tipo}\n` +
-                                            `Producto: ${mov.producto}\n` +
-                                            `Cantidad: ${mov.cantidad}\n` +
-                                            `Usuario: ${mov.usuario_nombre}\n` +
-                                            `Notas: ${mov.notas}`
-                                        );
+                                        mostrarModalDetalleMovimiento(mov);
                                     })
                                     .catch(err => {
                                         alert('Error al obtener detalles: ' + err);
                                     });
                             });
 
+                            // Evento imprimir
+                            const printBtn = fila.querySelector('.print');
+                            printBtn.addEventListener('click', () => {
+                                window.open(`../servicios/imprimir_movimiento.php?id=${mov.id}`, '_blank');
+                            });
                         });
                     })
                     .catch(err => {
@@ -342,30 +262,35 @@
                     });
             }
 
-            cargarMovimientos();
+            function mostrarModalDetalleMovimiento(mov) {
+                document.getElementById('detalleId').innerText = mov.id;
+                document.getElementById('detalleFecha').innerText = mov.fecha;
+                document.getElementById('detalleTipo').innerText = mov.tipo;
+                document.getElementById('detalleProducto').innerText = mov.producto;
+                document.getElementById('detalleCantidad').innerText = mov.cantidad;
+                document.getElementById('detalleUsuario').innerText = mov.usuario_nombre || 'Sin nombre';
+                document.getElementById('detalleNotas').innerText = mov.notas;
 
-            // Buscar
-            const searchInput = document.querySelector('.search-bar input');
-            searchInput.addEventListener('input', function () {
-                const searchTerm = this.value.toLowerCase();
-                const tableRows = document.querySelectorAll('.movements-table tbody tr');
-                tableRows.forEach(row => {
-                    const rowText = row.innerText.toLowerCase();
-                    row.style.display = rowText.includes(searchTerm) ? '' : 'none';
-                });
+                document.getElementById('viewMovementModal').style.display = 'flex';
+            }
+
+            document.getElementById('closeViewModal').addEventListener('click', () => {
+                document.getElementById('viewMovementModal').style.display = 'none';
             });
 
-            setTimeout(() => {
-                document.querySelectorAll('.print').forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const id = this.dataset.id;
-                        window.open(`../servicios/imprimir_movimiento.php?id=${id}`, '_blank');
-                    });
-                });
-            }, 200);
+            document.getElementById('cerrarDetalleBtn').addEventListener('click', () => {
+                document.getElementById('viewMovementModal').style.display = 'none';
+            });
 
+            window.addEventListener('click', function (event) {
+                const modal = document.getElementById('viewMovementModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            cargarMovimientos();
         });
     </script>
-
-
+</body>
 </html>
