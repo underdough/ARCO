@@ -1,7 +1,7 @@
 <?php
 require_once 'conexion.php';
 $conexion = ConectarDB();
-require_once 'librerias/tcpdf/tcpdf.php';
+require_once __DIR__ . '/librerias/tcpdf/tcpdf.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('ID de reporte inválido');
@@ -90,7 +90,7 @@ $result = $stmt->get_result();
 
 // Crear PDF
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetCreator('Sistema ARCO');
 $pdf->SetAuthor('Sistema ARCO');
 $pdf->SetTitle($titulo);
 $pdf->AddPage();
