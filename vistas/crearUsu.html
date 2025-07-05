@@ -8,6 +8,29 @@
     <link rel="shortcut icon" href="../componentes/img/logo2.png" />
     <link rel="stylesheet" href="../componentes/crearUsu.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .alerta {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .alerta-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alerta-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,28 +44,29 @@
             </div>
         </div>
 
-
         <div class="form-auten">
             <div id="alertContainer"></div>
             <div class="titulo-inicio">
                 <h3><i class="titulo-inicio"></i>Crear Usuario</h3>
             </div>
 
-            <form id="formRegistro" action="../servicios/registro.php" method="post">
-
+            <form id="formRegistro">
                 <div class="inputs-login">
                     <label for="nombreCompleto" class="txt-form">Nombre Completo</label>
                     <input type="text" class="input-form" id="nombreCompleto" name="nombreCompleto" required>
                 </div>
+                
                 <div class="inputs-login">
                     <label for="numeroDocumento" class="txt-form">Número de Documento</label>
                     <input type="text" class="input-form" id="numeroDocumento" name="numeroDocumento" minlength="6"
                         maxlength="12" pattern="[0-9]+" required>
                 </div>
+                
                 <div class="inputs-login">
                     <label for="email" class="txt-form">Correo Electrónico</label>
                     <input type="email" class="input-form" id="email" name="email" required>
                 </div>
+                
                 <div class="inputs-login">
                     <label for="contrasena" class="txt-form">Contraseña</label>
                     <div class="password-toggle">
@@ -51,6 +75,7 @@
                         <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('contrasena', this)"></i>
                     </div>
                 </div>
+                
                 <div class="inputs-login">
                     <label for="confirmarContrasena" class="txt-form">Confirmar Contraseña</label>
                     <div class="password-toggle">
@@ -60,8 +85,9 @@
                             onclick="togglePasswordVisibility('confirmarContrasena', this)"></i>
                     </div>
                 </div>
+                
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">Crear Usuario</button>
                 </div>
             </form>
         </div>
@@ -82,23 +108,67 @@
             }
         }
 
-        // Validación de contraseñas coincidentes
-        document.getElementById('formRegistro').addEventListener('submit', function (e) {
-            const password = document.getElementById('contrasena').value;
-            const confirmPassword = document.getElementById('confirmarContrasena').value;
-
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                showAlert('Las contraseñas no coinciden', 'error');
-            }
-        });
-
         // Función para mostrar mensajes de alerta
         function showAlert(message, type = 'error') {
             const alertContainer = document.getElementById('alertContainer');
             alertContainer.innerHTML = `<div class="alerta alerta-${type}">${message}</div>`;
             setTimeout(() => alertContainer.innerHTML = '', 5000);
         }
+
+        // Función para manejar el envío del formulario
+        document.getElementById('formRegistro').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('contrasena').value;
+            const confirmPassword = document.getElementById('confirmarContrasena').value;
+            const submitBtn = document.getElementById('btnSubmit');
+            const form = document.getElementById('formRegistro');
+
+            // Validación de contraseñas en el frontend
+            if (password !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            // Mostrar estado de carga
+            submitBtn.textContent = 'Registrando...';
+            submitBtn.disabled = true;
+            form.classList.add('loading');
+
+            try {
+                // Crear FormData con los datos del formulario
+                const formData = new FormData(this);
+                
+                // Enviar datos al servidor
+                const response = await fetch('../servicios/registro.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    // Limpiar formulario después del éxito
+                    this.reset();
+                    
+                    // Opcional: redirigir después de un tiempo
+                    setTimeout(() => {
+                        window.location.href = '../vistas/login.php';
+                    }, 2000);
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión. Por favor, intenta nuevamente.', 'error');
+            } finally {
+                // Restaurar estado del botón
+                submitBtn.textContent = 'Crear Usuario';
+                submitBtn.disabled = false;
+                form.classList.remove('loading');
+            }
+        });
     </script>
 </body>
 

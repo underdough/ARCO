@@ -2,8 +2,13 @@
 session_start();
 include 'conexion.php';
 
+// Establecer tipo de contenido JSON para mejor manejo de errores
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die("Acceso denegado.");
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit;
 }
 
 // Validar campos obligatorios
@@ -14,7 +19,9 @@ if (
     empty($_POST['contrasena']) ||
     empty($_POST['confirmarContrasena'])
 ) {
-    die("Todos los campos son obligatorios.");
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios']);
+    exit;
 }
 
 $nombreCompleto = trim($_POST['nombreCompleto']);
@@ -23,63 +30,113 @@ $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 $contrasena = $_POST['contrasena'];
 $confirmar = $_POST['confirmarContrasena'];
 
-if ($contrasena !== $confirmar) {
-    die("Las contraseñas no coinciden.");
-}
-
-$conn = ConectarDB();
-
-// Verificar si ya existe el número de documento
-$stmt = $conn->prepare("SELECT id_usuarios FROM usuarios WHERE num_doc = ?");
-$stmt->bind_param("i", $numeroDocumento);
-$stmt->execute();
-$stmt->store_result();
-
-if ($stmt->num_rows > 0) {
-    die("El número de documento ya está registrado.");
-}
-$stmt->close();
-
-// sirve para separar nombre y apellido si vienen juntos
-$partes = explode(" ", $nombreCompleto, 2);
-$nombre = $partes[0];
-$apellido = isset($partes[1]) ? $partes[1] : "";
-
-
-$hash = password_hash($contrasena, PASSWORD_BCRYPT);
-
-// Insertar nuevo usuario
-$rol = 'usuario';
-$cargos = 'sin definir';
-$estado = 'ACTIVO';
-$fecha_creacion = date('Y-m-d H:i:s');
-
-$sql = "INSERT INTO usuarios (num_doc, nombre, apellido, rol, cargos, correo, contrasena, num_telefono, fecha_creacion, estado)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-$stmt = $conn->prepare($sql);
-$num_telefono = '0000000000'; // Temporal, ya que no se pide en el formulario
-
-$stmt->bind_param(
-    "isssssssss",
-    $numeroDocumento,
-    $nombre,
-    $apellido,
-    $rol,
-    $cargos,
-    $email,
-    $hash,
-    $num_telefono,
-    $fecha_creacion,
-    $estado
-);
-
-if ($stmt->execute()) {
-    header('Location: ../vistas/usuario.php?success=' . urlencode('Usuario registrado con éxito.'));
+// Validar número de documento
+if (!$numeroDocumento || $numeroDocumento <= 0) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Número de documento inválido']);
     exit;
-} else {
-    die("Error al registrar usuario: " . $stmt->error);
 }
 
-$stmt->close();
-$conn->close();
+// Validar email
+if (!$email) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Correo electrónico inválido']);
+    exit;
+}
+
+// Validar contraseñas
+if ($contrasena !== $confirmar) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden']);
+    exit;
+}
+
+// Validar longitud de contraseña
+if (strlen($contrasena) < 8 || strlen($contrasena) > 20) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'La contraseña debe tener entre 8 y 20 caracteres']);
+    exit;
+}
+
+try {
+    $conn = ConectarDB();
+    
+    // Verificar si ya existe el número de documento
+    $stmt = $conn->prepare("SELECT id_usuarios FROM usuarios WHERE num_doc = ?");
+    $stmt->bind_param("s", $numeroDocumento);
+    $stmt->execute();
+    $stmt->store_result();
+    
+    if ($stmt->num_rows > 0) {
+        http_response_code(409);
+        echo json_encode(['success' => false, 'message' => 'El número de documento ya está registrado']);
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
+    $stmt->close();
+    
+    // Verificar si ya existe el email
+    $stmt = $conn->prepare("SELECT id_usuarios FROM usuarios WHERE correo = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+    
+    if ($stmt->num_rows > 0) {
+        http_response_code(409);
+        echo json_encode(['success' => false, 'message' => 'El correo electrónico ya está registrado']);
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
+    $stmt->close();
+    
+    // Separar nombre y apellido
+    $partes = explode(" ", $nombreCompleto, 2);
+    $nombre = $partes[0];
+    $apellido = isset($partes[1]) ? $partes[1] : "";
+    
+    // Hash de la contraseña
+    $hash = password_hash($contrasena, PASSWORD_BCRYPT);
+    
+    // Insertar nuevo usuario
+    $rol = 'usuario';
+    $cargos = 'sin definir';
+    $estado = 'ACTIVO';
+    $fecha_creacion = date('Y-m-d H:i:s');
+    $num_telefono = '0000000000'; // Temporal
+    
+    $sql = "INSERT INTO usuarios (num_doc, nombre, apellido, rol, cargos, correo, contrasena, num_telefono, fecha_creacion, estado)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        "ssssssssss",
+        $numeroDocumento,
+        $nombre,
+        $apellido,
+        $rol,
+        $cargos,
+        $email,
+        $hash,
+        $num_telefono,
+        $fecha_creacion,
+        $estado
+    );
+    
+    if ($stmt->execute()) {
+        http_response_code(201);
+        echo json_encode(['success' => true, 'message' => 'Usuario registrado con éxito']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Error al registrar usuario: ' . $stmt->error]);
+    }
+    
+    $stmt->close();
+    $conn->close();
+    
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Error interno del servidor: ' . $e->getMessage()]);
+}
+?>
