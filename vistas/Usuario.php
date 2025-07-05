@@ -6,17 +6,15 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-require_once '../servicios/conexion.php';  // usar require_once
+require_once '../servicios/conexion.php';
 
-$nombre = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : '';
-$apellido = isset($_SESSION['apellido']) ? $_SESSION['apellido'] : '';
+$nombre = $_SESSION['nombre'] ?? '';
+$apellido = $_SESSION['apellido'] ?? '';
 $nombreCompleto = $nombre . ' ' . $apellido;
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,38 +35,14 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
-            </a>
-            <a href="productos.html" class="menu-item">
-                <i class="fas fa-box"></i>
-                <span class="menu-text">Productos</span>
-            </a>
-            <a href="categorias.html" class="menu-item">
-                <i class="fas fa-tags"></i>
-                <span class="menu-text">Categorías</span>
-            </a>
-            <a href="movimientos.html" class="menu-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span class="menu-text">Movimientos</span>
-            </a>
-            <a href="Usuario.php" class="menu-item active">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Usuarios</span>
-            </a>
-            <a href="reportes.php" class="menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span class="menu-text">Reportes</span>
-            </a>
-            <a href="configuracion.php" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Configuración</span>
-            </a>
-            <a href="../login.html" class="menu-cerrar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="menu-text">Cerrar Sesión</span>
-            </a>
+            <a href="dashboard.php" class="menu-item"><i class="fas fa-tachometer-alt"></i><span class="menu-text">Inicio</span></a>
+            <a href="productos.html" class="menu-item"><i class="fas fa-box"></i><span class="menu-text">Productos</span></a>
+            <a href="categorias.html" class="menu-item"><i class="fas fa-tags"></i><span class="menu-text">Categorías</span></a>
+            <a href="movimientos.html" class="menu-item"><i class="fas fa-exchange-alt"></i><span class="menu-text">Movimientos</span></a>
+            <a href="usuario.php" class="menu-item active"><i class="fas fa-users"></i><span class="menu-text">Usuarios</span></a>
+            <a href="reportes.php" class="menu-item"><i class="fas fa-chart-bar"></i><span class="menu-text">Reportes</span></a>
+            <a href="configuracion.php" class="menu-item"><i class="fas fa-cog"></i><span class="menu-text">Configuración</span></a>
+            <a href="../login.html" class="menu-cerrar"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Cerrar Sesión</span></a>
         </div>
     </div>
 
@@ -89,24 +63,28 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
 
         <div class="users-table">
-            <?php
-            if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
+            <?php if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
                 echo "<p style='color: green; font-weight: bold;'>Usuario eliminado correctamente.</p>";
-            }
-            ?>
+            } ?>
 
             <?php include '../servicios/listar_usuarios.php'; ?>
+        </div>
+    </div>
 
+    <!-- MODAL -->
+    <div id="editarModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+            <div id="contenidoModal"></div>
         </div>
     </div>
 
     <script>
-        // Sidebar responsive
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
             document.getElementById('sidebar').classList.toggle('collapsed');
         });
 
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.getElementById('sidebarToggle');
             if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
@@ -116,8 +94,34 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
         function showUserMenu() {
             window.location.href = 'menuUsu.html';
-        };
+        }
+
+        // Abrir modal con AJAX
+        document.querySelectorAll('.btn-editar').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const userId = this.getAttribute('data-id');
+                fetch(`../servicios/editar_usuario.php?id=${userId}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('contenidoModal').innerHTML = html;
+                        document.getElementById('editarModal').style.display = 'flex';
+                    })
+                    .catch(err => alert("Error al cargar formulario"));
+            });
+        });
+
+        function cerrarModal() {
+            document.getElementById('editarModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function (e) {
+            const modal = document.getElementById('editarModal');
+            if (e.target === modal) {
+                cerrarModal();
+            }
+        });
     </script>
 </body>
-
 </html>

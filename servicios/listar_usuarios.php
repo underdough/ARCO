@@ -1,7 +1,7 @@
 <?php
 require_once 'conexion.php';
-
 $conexion = ConectarDB();
+
 $sql = "SELECT id_usuarios, nombre, apellido, rol, correo, estado FROM usuarios";
 $resultado = $conexion->query($sql);
 
@@ -23,15 +23,16 @@ if ($resultado->num_rows > 0): ?>
                     <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($fila['apellido']); ?></td>
                     <td>
-                        <?php 
-                            $rol = strtolower($fila['rol']);
-                            echo $rol === 'admin' || $rol === 'administrador' ? 'Administrador' : ($rol === 'usuario' ? 'Usuario' : 'No definido');
+                        <?php
+                        $rol = strtolower($fila['rol']);
+                        echo $rol === 'admin' || $rol === 'administrador' ? 'Administrador' :
+                            ($rol === 'usuario' ? 'Usuario' : 'No definido');
                         ?>
                     </td>
                     <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                     <td><?php echo strtoupper(htmlspecialchars($fila['estado'])); ?></td>
                     <td>
-                        <a href="../servicios/editar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-editar" title="Editar usuario">
+                        <a href="#" class="btn-editar" data-id="<?php echo $fila['id_usuarios']; ?>" title="Editar usuario">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a href="../servicios/eliminar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-eliminar" title="Eliminar usuario" onclick="return confirm('¿Está seguro de eliminar este usuario?');">
