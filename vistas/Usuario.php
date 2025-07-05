@@ -16,14 +16,16 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ARCO - Usuarios</title>
     <link rel="stylesheet" href="../componentes/dashboard.css" />
     <link rel="stylesheet" href="../componentes/usuarios.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body>
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
@@ -87,24 +89,24 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
 
         <div class="users-table">
-        <?php
-if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
-    echo "<p style='color: green; font-weight: bold;'>Usuario eliminado correctamente.</p>";
-}
-?>
+            <?php
+            if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
+                echo "<p style='color: green; font-weight: bold;'>Usuario eliminado correctamente.</p>";
+            }
+            ?>
 
-        <?php include '../servicios/listar_usuarios.php'; ?>
+            <?php include '../servicios/listar_usuarios.php'; ?>
 
         </div>
     </div>
 
     <script>
         // Sidebar responsive
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         });
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.getElementById('sidebarToggle');
             if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
@@ -117,4 +119,5 @@ if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
         };
     </script>
 </body>
+
 </html>
