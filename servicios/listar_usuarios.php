@@ -13,7 +13,7 @@ if ($resultado->num_rows > 0): ?>
                 <th>Apellido</th>
                 <th>Rol</th>
                 <th>Correo</th>
-                <th>Estado</th> 
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -25,23 +25,24 @@ if ($resultado->num_rows > 0): ?>
                     <td>
                         <?php
                         $rol = strtolower($fila['rol']);
-                        echo $rol === 'admin' || $rol === 'administrador' ? 'Administrador' :
-                            ($rol === 'usuario' ? 'Usuario' : 'No definido');
+                        echo $rol === 'admin' || $rol === 'administrador' ? 'Administrador' : ($rol === 'usuario' ? 'Usuario' : 'No definido');
                         ?>
                     </td>
                     <td><?php echo htmlspecialchars($fila['correo']); ?></td>
                     <td><?php echo strtoupper(htmlspecialchars($fila['estado'])); ?></td>
                     <td>
-                        <a href="#" class="btn-editar" data-id="<?php echo $fila['id_usuarios']; ?>" title="Editar usuario">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="../servicios/eliminar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="btn-eliminar" title="Eliminar usuario" onclick="return confirm('¿Está seguro de eliminar este usuario?');">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <div class="actions">
+                            <a href="#" class="action-icon btn-editar" data-id="<?php echo $fila['id_usuarios']; ?>" title="Editar usuario">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="../servicios/eliminar_usuario.php?id=<?php echo $fila['id_usuarios']; ?>" class="action-icon btn-eliminar" title="Eliminar usuario" onclick="return confirm('¿Está seguro de eliminar este usuario?');">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             <?php endwhile; ?>
-        </tbody>    
+        </tbody>
     </table>
 <?php else: ?>
     <p>No hay usuarios registrados.</p>

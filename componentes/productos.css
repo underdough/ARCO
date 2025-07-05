@@ -630,6 +630,53 @@ tbody tr:hover {
     }
 }
 
+.actions {
+    display: flex;
+    gap: 8px; /* Espacio entre los botones */
+}
+
+.action-btn {
+    padding: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    width: 32px; /* Tamaño fijo para mantener proporción */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff; /* Fondo blanco por defecto */
+    border: 1px solid #ddd; /* Borde sutil */
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.1); /* Efecto de aumento al pasar el ratón */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra al hover */
+}
+
+.btn-edit {
+    color: #007bff; /* Color azul para editar */
+}
+
+.btn-edit:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-delete {
+    color: #dc3545; /* Color rojo para eliminar */
+}
+
+.btn-delete:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.action-btn i {
+    margin: 0; /* Elimina márgenes innecesarios en los íconos */
+}
+
 /* Loading states */
 .loading {
     opacity: 0.6;

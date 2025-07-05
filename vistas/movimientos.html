@@ -189,26 +189,26 @@
         </div>
     </div>
     <!-- Modal para ver detalles del movimiento -->
-<div class="modal" id="viewMovementModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">Detalle del Movimiento</h3>
-            <button class="close-modal" id="closeViewModal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p><strong>ID:</strong> <span id="detalleId"></span></p>
-            <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
-            <p><strong>Tipo:</strong> <span id="detalleTipo"></span></p>
-            <p><strong>Producto:</strong> <span id="detalleProducto"></span></p>
-            <p><strong>Cantidad:</strong> <span id="detalleCantidad"></span></p>
-            <p><strong>Usuario:</strong> <span id="detalleUsuario"></span></p>
-            <p><strong>Notas:</strong> <span id="detalleNotas"></span></p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-cerrar" id="cerrarDetalleBtn">Cerrar</button>
+    <div class="modal" id="viewMovementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalle del Movimiento</h3>
+                <button class="close-modal" id="closeViewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="detalleId"></span></p>
+                <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
+                <p><strong>Tipo:</strong> <span id="detalleTipo"></span></p>
+                <p><strong>Producto:</strong> <span id="detalleProducto"></span></p>
+                <p><strong>Cantidad:</strong> <span id="detalleCantidad"></span></p>
+                <p><strong>Usuario:</strong> <span id="detalleUsuario"></span></p>
+                <p><strong>Notas:</strong> <span id="detalleNotas"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cerrar" id="cerrarDetalleBtn">Cerrar</button>
+            </div>
         </div>
     </div>
-</div>
 
 
     <script>
@@ -230,8 +230,8 @@
                                 <td>${mov.usuario_nombre || 'Sin nombre'}</td>
                                 <td>${mov.notas}</td>
                                 <td class="actions">
-                                    <div class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></div>
-                                    <div class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></div>
+                                    <button class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></button>
+                                    <button class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></button>
                                 </td>
                             `;
                             tbody.appendChild(fila);
@@ -293,4 +293,5 @@
         });
     </script>
 </body>
+
 </html>

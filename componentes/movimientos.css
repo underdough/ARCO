@@ -400,40 +400,51 @@ tr:hover {
 
 .actions {
     display: flex;
-    gap: 10px;
+    gap: 10px; /* Espacio entre los botones */
 }
 
 .action-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 4px;
+    width: 32px; /* Tamaño fijo para consistencia */
+    height: 32px;
+    border-radius: 4px; /* Hace los botones circulares como en la imagen */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    border: 1px solid #ddd; /* Borde sutil */
+    background-color: #fff; /* Fondo blanco por defecto */
+    transition: all 0.3s ease;
 }
 
 .action-icon:hover {
-    opacity: 0.9;
+    opacity: 1; /* Asegura visibilidad en hover */
+    transform: scale(1.1); /* Efecto de aumento al pasar el ratón */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra al hover */
 }
 
-.edit {
-    background-color: #e3f2fd;
-    color: #1976d2;
+.view {
+    color: #1976d2; /* Azul para "Ver", similar a Material Design */
 }
 
-.edit:hover {
-    color: #4CAF50;
+.view:hover {
+    background-color: #1976d2; /* Fondo azul al hover */
+    color: #fff; /* Ícono blanco al hover */
+    border-color: #1976d2;
 }
 
-.delete {
-    background-color: #ffebee;
-    color: #d32f2f;
+.print {
+    color: #4CAF50; /* Verde para "Imprimir", similar a Material Design */
 }
 
-.delete:hover {
-    color: #f44336;
+.print:hover {
+    background-color: #4CAF50; /* Fondo verde al hover */
+    color: #fff; /* Ícono blanco al hover */
+    border-color: #4CAF50;
+}
+
+.action-icon i {
+    font-size: 14px; /* Ajusta el tamaño del ícono si es necesario */
+    margin: 0; /* Elimina márgenes innecesarios */
 }
 
 .pagination {
