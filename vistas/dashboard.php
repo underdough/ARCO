@@ -20,6 +20,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCO - Inicio</title>
+    <link rel="shortcut icon" href="../componentes/img/logo2.png" />
     <link rel="stylesheet" href="../componentes/dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
