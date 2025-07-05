@@ -6,7 +6,13 @@ if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../login.html");
     exit;
 }
+$nombre = $_SESSION['nombre'] ?? '';
+$apellido = $_SESSION['apellido'] ?? '';
+$nombreCompleto = $nombre . ' ' . $apellido;
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -72,7 +78,7 @@ if (!isset($_SESSION['usuario_id'])) {
             <h2>Panel de control</h2>
             <div class="user-info" onclick="showUserMenu()">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
-                <span>Bienvenido, <strong id="userName">Usuario</strong></span>
+                <span>Bienvenido, <strong id="userName"><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
             </div>
         </div>
         
