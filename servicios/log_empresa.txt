@@ -11,3 +11,8 @@ Procesando empresa: siii, 312321, Carrera 14, Barcelona, 3166678284, k3vinch3nl1
 =======
 Procesando empresa: Poiyiiigjhgg, Y7743743, calle 11, Cali, 22222222222222, contacto@arcoinventarios.com
 >>>>>>> ceed78d3e422654a7029ea57329f5075910c334e
+Procesando empresa: cafes el nortegañil, 312321, Carrera 14, Barcelona, 3166678284, k3vinch3nl1@gmail.com
+Procesando empresa: cafes el nortegañil, 6534, Carrera 14, Barcelona, 3166678284, k3vinch3nl1@gmail.com
+Procesando empresa: cafes el nortegañil, 6534, Carrera 100 grados, el hueco de cerrito, movistar(no llamen sapos), k3vinch3nl1@gmail.com
+Procesando empresa: cafes el nortegañil, 6534, Carrera 100 grados, el hueco de cerrito, movistar(no llamen sapos), ajinomen@katatumbo.com
+Procesando empresa: cafes el nortegañil, 6534, Carrera 100 grados, el hueco de cerrito, movistar(no llamen sapos), ajinomen@katatumbo.com
