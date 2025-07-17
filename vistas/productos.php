@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCO - Gestión de Productos</title>
-    <link rel="shortcut icon" href="../componentes/img/logo2.png" />
     <link rel="stylesheet" href="../componentes/productos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../public/componentes/productos.css">
 </head>
-
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
@@ -24,7 +21,7 @@
         <div class="sidebar-menu">
             <a href="dashboard.php" class="menu-item">
                 <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
+                <span class="menu-text">Dashboard</span>
             </a>
             <a href="productos.html" class="menu-item active">
                 <i class="fas fa-box"></i>
@@ -38,7 +35,7 @@
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuario.php" class="menu-item">
+            <a href="Usuario.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
@@ -50,13 +47,13 @@
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
-            <a href="../login.html" class="menu-cerrar">
+            <a href="../login.html" class="menu-item">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>
         </div>
     </div>
-
+    
     <div class="main-content">
         <div class="header">
             <h2>Gestión de Productos</h2>
@@ -73,7 +70,7 @@
                 </button>
             </div>
         </div>
-
+        
         <div class="products-table">
             <table>
                 <thead>
@@ -98,14 +95,66 @@
                         <td>$899.99</td>
                         <td><span class="status status-disponible">Disponible</span></td>
                         <td class="actions">
-                            <button class="action-btn btn-edit"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn btn-delete"><i class="fas fa-trash"></i></button>
+                            <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                            <div class="action-icon delete"><i class="fas fa-trash"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td><img src="https://via.placeholder.com/40" alt="Producto" style="border-radius: 4px;"></td>
+                        <td>Monitor Dell 27"</td>
+                        <td>Electrónicos</td>
+                        <td>8</td>
+                        <td>$349.99</td>
+                        <td><span class="status status-bajo">Stock Bajo</span></td>
+                        <td class="actions">
+                            <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                            <div class="action-icon delete"><i class="fas fa-trash"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td><img src="https://via.placeholder.com/40" alt="Producto" style="border-radius: 4px;"></td>
+                        <td>Teclado Mecánico RGB</td>
+                        <td>Accesorios</td>
+                        <td>0</td>
+                        <td>$129.99</td>
+                        <td><span class="status status-agotado">Agotado</span></td>
+                        <td class="actions">
+                            <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                            <div class="action-icon delete"><i class="fas fa-trash"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>004</td>
+                        <td><img src="https://via.placeholder.com/40" alt="Producto" style="border-radius: 4px;"></td>
+                        <td>Mouse Inalámbrico</td>
+                        <td>Accesorios</td>
+                        <td>42</td>
+                        <td>$49.99</td>
+                        <td><span class="status status-disponible">Disponible</span></td>
+                        <td class="actions">
+                            <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                            <div class="action-icon delete"><i class="fas fa-trash"></i></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>005</td>
+                        <td><img src="https://via.placeholder.com/40" alt="Producto" style="border-radius: 4px;"></td>
+                        <td>Impresora Multifuncional</td>
+                        <td>Oficina</td>
+                        <td>12</td>
+                        <td>$299.99</td>
+                        <td><span class="status status-disponible">Disponible</span></td>
+                        <td class="actions">
+                            <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                            <div class="action-icon delete"><i class="fas fa-trash"></i></div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
+        
         <div class="pagination">
             <div class="page-item"><i class="fas fa-chevron-left"></i></div>
             <div class="page-item active">1</div>
@@ -114,7 +163,7 @@
             <div class="page-item"><i class="fas fa-chevron-right"></i></div>
         </div>
     </div>
-
+    
     <!-- Modal para agregar/editar producto -->
     <div class="modal" id="productModal">
         <div class="modal-content">
@@ -160,15 +209,15 @@
             </form>
         </div>
     </div>
-
+    
     <!-- Botón toggle para sidebar en móvil -->
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
     </button>
-
+    
     <script>
         // JavaScript para funcionalidad interactiva avanzada
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Elementos del DOM
             const modal = document.getElementById('productModal');
             const btnAddProduct = document.getElementById('btnAddProduct');
@@ -182,47 +231,49 @@
             const sidebar = document.querySelector('.sidebar');
             const mainContent = document.querySelector('.main-content');
             const pageItems = document.querySelectorAll('.page-item');
+            
+            let editingRow = null; // <-- NUEVA VARIABLE para saber si estamos editando
 
             // Configurar scroll suave
             document.documentElement.style.scrollBehavior = 'smooth';
-
+            
             // Animaciones de entrada
             function animateOnLoad() {
                 const header = document.querySelector('.header');
                 const table = document.querySelector('.products-table');
-
+                
                 header.style.opacity = '0';
                 header.style.transform = 'translateY(-30px)';
                 table.style.opacity = '0';
                 table.style.transform = 'translateY(30px)';
-
+                
                 setTimeout(() => {
                     header.style.transition = 'all 0.5s ease';
                     header.style.opacity = '1';
                     header.style.transform = 'translateY(0)';
                 }, 100);
-
+                
                 setTimeout(() => {
                     table.style.transition = 'all 0.6s ease';
                     table.style.opacity = '1';
                     table.style.transform = 'translateY(0)';
                 }, 300);
             }
-
+            
             // Sidebar toggle para móvil
-            sidebarToggle.addEventListener('click', function () {
+            sidebarToggle.addEventListener('click', function() {
                 sidebar.classList.toggle('collapsed');
                 this.style.transform = sidebar.classList.contains('collapsed') ? 'rotate(90deg)' : 'rotate(0deg)';
             });
-
+            
             // Funcionalidad de búsqueda en tiempo real
-            searchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function() {
                 const searchTerm = this.value.toLowerCase();
-
+                
                 tableRows.forEach(row => {
                     const productName = row.cells[2].textContent.toLowerCase();
                     const category = row.cells[3].textContent.toLowerCase();
-
+                    
                     if (productName.includes(searchTerm) || category.includes(searchTerm)) {
                         row.style.display = '';
                         row.style.animation = 'fadeInUp 0.3s ease';
@@ -231,22 +282,22 @@
                     }
                 });
             });
-
+            
             // Efectos hover mejorados para filas de tabla
             tableRows.forEach(row => {
-                row.addEventListener('mouseenter', function () {
+                row.addEventListener('mouseenter', function() {
                     this.style.transform = 'scale(1.01)';
                     this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
                     this.style.zIndex = '10';
                 });
-
-                row.addEventListener('mouseleave', function () {
+                
+                row.addEventListener('mouseleave', function() {
                     this.style.transform = 'scale(1)';
                     this.style.boxShadow = 'none';
                     this.style.zIndex = '1';
                 });
             });
-
+            
             // Modal con animaciones mejoradas
             function openModal(title = 'Agregar Nuevo Producto') {
                 modal.classList.add('show');
@@ -254,18 +305,27 @@
                 document.querySelector('.modal-title').textContent = title;
                 document.body.style.overflow = 'hidden';
 
+                // Suspender loading del botón "Nuevo Producto" al abrir el modal
+                removeLoadingEffect(btnAddProduct);
+
+                // Si es agregar, limpiar variable de edición
+                if (title === 'Agregar Nuevo Producto') {
+                    editingRow = null;
+                    document.getElementById('productForm').reset();
+                }
+                
                 // Animación de entrada del modal
                 const modalContent = document.querySelector('.modal-content');
                 modalContent.style.transform = 'scale(0.7) translateY(-50px)';
                 modalContent.style.opacity = '0';
-
+                
                 setTimeout(() => {
                     modalContent.style.transition = 'all 0.3s ease';
                     modalContent.style.transform = 'scale(1) translateY(0)';
                     modalContent.style.opacity = '1';
                 }, 10);
             }
-
+            
             function closeProductModal() {
                 const modalContent = document.querySelector('.modal-content');
                 modalContent.style.transform = 'scale(0.7) translateY(-50px)';
@@ -276,71 +336,75 @@
                     modal.style.display = 'none';
                     document.body.style.overflow = 'auto';
                     document.getElementById('productForm').reset();
+                    editingRow = null; // Limpiar variable de edición al cerrar
+                    removeLoadingEffect(btnAddProduct); // Suspender loading si quedó activo
                 }, 300);
             }
-
+            
             // Event listeners para modal
             btnAddProduct.addEventListener('click', () => {
                 openModal('Agregar Nuevo Producto');
                 addLoadingEffect(btnAddProduct);
             });
-
+            
             btnCancelProduct.addEventListener('click', closeProductModal);
             closeModal.addEventListener('click', closeProductModal);
-
+            
             // Cerrar modal con Escape
-            document.addEventListener('keydown', function (e) {
+            document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && modal.classList.contains('show')) {
                     closeProductModal();
                 }
             });
-
+            
             // Cerrar modal al hacer clic fuera
-            modal.addEventListener('click', function (e) {
+            modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     closeProductModal();
                 }
             });
-
+            
             // Funcionalidad de edición con carga de datos
             editButtons.forEach((button, index) => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function() {
                     addLoadingEffect(this);
 
                     setTimeout(() => {
                         openModal('Editar Producto');
-
-                        // Simular carga de datos del producto
                         const row = this.closest('tr');
-                        const productData = {
-                            name: row.cells[2].textContent,
-                            category: row.cells[3].textContent,
-                            stock: row.cells[4].textContent,
-                            price: row.cells[5].textContent.replace('$', '')
-                        };
+                        editingRow = row; // Guardar la fila que se está editando
 
-                        // Llenar el formulario con los datos
-                        document.getElementById('productName').value = productData.name;
-                        document.getElementById('productStock').value = productData.stock;
-                        document.getElementById('productPrice').value = productData.price;
+                        document.getElementById('productName').value = row.cells[2].textContent;
+                        // Seleccionar la categoría correcta
+                        const categoryText = row.cells[3].textContent;
+                        const categorySelect = document.getElementById('productCategory');
+                        for (let i = 0; i < categorySelect.options.length; i++) {
+                            if (categorySelect.options[i].text === categoryText) {
+                                categorySelect.selectedIndex = i;
+                                break;
+                            }
+                        }
+                        document.getElementById('productStock').value = row.cells[4].textContent;
+                        document.getElementById('productPrice').value = row.cells[5].textContent.replace('$', '.');
+                        // Puedes agregar aquí la descripción e imagen si lo deseas
 
                         removeLoadingEffect(this);
                     }, 500);
                 });
             });
-
+            
             // Funcionalidad de eliminación con confirmación mejorada
             deleteButtons.forEach(button => {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function() {
                     const row = this.closest('tr');
                     const productName = row.cells[2].textContent;
-
+                    
                     if (confirm(`¿Está seguro de que desea eliminar "${productName}"?\n\nEsta acción no se puede deshacer.`)) {
                         addLoadingEffect(this);
-
+                        
                         setTimeout(() => {
                             row.style.animation = 'fadeOut 0.5s ease';
-
+                            
                             setTimeout(() => {
                                 row.remove();
                                 showNotification('Producto eliminado correctamente', 'success');
@@ -349,18 +413,18 @@
                     }
                 });
             });
-
+            
             // Paginación interactiva
             pageItems.forEach(item => {
-                item.addEventListener('click', function () {
+                item.addEventListener('click', function() {
                     if (!this.classList.contains('active')) {
                         document.querySelector('.page-item.active').classList.remove('active');
                         this.classList.add('active');
-
+                        
                         // Simular carga de nueva página
                         const tableContainer = document.querySelector('.products-table');
                         tableContainer.style.opacity = '0.6';
-
+                        
                         setTimeout(() => {
                             tableContainer.style.opacity = '1';
                             showNotification('Página cargada', 'info');
@@ -368,22 +432,114 @@
                     }
                 });
             });
-
+            
             // Manejar envío del formulario con validación
-            document.getElementById('productForm').addEventListener('submit', function (e) {
+            document.getElementById('productForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const submitBtn = this.querySelector('button[type="submit"]');
                 addLoadingEffect(submitBtn);
 
-                // Simular guardado
+                // Obtener datos del formulario
+                const name = document.getElementById('productName').value;
+                const categorySelect = document.getElementById('productCategory');
+                const category = categorySelect.options[categorySelect.selectedIndex].text;
+                const stock = document.getElementById('productStock').value;
+                // Formatea el precio con puntos como separador de miles y dos decimales
+                const price = document.getElementById('productPrice').value;
+                const priceFormatted = Number(price).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                const imageUrl = "https://via.placeholder.com/40";
+                let estado = '';
+                let statusClass = '';
+                if (parseInt(stock) === 0) {
+                    estado = 'Agotado';
+                    statusClass = 'status-agotado';
+                } else if (parseInt(stock) < 10) {
+                    estado = 'Stock Bajo';
+                    statusClass = 'status-bajo';
+                } else {
+                    estado = 'Disponible';
+                    statusClass = 'status-disponible';
+                }
+
                 setTimeout(() => {
                     removeLoadingEffect(submitBtn);
-                    showNotification('Producto guardado correctamente', 'success');
+
+                    if (editingRow) {
+                        // MODO EDITAR: Actualizar la fila existente
+                        editingRow.cells[2].textContent = name;
+                        editingRow.cells[3].textContent = category;
+                        editingRow.cells[4].textContent = stock;
+                        editingRow.cells[5].textContent = `$${priceFormatted}`;
+                        editingRow.cells[6].innerHTML = `<span class="status ${statusClass}">${estado}</span>`;
+                        // Si quieres actualizar la imagen, hazlo aquí
+                        showNotification('Producto actualizado correctamente', 'success');
+                    } else {
+                        // MODO NUEVO: Crear nueva fila
+                        const tbody = document.querySelector('.products-table tbody');
+                        const lastRow = tbody.querySelector('tr:last-child');
+                        let newId = 1;
+                        if (lastRow) {
+                            newId = parseInt(lastRow.cells[0].textContent) + 1;
+                        }
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                            <td>${String(newId).padStart(3, '0')}</td>
+                            <td><img src="${imageUrl}" alt="Producto" style="border-radius: 4px;"></td>
+                            <td>${name}</td>
+                            <td>${category}</td>
+                            <td>${stock}</td>
+                            <td>${priceFormatted}</td>
+                            <td><span class="status ${statusClass}">${estado}</span></td>
+                            <td class="actions">
+                                <div class="action-icon edit"><i class="fas fa-edit"></i></div>
+                                <div class="action-icon delete"><i class="fas fa-trash"></i></div>
+                            </td>
+                        `;
+                        tbody.appendChild(newRow);
+
+                        // Asignar eventos a los nuevos botones
+                        newRow.querySelector('.edit').addEventListener('click', function() {
+                            addLoadingEffect(this);
+                            setTimeout(() => {
+                                openModal('Editar Producto');
+                                editingRow = this.closest('tr');
+                                document.getElementById('productName').value = editingRow.cells[2].textContent;
+                                // Seleccionar la categoría correcta
+                                const categoryText = editingRow.cells[3].textContent;
+                                const categorySelect = document.getElementById('productCategory');
+                                for (let i = 0; i < categorySelect.options.length; i++) {
+                                    if (categorySelect.options[i].text === categoryText) {
+                                        categorySelect.selectedIndex = i;
+                                        break;
+                                    }
+                                }
+                                document.getElementById('productStock').value = editingRow.cells[4].textContent;
+                                document.getElementById('productPrice').value = editingRow.cells[5].textContent.replace('$', '');
+                                removeLoadingEffect(this);
+                            }, 500);
+                        });
+                        newRow.querySelector('.delete').addEventListener('click', function() {
+                            const row = this.closest('tr');
+                            const productName = row.cells[2].textContent;
+                            if (confirm(`¿Está seguro de que desea eliminar "${productName}"?\n\nEsta acción no se puede deshacer.`)) {
+                                addLoadingEffect(this);
+                                setTimeout(() => {
+                                    row.style.animation = 'fadeOut 0.5s ease';
+                                    setTimeout(() => {
+                                        row.remove();
+                                        showNotification('Producto eliminado correctamente', 'success');
+                                    }, 500);
+                                }, 1000);
+                            }
+                        });
+
+                        showNotification('Producto guardado correctamente', 'success');
+                    }
                     closeProductModal();
                 }, 2000);
             });
-
+            
             // Funciones auxiliares
             function addLoadingEffect(element) {
                 element.classList.add('loading');
@@ -391,7 +547,7 @@
                 element.innerHTML = '<span class="spinner"></span>' + originalContent;
                 element.disabled = true;
             }
-
+            
             function removeLoadingEffect(element) {
                 element.classList.remove('loading');
                 const spinner = element.querySelector('.spinner');
@@ -400,7 +556,7 @@
                 }
                 element.disabled = false;
             }
-
+            
             function showNotification(message, type = 'info') {
                 const notification = document.createElement('div');
                 notification.className = `notification ${type}`;
@@ -408,7 +564,7 @@
                     <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
                     <span>${message}</span>
                 `;
-
+                
                 notification.style.cssText = `
                     position: fixed;
                     top: 20px;
@@ -425,9 +581,9 @@
                     animation: slideInRight 0.3s ease;
                     max-width: 300px;
                 `;
-
+                
                 document.body.appendChild(notification);
-
+                
                 setTimeout(() => {
                     notification.style.animation = 'slideOutRight 0.3s ease';
                     setTimeout(() => {
@@ -435,33 +591,33 @@
                     }, 300);
                 }, 3000);
             }
-
+            
             // Validación en tiempo real de formularios
             const formInputs = document.querySelectorAll('.form-control');
             formInputs.forEach(input => {
-                input.addEventListener('blur', function () {
+                input.addEventListener('blur', function() {
                     validateField(this);
                 });
-
-                input.addEventListener('input', function () {
+                
+                input.addEventListener('input', function() {
                     if (this.classList.contains('error')) {
                         validateField(this);
                     }
                 });
             });
-
+            
             function validateField(field) {
                 const value = field.value.trim();
                 let isValid = true;
-
+                
                 if (field.hasAttribute('required') && !value) {
                     isValid = false;
                 }
-
+                
                 if (field.type === 'number' && value && (isNaN(value) || parseFloat(value) < 0)) {
                     isValid = false;
                 }
-
+                
                 if (isValid) {
                     field.classList.remove('error');
                     field.style.borderColor = '#28a745';
@@ -469,10 +625,9 @@
                     field.classList.add('error');
                     field.style.borderColor = '#dc3545';
                 }
-
+                
                 return isValid;
-            }
-
+            }            
             // Agregar estilos CSS para animaciones adicionales
             const additionalStyles = `
                 @keyframes fadeOut {
@@ -495,17 +650,17 @@
                     box-shadow: 0 0 5px rgba(220, 53, 69, 0.3) !important;
                 }
             `;
-
+            
             const styleSheet = document.createElement('style');
             styleSheet.textContent = additionalStyles;
             document.head.appendChild(styleSheet);
-
+            
             // Inicializar animaciones
             animateOnLoad();
-
+            
             // Smooth scroll para navegación
             document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', function (e) {
+                item.addEventListener('click', function(e) {
                     if (this.getAttribute('href').startsWith('#')) {
                         e.preventDefault();
                         const target = document.querySelector(this.getAttribute('href'));
@@ -519,5 +674,4 @@
     </script>
     <script src="../public/js/admin-verification.js"></script>
 </body>
-
 </html>
