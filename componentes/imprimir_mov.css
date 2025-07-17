@@ -40,6 +40,27 @@ tr:last-child td {
     border-bottom: none;
 }
 
+.no-print {
+    display: inline-block;
+    margin: 30px auto 0 auto;
+    padding: 12px 32px;
+    background-color: #2f4a7c;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(47, 74, 124, 0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.no-print:hover {
+    background-color: #4666a3;
+    box-shadow: 0 4px 16px rgba(47, 74, 124, 0.15);
+    transform: translateY(-2px) scale(1.03);
+}
+
 @media print {
     body {
         margin: 0;
