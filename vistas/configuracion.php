@@ -96,7 +96,7 @@ if ($result && $result->num_rows > 0) {
                 <div class="form-row">
                     <div class="form-group">
                         <label for="companyName">Nombre de la Empresa</label>
-                        <input type="text" class="form-control" id="companyName" name="companyName"
+                        <input type="text" class="form-control" id="companyName" name="companyName" 
                             value="<?= htmlspecialchars($empresa['nombre']) ?>">
                     </div>
                     <div class="form-group">
