@@ -37,7 +37,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
         <div class="sidebar-menu">
             <a href="dashboard.php" class="menu-item"><i class="fas fa-tachometer-alt"></i><span class="menu-text">Inicio</span></a>
-            <a href="productos.html" class="menu-item"><i class="fas fa-box"></i><span class="menu-text">Productos</span></a>
+            <a href="productos.php" class="menu-item"><i class="fas fa-box"></i><span class="menu-text">Productos</span></a>
             <a href="categorias.html" class="menu-item"><i class="fas fa-tags"></i><span class="menu-text">Categorías</span></a>
             <a href="movimientos.html" class="menu-item"><i class="fas fa-exchange-alt"></i><span class="menu-text">Movimientos</span></a>
             <a href="usuario.php" class="menu-item active"><i class="fas fa-users"></i><span class="menu-text">Usuarios</span></a>
