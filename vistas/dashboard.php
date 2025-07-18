@@ -91,8 +91,8 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                         <i class="fas fa-box"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalProducts">1,250</div>
-                <div class="card-footer">+12% desde el mes pasado</div>
+                <div class="card-value" id="totalProducts">Cargando...</div>
+                <div class="card-footer" id="footerProducts">Cargando datos...</div>
             </div>
             
             <div class="card" onclick="navigateTo('categorias.html')">
@@ -102,8 +102,8 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                         <i class="fas fa-tags"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalCategories">32</div>
-                <div class="card-footer">+3 nuevas categorías</div>
+                <div class="card-value" id="totalCategories">Cargando...</div>
+                <div class="card-footer" id="footerCategories">Cargando datos...</div>
             </div>
             
             <div class="card" onclick="navigateTo('movimientos.html')">
@@ -113,8 +113,8 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                         <i class="fas fa-exchange-alt"></i>
                     </div>
                 </div>
-                <div class="card-value" id="todayMovements">48</div>
-                <div class="card-footer">15 entradas, 33 salidas</div>
+                <div class="card-value" id="todayMovements">Cargando...</div>
+                <div class="card-footer" id="footerMovements">Cargando datos...</div>
             </div>
             
             <div class="card" onclick="showAlerts()">
@@ -124,8 +124,8 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                 </div>
-                <div class="card-value" id="totalAlerts">7</div>
-                <div class="card-footer">Stock bajo en 7 productos</div>
+                <div class="card-value" id="totalAlerts">Cargando...</div>
+                <div class="card-footer" id="footerAlerts">Cargando datos...</div>
             </div>
         </div>
         
@@ -136,53 +136,13 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             </div>
             
             <ul class="activity-list" id="activityList">
-                <li class="activity-item" onclick="showActivityDetails(1)">
+                <li class="activity-item">
                     <div class="activity-icon">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-spinner fa-spin"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">Se agregaron 50 unidades de Producto A</div>
-                        <div class="activity-time">Hace 2 horas - por Juan Pérez</div>
-                    </div>
-                </li>
-                
-                <li class="activity-item" onclick="showActivityDetails(2)">
-                    <div class="activity-icon">
-                        <i class="fas fa-minus"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Se retiraron 25 unidades de Producto B</div>
-                        <div class="activity-time">Hace 3 horas - por María López</div>
-                    </div>
-                </li>
-                
-                <li class="activity-item" onclick="showActivityDetails(3)">
-                    <div class="activity-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Se actualizó la información del Producto C</div>
-                        <div class="activity-time">Hace 5 horas - por Carlos Rodríguez</div>
-                    </div>
-                </li>
-                
-                <li class="activity-item" onclick="showActivityDetails(4)">
-                    <div class="activity-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Nuevo usuario registrado: Ana Martínez</div>
-                        <div class="activity-time">Hace 1 día - por Sistema</div>
-                    </div>
-                </li>
-                
-                <li class="activity-item" onclick="showActivityDetails(5)">
-                    <div class="activity-icon">
-                        <i class="fas fa-tag"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Nueva categoría creada: Electrónicos</div>
-                        <div class="activity-time">Hace 2 días - por Admin</div>
+                        <div class="activity-title">Cargando actividad reciente...</div>
+                        <div class="activity-time">Por favor espere</div>
                     </div>
                 </li>
             </ul>
@@ -230,14 +190,27 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             setInterval(updateDashboardData, 30000);
         }
         
-        function loadDashboardData() {
-            // Simular carga de datos
-            showLoading();
-            
-            setTimeout(() => {
+        async function loadDashboardData() {
+            try {
+                showLoading();
+                
+                const response = await fetch('../servicios/obtener_dashboard.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateDashboardCards(data.data);
+                    updateActivityList(data.data.actividad_reciente);
+                } else {
+                    console.error('Error al cargar datos:', data.error);
+                    showErrorMessage('Error al cargar los datos del dashboard');
+                }
+                
                 hideLoading();
-                animateCounters();
-            }, 1000);
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                hideLoading();
+                showErrorMessage('Error de conexión con el servidor');
+            }
         }
         
         function showLoading() {
@@ -254,12 +227,101 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             });
         }
         
-        function animateCounters() {
-            // Animar contadores
-            animateCounter('totalProducts', 1250);
-            animateCounter('totalCategories', 32);
-            animateCounter('todayMovements', 48);
-            animateCounter('totalAlerts', 7);
+        function updateDashboardCards(data) {
+            // Actualizar tarjetas con datos reales
+            animateCounter('totalProducts', data.total_productos);
+            animateCounter('totalCategories', data.total_categorias);
+            animateCounter('todayMovements', data.movimientos_hoy);
+            animateCounter('totalAlerts', data.total_alertas);
+            
+            // Actualizar footers con información adicional
+            document.getElementById('footerProducts').textContent = `+${data.porcentaje_productos}% desde el mes pasado`;
+            document.getElementById('footerCategories').textContent = `+${data.nuevas_categorias} nuevas categorías`;
+            document.getElementById('footerMovements').textContent = `${data.entradas_hoy} entradas, ${data.salidas_hoy} salidas`;
+            
+            const alertText = data.total_alertas > 0 ? 
+                `Stock bajo en ${data.total_alertas} producto${data.total_alertas > 1 ? 's' : ''}` :
+                'No hay alertas de stock';
+            document.getElementById('footerAlerts').textContent = alertText;
+        }
+        
+        function updateActivityList(actividades) {
+            const activityList = document.getElementById('activityList');
+            activityList.innerHTML = '';
+            
+            if (actividades.length === 0) {
+                activityList.innerHTML = `
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">No hay actividad reciente</div>
+                            <div class="activity-time">No se han registrado movimientos</div>
+                        </div>
+                    </li>
+                `;
+                return;
+            }
+            
+            actividades.forEach((actividad, index) => {
+                const iconClass = getActivityIcon(actividad.tipo);
+                const actionText = getActivityText(actividad.tipo, actividad.cantidad, actividad.producto);
+                
+                const activityItem = document.createElement('li');
+                activityItem.className = 'activity-item';
+                activityItem.onclick = () => showActivityDetails(index + 1);
+                
+                activityItem.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-title">${actionText}</div>
+                        <div class="activity-time">${actividad.tiempo} - por ${actividad.usuario}</div>
+                    </div>
+                `;
+                
+                activityList.appendChild(activityItem);
+            });
+        }
+        
+        function getActivityIcon(tipo) {
+            switch(tipo) {
+                case 'entrada': return 'fa-plus';
+                case 'salida': return 'fa-minus';
+                case 'ajuste': return 'fa-edit';
+                case 'transferencia': return 'fa-exchange-alt';
+                default: return 'fa-circle';
+            }
+        }
+        
+        function getActivityText(tipo, cantidad, producto) {
+            switch(tipo) {
+                case 'entrada':
+                    return `Se agregaron ${cantidad} unidades de ${producto}`;
+                case 'salida':
+                    return `Se retiraron ${cantidad} unidades de ${producto}`;
+                case 'ajuste':
+                    return `Se ajustó el stock de ${producto} (${cantidad} unidades)`;
+                case 'transferencia':
+                    return `Se transfirieron ${cantidad} unidades de ${producto}`;
+                default:
+                    return `Movimiento de ${cantidad} unidades de ${producto}`;
+            }
+        }
+        
+        function showErrorMessage(message) {
+            // Mostrar mensaje de error en las tarjetas
+            document.getElementById('totalProducts').textContent = 'Error';
+            document.getElementById('totalCategories').textContent = 'Error';
+            document.getElementById('todayMovements').textContent = 'Error';
+            document.getElementById('totalAlerts').textContent = 'Error';
+            
+            document.getElementById('footerProducts').textContent = message;
+            document.getElementById('footerCategories').textContent = message;
+            document.getElementById('footerMovements').textContent = message;
+            document.getElementById('footerAlerts').textContent = message;
         }
         
         function animateCounter(elementId, targetValue) {
@@ -302,20 +364,42 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             alert(`Mostrando detalles de la actividad ${activityId} - Funcionalidad por implementar`);
         }
         
-        function refreshActivity() {
+        async function refreshActivity() {
             const activityList = document.getElementById('activityList');
             activityList.style.opacity = '0.5';
             
-            setTimeout(() => {
-                activityList.style.opacity = '1';
-                // Aquí se cargarían los datos actualizados
-            }, 1000);
+            try {
+                const response = await fetch('../servicios/obtener_dashboard.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateActivityList(data.data.actividad_reciente);
+                } else {
+                    console.error('Error al actualizar actividad:', data.error);
+                }
+            } catch (error) {
+                console.error('Error de conexión al actualizar actividad:', error);
+            }
+            
+            activityList.style.opacity = '1';
         }
         
-        function updateDashboardData() {
+        async function updateDashboardData() {
             // Actualizar datos en tiempo real
             console.log('Actualizando datos del dashboard...');
-            // Aquí se implementaría la lógica para obtener datos actualizados del servidor
+            try {
+                const response = await fetch('../servicios/obtener_dashboard.php');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateDashboardCards(data.data);
+                    updateActivityList(data.data.actividad_reciente);
+                } else {
+                    console.error('Error al actualizar datos:', data.error);
+                }
+            } catch (error) {
+                console.error('Error de conexión al actualizar:', error);
+            }
         }
         
         // Funciones de utilidad
