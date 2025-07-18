@@ -254,7 +254,7 @@
                             // Evento imprimir
                             const printBtn = fila.querySelector('.print');
                             printBtn.addEventListener('click', () => {
-                                window.open(`../servicios/imprimir_movimiento.php?id=${mov.id}`, '_blank');
+                                window.location.href = `../servicios/imprimir_movimiento.php?id=${mov.id}`;
                             });
                         });
                     })

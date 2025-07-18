@@ -34,6 +34,13 @@ if ($resultado && $resultado->num_rows > 0) {
     <meta charset="UTF-8">
     <title>Imprimir Movimiento</title>
     <link rel="stylesheet" href="../componentes/imprimir_mov.css">
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body onload="window.print()">
     <h1>Detalle del Movimiento</h1>
@@ -46,5 +53,7 @@ if ($resultado && $resultado->num_rows > 0) {
         <tr><td><strong>Usuario</strong></td><td><?= $mov['usuario_nombre'] ?></td></tr>
         <tr><td><strong>Notas</strong></td><td><?= $mov['notas'] ?></td></tr>
     </table>
+    <br>
+    <button class="no-print" onclick="window.location.href='../vistas/movimientos.html'">Volver</button>
 </body>
 </html>
