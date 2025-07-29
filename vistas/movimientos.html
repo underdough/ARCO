@@ -25,7 +25,7 @@
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Inicio</span>
             </a>
-            <a href="productos.php" class="menu-item">
+            <a href="productos.html" class="menu-item">
                 <i class="fas fa-box"></i>
                 <span class="menu-text">Productos</span>
             </a>
@@ -160,6 +160,14 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="movementProduct">Producto</label>
+                        <select class="form-control" id="movementProduct" required>
+                            <option value="">Seleccionar producto</option>
+                            <!-- Las opciones se llenarán automáticamente -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="movementDate">Fecha</label>
                         <input type="date" class="form-control" id="movementDate" required>
                     </div>
@@ -262,6 +270,81 @@
                         console.error('Error al cargar movimientos:', err);
                     });
             }
+            // Mostrar modal al hacer clic en "Nuevo Movimiento"
+            document.getElementById('btnAddMovement').addEventListener('click', function () {
+                document.getElementById('movementModal').style.display = 'flex';
+            });
+            // Cerrar modal al hacer clic en "Cancelar" o la X
+            document.querySelector('#movementModal .close-modal').addEventListener('click', () => {
+                document.getElementById('movementModal').style.display = 'none';
+            });
+
+            document.getElementById('btnCancelMovement').addEventListener('click', () => {
+                document.getElementById('movementModal').style.display = 'none';
+            });
+            // Cerrar modal haciendo clic fuera del contenido
+            window.addEventListener('click', function (event) {
+                const modal = document.getElementById('movementModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            document.getElementById('movementForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const tipo = document.getElementById('movementType').value;
+    const fecha = document.getElementById('movementDate').value;
+    const producto = document.getElementById('movementProduct').value;
+    const cantidad = document.getElementById('movementQuantity').value;
+    const notas = document.getElementById('movementNotes').value;
+
+    const formData = new FormData();
+    formData.append('tipo', tipo);
+    formData.append('fecha', fecha);
+    formData.append('producto', producto);
+    formData.append('cantidad', cantidad);
+    formData.append('notas', notas);
+
+    fetch('../servicios/guardar_movimiento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('✅ ' + data.message);
+            document.getElementById('movementModal').style.display = 'none';
+            cargarMovimientos(); // vuelve a cargar la tabla
+        } else {
+            alert('❌ ' + data.message);
+        }
+    })
+    .catch(err => {
+        console.error('Error al guardar movimiento:', err);
+        alert('❌ Error al enviar los datos');
+    });
+});
+
+function cargarProductos() {
+    fetch('../servicios/obtener_productos.php')
+        .then(res => res.json())
+        .then(data => {
+            const select = document.getElementById('movementProduct');
+            data.forEach(producto => {
+                const option = document.createElement('option');
+                option.value = producto.id; // debe coincidir con el campo en tu tabla productos
+                option.textContent = producto.nombre; // o el campo que uses como nombre visible
+                select.appendChild(option);
+            });
+        })
+        .catch(err => {
+            console.error('Error al cargar productos:', err);
+        });
+}
+
+
+
 
             function mostrarModalDetalleMovimiento(mov) {
                 document.getElementById('detalleId').innerText = mov.id;
@@ -289,6 +372,8 @@
                     modal.style.display = 'none';
                 }
             });
+
+            cargarProductos();
 
             cargarMovimientos();
         });

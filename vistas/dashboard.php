@@ -297,19 +297,36 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         }
         
         function getActivityText(tipo, cantidad, producto) {
-            switch(tipo) {
-                case 'entrada':
-                    return `Se agregaron ${cantidad} unidades de ${producto}`;
-                case 'salida':
-                    return `Se retiraron ${cantidad} unidades de ${producto}`;
-                case 'ajuste':
-                    return `Se ajustó el stock de ${producto} (${cantidad} unidades)`;
-                case 'transferencia':
-                    return `Se transfirieron ${cantidad} unidades de ${producto}`;
-                default:
-                    return `Movimiento de ${cantidad} unidades de ${producto}`;
-            }
-        }
+    switch(tipo) {
+        case 'entrada':
+            return `Se agregaron ${cantidad} unidades de ${producto}`;
+        case 'salida':
+            return `Se retiraron ${cantidad} unidades de ${producto}`;
+        case 'ajuste':
+            return `Se ajustó el stock de ${producto} (${cantidad} unidades)`;
+        case 'transferencia':
+            return `Se transfirieron ${cantidad} unidades de ${producto}`;
+
+        // Aquí vienen los del historial_acciones:
+        case 'crear':
+            return `Se creó: ${producto}`;
+        case 'editar':
+            return `Se editó: ${producto}`;
+        case 'eliminar_producto':
+            return `Se eliminó: ${producto}`;
+        case 'agregar_producto':
+            return `Se agregó el producto: ${producto}`;
+        case 'agregar_categoria':
+            return `Se agregó la categoría: ${producto}`;
+        case 'editar_categoria':
+            return `Se editó la categoría: ${producto}`;
+        case 'eliminar_categoria':
+            return `Se eliminó la categoría: ${producto}`;
+        default:
+            return producto; // Por si acaso viene una descripción genérica
+    }
+}
+    
         
         function showErrorMessage(message) {
             // Mostrar mensaje de error en las tarjetas

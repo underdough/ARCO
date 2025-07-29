@@ -12,73 +12,90 @@ try {
     $sql_productos = "SELECT COUNT(*) as total FROM materiales";
     $resultado_productos = $conexion->query($sql_productos);
     $total_productos = $resultado_productos->fetch_assoc()['total'];
-    
+
     // Obtener total de categorías
     $sql_categorias = "SELECT COUNT(*) as total FROM categorias";
     $resultado_categorias = $conexion->query($sql_categorias);
     $total_categorias = $resultado_categorias->fetch_assoc()['total'];
-    
+
     // Obtener movimientos de hoy
     $sql_movimientos_hoy = "SELECT COUNT(*) as total FROM movimientos WHERE DATE(creado_en) = CURDATE()";
     $resultado_movimientos = $conexion->query($sql_movimientos_hoy);
     $movimientos_hoy = $resultado_movimientos->fetch_assoc()['total'];
-    
-    // Obtener entradas y salidas de hoy
+
+    // Obtener entradas de hoy
     $sql_entradas = "SELECT COUNT(*) as total FROM movimientos WHERE DATE(creado_en) = CURDATE() AND tipo = 'entrada'";
     $resultado_entradas = $conexion->query($sql_entradas);
     $entradas_hoy = $resultado_entradas->fetch_assoc()['total'];
-    
+
+    // Obtener salidas de hoy
     $sql_salidas = "SELECT COUNT(*) as total FROM movimientos WHERE DATE(creado_en) = CURDATE() AND tipo = 'salida'";
     $resultado_salidas = $conexion->query($sql_salidas);
     $salidas_hoy = $resultado_salidas->fetch_assoc()['total'];
-    
-    // Obtener productos con stock bajo (alertas)
+
+    // Obtener productos con stock bajo
     $sql_alertas = "SELECT COUNT(*) as total FROM materiales WHERE stock <= minimo_alarma AND stock > 0";
     $resultado_alertas = $conexion->query($sql_alertas);
     $total_alertas = $resultado_alertas->fetch_assoc()['total'];
-    
+
     // Obtener productos agotados
     $sql_agotados = "SELECT COUNT(*) as total FROM materiales WHERE stock = 0";
     $resultado_agotados = $conexion->query($sql_agotados);
     $productos_agotados = $resultado_agotados->fetch_assoc()['total'];
-    
-    // Obtener actividad reciente (últimos 5 movimientos)
-    $sql_actividad = "SELECT 
-        m.tipo,
-        m.cantidad,
-        mat.nombre_material,
-        m.creado_en,
-        m.notas,
-        CASE 
-            WHEN m.usuario_id = 2 THEN 'Juan Pérez'
-            WHEN m.usuario_id = 4 THEN 'María López'
-            ELSE 'Usuario Sistema'
-        END as usuario
-        FROM movimientos m 
-        LEFT JOIN materiales mat ON m.producto_id = mat.id_material 
-        ORDER BY m.creado_en DESC 
-        LIMIT 5";
-    
+
+    // Obtener actividad reciente combinada (últimos 5 registros de movimientos o historial)
+    $sql_actividad = "
+        SELECT tipo, cantidad, producto, creado_en, usuario, notas FROM (
+            SELECT 
+                m.tipo,
+                m.cantidad,
+                mat.nombre_material AS producto,
+                m.creado_en,
+                CASE 
+                    WHEN m.usuario_id = 2 THEN 'Juan Pérez'
+                    WHEN m.usuario_id = 4 THEN 'María López'
+                    ELSE 'Usuario Sistema'
+                END AS usuario,
+                m.notas
+            FROM movimientos m
+            LEFT JOIN materiales mat ON m.producto_id = mat.id_material
+            WHERE mat.id_material IS NOT NULL
+
+            UNION ALL
+
+            SELECT 
+                h.tipo_accion AS tipo,
+                '' AS cantidad,
+                h.descripcion AS producto,
+                h.fecha AS creado_en,
+                u.nombre AS usuario,
+                '' AS notas
+            FROM historial_acciones h
+            JOIN usuarios u ON h.usuario_id = u.id_usuarios
+        ) AS actividades
+        ORDER BY creado_en DESC
+        LIMIT 5
+    ";
+
     $resultado_actividad = $conexion->query($sql_actividad);
     $actividad_reciente = [];
-    
+
     while ($fila = $resultado_actividad->fetch_assoc()) {
         $tiempo_transcurrido = calcularTiempoTranscurrido($fila['creado_en']);
-        
         $actividad_reciente[] = [
             'tipo' => $fila['tipo'],
             'cantidad' => $fila['cantidad'],
-            'producto' => $fila['nombre_material'],
+            'producto' => $fila['producto'],
             'tiempo' => $tiempo_transcurrido,
             'usuario' => $fila['usuario'],
             'notas' => $fila['notas']
         ];
     }
-    
-    // Calcular porcentaje de cambio (simulado por ahora)
+
+    // Datos simulados (puedes ajustar si tienes métricas reales)
     $porcentaje_productos = rand(5, 20);
     $nuevas_categorias = rand(1, 5);
-    
+
     $respuesta = [
         'success' => true,
         'data' => [
@@ -94,23 +111,26 @@ try {
             'actividad_reciente' => $actividad_reciente
         ]
     ];
-    
+
     echo json_encode($respuesta);
-    
+    $conexion->close();
+    exit;
+
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
     ]);
+    exit;
 }
 
-$conexion->close();
 
+// Función auxiliar
 function calcularTiempoTranscurrido($fecha) {
     $ahora = new DateTime();
     $fecha_movimiento = new DateTime($fecha);
     $diferencia = $ahora->diff($fecha_movimiento);
-    
+
     if ($diferencia->days > 0) {
         return "Hace " . $diferencia->days . " día" . ($diferencia->days > 1 ? "s" : "");
     } elseif ($diferencia->h > 0) {
@@ -121,4 +141,3 @@ function calcularTiempoTranscurrido($fecha) {
         return "Hace unos segundos";
     }
 }
-?>

@@ -4,18 +4,19 @@ include_once "conexion.php";
 
 $conexion = ConectarDB();
 
-$sql = "SELECT 
-            m.id,
-            m.tipo,
-            m.fecha,
-            m.producto_id,
-            m.cantidad,
-            m.usuario_id,
-            u.nombre AS usuario_nombre,
-            m.notas
-        FROM movimientos m
-        LEFT JOIN usuarios u ON m.usuario_id = u.id_usuarios
-        ORDER BY m.id ASC";
+$sql = "SELECT
+    m.id AS id,
+    m.fecha,
+    m.tipo,
+    m.cantidad,
+    m.notas,
+    u.nombre AS usuario_nombre,
+    p.nombre_material AS producto
+FROM movimientos m
+LEFT JOIN usuarios u ON m.usuario_id = u.id_usuarios
+LEFT JOIN materiales p ON m.producto_id = p.id_material
+ORDER BY m.fecha DESC";
+
 
 $resultado = $conexion->query($sql);
 

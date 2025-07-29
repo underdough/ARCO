@@ -48,6 +48,6 @@ if (
 }
 
 } else {
-    echo "Usted no se encuentra registrado en la base de datos. Por favor comuníquese con un administrador";
+    echo "Usted no se encuentra registrado en la base de datos. Por favor si desea registrarse click aqui: <a href=''>Registrarse</a>";
     echo '<a href="/ARCO/login.html">Volver al inicio</a>';
 }

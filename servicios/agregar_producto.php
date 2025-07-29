@@ -1,5 +1,8 @@
 <?php
+require_once 'registrar_historial.php';
 require_once 'conexion.php';
+session_start();
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -62,6 +65,12 @@ try {
     
     if ($stmt->execute()) {
         $producto_id = $conexion->insert_id;
+
+        $usuario_id = $_SESSION['usuario_id'] ?? null;
+        if ($usuario_id) {
+            registrarHistorial($usuario_id, 'entrada', 'Se agregaron ' . $stock . ' unidades de ' . $nombre);
+
+        }
         
         echo json_encode([
             'success' => true,

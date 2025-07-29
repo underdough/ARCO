@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-06-2025 a las 19:44:23
+-- Tiempo de generación: 25-07-2025 a las 17:40:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -30,16 +30,18 @@ SET time_zone = "+00:00";
 CREATE TABLE `categorias` (
   `id_categorias` int(11) NOT NULL,
   `nombre_cat` varchar(25) DEFAULT NULL,
-  `subcategoria` int(11) DEFAULT NULL
+  `subcategorias` int(11) DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT 1,
+  `productos` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-INSERT INTO `categorias`(`id_categorias`, `nombre_cat`, `subcategoria`) VALUES 
-('1','Electronicos','Telefono'),
-('2','Oficina','Papeleria'),
-('3','Herramientas','Manuales'),
-('4','Limpieza','Detergentes'),
-('5','Seguridad','EPP');
+--
+-- Volcado de datos para la tabla `categorias`
+--
 
+INSERT INTO `categorias` (`id_categorias`, `nombre_cat`, `subcategorias`, `estado`, `productos`) VALUES
+(1, 'Electronicos', 0, 1, 0),
+(2, 'Aji píque', 0, 0, 23);
 
 -- --------------------------------------------------------
 
@@ -115,6 +117,13 @@ CREATE TABLE `empresa` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `empresa`
+--
+
+INSERT INTO `empresa` (`id`, `nombre`, `nif`, `direccion`, `ciudad`, `telefono`, `email`, `logo`, `updated_at`) VALUES
+(2, 'siii', '312321', 'Carrera 14', 'Barcelona', '3166678284', 'k3vinch3nl1@gmail.com', NULL, '2025-06-26 18:42:13');
+
 -- --------------------------------------------------------
 
 --
@@ -151,16 +160,7 @@ CREATE TABLE `materiales` (
 --
 
 INSERT INTO `materiales` (`id_material`, `id_categorias`, `nombre_material`, `stock`, `disponibilidad`, `minimo_alarma`, `fk_reporte`, `fk_ubicacion`, `conf_recibido`) VALUES
-(1, 1, 'Smartphone Samsung Galaxy', 2, 1, 5, NULL, NULL, 'recibido'),
-(2, 1, 'Laptop Dell Inspiron', 15, 1, 10, NULL, NULL, 'recibido'),
-(3, 2, 'Papel Bond A4', 8, 1, 20, NULL, NULL, 'recibido'),
-(4, 2, 'Marcadores Permanentes', 25, 1, 15, NULL, NULL, 'recibido'),
-(5, 3, 'Martillo de Acero', 12, 1, 8, NULL, NULL, 'recibido'),
-(6, 3, 'Destornillador Phillips', 3, 1, 10, NULL, NULL, 'recibido'),
-(7, 4, 'Detergente Líquido', 18, 1, 12, NULL, NULL, 'recibido'),
-(8, 4, 'Escoba Industrial', 4, 1, 8, NULL, NULL, 'recibido'),
-(9, 5, 'Casco de Seguridad', 22, 1, 15, NULL, NULL, 'recibido'),
-(10, 5, 'Guantes de Protección', 6, 1, 20, NULL, NULL, 'recibido');
+(1, 2, 'canela', 45, 1, 5, NULL, NULL, 'recibido');
 
 -- --------------------------------------------------------
 
@@ -184,22 +184,19 @@ CREATE TABLE `movimientos` (
 --
 
 INSERT INTO `movimientos` (`id`, `tipo`, `fecha`, `producto_id`, `cantidad`, `usuario_id`, `notas`, `creado_en`) VALUES
-(1, 'entrada', '2025-06-26', 1, 10, 2, 'Compra de smartphones Samsung', '2025-06-26 00:24:24'),
-(2, 'salida', '2025-06-26', 1, 8, 4, 'Venta de smartphones a cliente corporativo', '2025-06-26 00:31:37'),
-(3, 'entrada', '2025-06-26', 3, 50, 4, 'Recepción de papel bond A4', '2025-06-26 00:32:13'),
-(4, 'salida', '2025-06-26', 3, 42, 4, 'Consumo de papel en oficinas', '2025-06-26 00:40:18'),
-(5, 'ajuste', '2025-06-26', 6, 7, 4, 'Corrección de inventario destornilladores', '2025-06-26 00:43:46'),
-(6, 'entrada', '2025-06-27', 2, 5, 2, 'Compra de laptops Dell', '2025-06-27 08:15:30'),
-(7, 'transferencia', '2025-06-27', 5, 3, 4, 'Traslado de martillos a almacén B', '2025-06-27 10:22:15'),
-(8, 'salida', '2025-06-27', 8, 4, 2, 'Uso de escobas en limpieza', '2025-06-27 14:30:45'),
-(9, 'entrada', '2025-06-28', 10, 30, 4, 'Recepción de guantes de protección', '2025-06-28 09:45:20'),
-(10, 'salida', '2025-06-28', 10, 24, 2, 'Distribución de guantes a trabajadores', '2025-06-28 16:20:10');
-
-
-
+(1, 'salida', '2025-06-26', 3, 23, 2, 'dsasfasfaf', '2025-06-26 05:24:24'),
+(2, 'salida', '2025-06-26', 3, 23, 4, 'qeewqeqwe', '2025-06-26 05:31:37'),
+(3, 'ajuste', '2025-06-30', 5, 12, 4, 'qqqq', '2025-06-26 05:32:13'),
+(4, 'salida', '2025-06-26', 2, 12, 4, 'asdasdasd', '2025-06-26 05:40:18'),
+(5, 'salida', '2025-06-30', 3, 23, 4, 'sdsdsd', '2025-06-26 05:43:46'),
+(0, 'entrada', '2025-06-26', 1, 4, 3, 'entrada', '2025-06-26 23:05:30');
 
 -- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `notificaciones`
+--
+
 CREATE TABLE `notificaciones` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -209,6 +206,13 @@ CREATE TABLE `notificaciones` (
   `notify_email` tinyint(1) DEFAULT 0,
   `notification_emails` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notificaciones`
+--
+
+INSERT INTO `notificaciones` (`id`, `usuario_id`, `notify_low_stock`, `low_stock_threshold`, `notify_movements`, `notify_email`, `notification_emails`) VALUES
+(0, 3, 1, 15, 0, 1, 'k3vinch3nl1@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -258,6 +262,16 @@ CREATE TABLE `reportes_generados` (
   `fecha_generado` timestamp NOT NULL DEFAULT current_timestamp(),
   `archivo_url` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `reportes_generados`
+--
+
+INSERT INTO `reportes_generados` (`id`, `titulo`, `descripcion`, `tipo_reporte`, `formato`, `fecha_inicio`, `fecha_fin`, `fecha_generado`, `archivo_url`) VALUES
+(1, 'Reporte de Prueba', 'Este es un reporte de prueba', 'movimientos', 'pdf', '2024-01-01', '2024-01-31', '2025-06-26 23:56:49', 'test.pdf'),
+(3, 'Test Reporte 2025-06-27 21:06:25', 'Notas de prueba', 'inventario', 'PDF', '2024-01-01', '2024-12-31', '2025-06-27 19:06:25', 'reportes/test_685eebb1af2e4.pdf'),
+(4, 'Reporte de Inventario Actual', '', 'inventario', 'pdf', '2025-05-27', '2025-06-27', '2025-06-28 00:57:01', 'reportes/685f3ddd794b9.pdf'),
+(5, 'Reporte de Movimientos de Inventario', '', 'movimientos', 'pdf', '2025-06-26', '2025-06-24', '2025-06-28 00:57:42', 'reportes/685f3e069d21f.pdf');
 
 -- --------------------------------------------------------
 
@@ -386,12 +400,6 @@ ALTER TABLE `materiales`
   ADD KEY `fk_materiales_ubicaciones` (`fk_ubicacion`);
 
 --
--- Indices de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indices de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
@@ -447,7 +455,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categorias` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categorias` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
@@ -477,19 +485,13 @@ ALTER TABLE `documentos`
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `materiales`
 --
 ALTER TABLE `materiales`
-  MODIFY `id_material` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_material` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
@@ -507,7 +509,7 @@ ALTER TABLE `reportes`
 -- AUTO_INCREMENT de la tabla `reportes_generados`
 --
 ALTER TABLE `reportes_generados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `seguimiento`

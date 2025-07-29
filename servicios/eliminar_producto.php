@@ -1,5 +1,8 @@
 <?php
 require_once 'conexion.php';
+require_once 'registrar_historial.php';
+session_start();
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, DELETE, OPTIONS');
@@ -69,12 +72,17 @@ try {
         $stmt->bind_param('i', $id);
         
         if ($stmt->execute()) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Producto desactivado exitosamente (tiene movimientos asociados)',
-                'action' => 'deactivated'
-            ]);
-        } else {
+    $usuario_id = $_SESSION['usuario_id'] ?? null;
+    if ($usuario_id) {
+        registrarHistorial($usuario_id, 'desactivado', 'Desactivó el producto ID: ' . $id . ' — Nombre: ' . $producto['nombre_material']);
+    }
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Producto desactivado exitosamente (tiene movimientos asociados)',
+        'action' => 'deactivated'
+    ]);
+    } else {
             throw new Exception('Error al desactivar el producto: ' . $stmt->error);
         }
     } else {
@@ -85,6 +93,11 @@ try {
         
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
+
+                $usuario_id = $_SESSION['usuario_id'] ?? null;
+                if ($usuario_id) {
+                    registrarHistorial($usuario_id, 'eliminar_producto', 'Eliminó el producto ID: ' . $id . ' — Nombre: ' . $producto['nombre_material']);
+                }
                 echo json_encode([
                     'success' => true,
                     'message' => 'Producto eliminado exitosamente',

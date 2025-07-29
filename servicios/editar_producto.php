@@ -1,5 +1,8 @@
 <?php
 require_once 'conexion.php';
+require_once 'registrar_historial.php';
+session_start();
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -82,6 +85,11 @@ try {
     
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
+
+            $usuario_id = $_SESSION['usuario_id'] ?? null;
+            if ($usuario_id) {
+                registrarHistorial($usuario_id, 'editar_producto', 'Editó el producto ID: ' . $id . ' — Nuevo nombre: ' . $nombre);
+            }
             echo json_encode([
                 'success' => true,
                 'message' => 'Producto actualizado exitosamente'
