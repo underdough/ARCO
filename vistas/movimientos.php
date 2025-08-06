@@ -67,7 +67,7 @@ if (!isset($_SESSION['usuario_id'])) {
             <h2>Gestión de Movimientos</h2>
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Buscar movimientos...">
+                <input type="text" id="searchInput" placeholder="Buscar movimientos...">
             </div>
             <div class="action-buttons">
                 <button class="btn btn-secondary">
@@ -228,54 +228,143 @@ if (!isset($_SESSION['usuario_id'])) {
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            function cargarMovimientos() {
-                fetch('../servicios/obtener_movimientos.php')
+            let movimientosData = []; // Variable para almacenar todos los movimientos
+
+            function cargarMovimientos(filtros = {}) {
+                // Mostrar indicador de carga
+                const tbody = document.querySelector('.movements-table tbody');
+                if (filtros.busqueda !== undefined) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Buscando...</td></tr>';
+                }
+                
+                // Construir URL con parámetros de filtro
+                let url = '../servicios/filtrar_movimientos.php';
+                const params = new URLSearchParams();
+                
+                if (filtros.tipo) params.append('tipo', filtros.tipo);
+                if (filtros.usuario) params.append('usuario', filtros.usuario);
+                if (filtros.fecha) params.append('fecha', filtros.fecha);
+                if (filtros.busqueda !== undefined) params.append('busqueda', filtros.busqueda);
+                
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+
+                fetch(url)
                     .then(res => res.json())
                     .then(data => {
-                        const tbody = document.querySelector('.movements-table tbody');
-                        tbody.innerHTML = '';
-                        data.forEach(mov => {
-                            const fila = document.createElement('tr');
-                            fila.innerHTML = `
-                                <td>${mov.id}</td>
-                                <td>${mov.fecha}</td>
-                                <td><span class="status status-${mov.tipo}">${mov.tipo}</span></td>
-                                <td>${mov.producto}</td>
-                                <td>${mov.cantidad}</td>
-                                <td>${mov.usuario_nombre || 'Sin nombre'}</td>
-                                <td>${mov.notas}</td>
-                                <td class="actions">
-                                    <button class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></button>
-                                    <button class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></button>
-                                </td>
-                            `;
-                            tbody.appendChild(fila);
-
-                            // Evento Ver
-                            const viewBtn = fila.querySelector('.view');
-                            viewBtn.addEventListener('click', () => {
-                                const id = viewBtn.dataset.id;
-                                fetch(`../servicios/obtener_detalle_movimiento.php?id=${id}`)
-                                    .then(res => res.json())
-                                    .then(mov => {
-                                        mostrarModalDetalleMovimiento(mov);
-                                    })
-                                    .catch(err => {
-                                        alert('Error al obtener detalles: ' + err);
-                                    });
-                            });
-
-                            // Evento imprimir
-                            const printBtn = fila.querySelector('.print');
-                            printBtn.addEventListener('click', () => {
-                                window.location.href = `../servicios/imprimir_movimiento.php?id=${mov.id}`;
-                            });
-                        });
+                        movimientosData = data;
+                        mostrarMovimientos(data);
                     })
                     .catch(err => {
                         console.error('Error al cargar movimientos:', err);
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: red;">Error al cargar movimientos</td></tr>';
                     });
             }
+
+            function mostrarMovimientos(movimientos) {
+                const tbody = document.querySelector('.movements-table tbody');
+                tbody.innerHTML = '';
+                
+                if (movimientos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">No se encontraron movimientos</td></tr>';
+                    return;
+                }
+                
+                movimientos.forEach(mov => {
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td>${mov.id}</td>
+                        <td>${mov.fecha}</td>
+                        <td><span class="status status-${mov.tipo}">${mov.tipo}</span></td>
+                        <td>${mov.producto}</td>
+                        <td>${mov.cantidad}</td>
+                        <td>${mov.usuario_nombre || 'Sin nombre'}</td>
+                        <td>${mov.notas}</td>
+                        <td class="actions">
+                            <button class="action-icon view" data-id="${mov.id}"><i class="fas fa-eye"></i></button>
+                            <button class="action-icon print" data-id="${mov.id}"><i class="fas fa-print"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(fila);
+
+                    // Evento Ver
+                    const viewBtn = fila.querySelector('.view');
+                    viewBtn.addEventListener('click', () => {
+                        const id = viewBtn.dataset.id;
+                        fetch(`../servicios/obtener_detalle_movimiento.php?id=${id}`)
+                            .then(res => res.json())
+                            .then(mov => {
+                                mostrarModalDetalleMovimiento(mov);
+                            })
+                            .catch(err => {
+                                alert('Error al obtener detalles: ' + err);
+                            });
+                    });
+
+                    // Evento imprimir
+                    const printBtn = fila.querySelector('.print');
+                    printBtn.addEventListener('click', () => {
+                        window.location.href = `../servicios/imprimir_movimiento.php?id=${mov.id}`;
+                    });
+                });
+            }
+
+            // Funcionalidad del botón de filtrar
+            const filterBtn = document.querySelector('.btn-secondary');
+            const filterPanel = document.getElementById('filterPanel');
+            
+            filterBtn.addEventListener('click', function() {
+                if (filterPanel.style.display === 'none' || filterPanel.style.display === '') {
+                    filterPanel.style.display = 'block';
+                } else {
+                    filterPanel.style.display = 'none';
+                }
+            });
+
+            // Funcionalidad del formulario de filtros
+            document.getElementById('filterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const filtros = {
+                    tipo: document.getElementById('filterTipo').value,
+                    usuario: document.getElementById('filterUsuario').value,
+                    fecha: document.getElementById('filterFecha').value
+                };
+                
+                cargarMovimientos(filtros);
+            });
+
+            // Funcionalidad del botón restablecer
+            document.getElementById('btnResetFilter').addEventListener('click', function() {
+                document.getElementById('filterForm').reset();
+                cargarMovimientos(); // Cargar todos los movimientos
+            });
+
+            // Funcionalidad de la barra de búsqueda
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+            
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const busqueda = this.value.trim();
+                    console.log('Buscando:', busqueda); // Para debug
+                    if (busqueda.length >= 1 || busqueda.length === 0) {
+                        cargarMovimientos({ busqueda: busqueda });
+                    }
+                }, 300); // Reducido a 300ms para respuesta más rápida
+            });
+
+            // También agregar evento para búsqueda al presionar Enter
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    clearTimeout(searchTimeout);
+                    const busqueda = this.value.trim();
+                    cargarMovimientos({ busqueda: busqueda });
+                }
+            });
+
             // Mostrar modal al hacer clic en "Nuevo Movimiento"
             document.getElementById('btnAddMovement').addEventListener('click', function () {
                 document.getElementById('movementModal').style.display = 'flex';
