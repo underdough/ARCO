@@ -385,7 +385,7 @@ if (isset($_POST['generar_reporte'])) {
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Inicio</span>
             </a>
-            <a href="productos.php" class="menu-item">
+            <a href="productos.html" class="menu-item">
                 <i class="fas fa-box"></i>
                 <span class="menu-text">Productos</span>
             </a>

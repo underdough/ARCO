@@ -15,6 +15,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,14 +37,38 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             <p class="subtlo">Gestión de Inventario</p>
         </div>
         <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item"><i class="fas fa-tachometer-alt"></i><span class="menu-text">Inicio</span></a>
-            <a href="productos.php" class="menu-item"><i class="fas fa-box"></i><span class="menu-text">Productos</span></a>
-            <a href="categorias.html" class="menu-item"><i class="fas fa-tags"></i><span class="menu-text">Categorías</span></a>
-            <a href="movimientos.html" class="menu-item"><i class="fas fa-exchange-alt"></i><span class="menu-text">Movimientos</span></a>
-            <a href="usuario.php" class="menu-item active"><i class="fas fa-users"></i><span class="menu-text">Usuarios</span></a>
-            <a href="reportes.php" class="menu-item"><i class="fas fa-chart-bar"></i><span class="menu-text">Reportes</span></a>
-            <a href="configuracion.php" class="menu-item"><i class="fas fa-cog"></i><span class="menu-text">Configuración</span></a>
-            <a href="../login.html" class="menu-cerrar"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Cerrar Sesión</span></a>
+            <a href="dashboard.php" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="menu-text">Inicio</span>
+            </a>
+            <a href="productos.html" class="menu-item">
+                <i class="fas fa-box"></i>
+                <span class="menu-text">Productos</span>
+            </a>
+            <a href="categorias.html" class="menu-item">
+                <i class="fas fa-tags"></i>
+                <span class="menu-text">Categorías</span>
+            </a>
+            <a href="movimientos.html" class="menu-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="menu-text">Movimientos</span>
+            </a>
+            <a href="usuario.php" class="menu-item active">
+                <i class="fas fa-users"></i>
+                <span class="menu-text">Usuarios</span>
+            </a>
+            <a href="reportes.php" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span class="menu-text">Reportes</span>
+            </a>
+            <a href="configuracion.php" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span class="menu-text">Configuración</span>
+            </a>
+            <a href="../login.html" class="menu-cerrar">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="menu-text">Cerrar Sesión</span>
+            </a>
         </div>
     </div>
 
@@ -81,11 +106,11 @@ $nombreCompleto = $nombre . ' ' . $apellido;
     </div>
 
     <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         });
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', function(e) {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.getElementById('sidebarToggle');
             if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
@@ -99,7 +124,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
         // Abrir modal con AJAX
         document.querySelectorAll('.btn-editar').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const userId = this.getAttribute('data-id');
                 fetch(`../servicios/editar_usuario.php?id=${userId}`)
@@ -117,7 +142,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         }
 
         // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function (e) {
+        window.addEventListener('click', function(e) {
             const modal = document.getElementById('editarModal');
             if (e.target === modal) {
                 cerrarModal();
@@ -125,4 +150,5 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         });
     </script>
 </body>
+
 </html>

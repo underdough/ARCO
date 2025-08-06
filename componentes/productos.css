@@ -306,15 +306,15 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #2d7a00 100%);
+    background: var(--primary-color);
     color: white;
     border: 2px solid transparent;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #2d7a00 0%, #1e5200 100%);
+    background:var(--tertiary-color);
+
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(57, 169, 0, 0.4);
     border-color: rgba(255, 255, 255, 0.2);
 }
 
