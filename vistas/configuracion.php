@@ -54,15 +54,15 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Inicio</span>
             </a>
-            <a href="productos.html" class="menu-item">
+            <a href="productos.php" class="menu-item">
                 <i class="fas fa-box"></i>
                 <span class="menu-text">Productos</span>
             </a>
-            <a href="categorias.html" class="menu-item">
+            <a href="categorias.php" class="menu-item">
                 <i class="fas fa-tags"></i>
                 <span class="menu-text">Categorías</span>
             </a>
-            <a href="movimientos.html" class="menu-item">
+            <a href="movimientos.php" class="menu-item">
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
