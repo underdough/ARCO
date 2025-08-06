@@ -409,7 +409,7 @@ if (isset($_POST['generar_reporte'])) {
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
-            <a href="../login.html" class="menu-cerrar">
+            <a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>

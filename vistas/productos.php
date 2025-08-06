@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: ../login.html');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,10 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Añadir FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ELIMINAR esta línea duplicada que causa error 404 -->
-    <!-- <link rel="stylesheet" href="../public/componentes/productos.css"> -->
 </head>
 <body>
     <div class="sidebar">
@@ -48,7 +52,7 @@
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
-            <a href="../login.html" class="menu-cerrar">
+            <a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>
@@ -152,7 +156,6 @@
     </button>
     
     <script src="../SOLOjavascript/productos.js"></script>
-    <!-- ELIMINAR esta línea que causa error 404 -->
-    <!-- <script src="../public/js/admin-verification.js"></script> -->
+    <script src="../public/js/admin-verification.js"></script>
 </body>
 </html>
