@@ -1,19 +1,18 @@
-/* Estilos específicos para configuración */
+/* Estilos específicos para configuración - Versión mejorada */
 :root {
-    --primary-color: #395886; /* Azul principal */
-    --secondary-color: #395886; /* Azul oscuro */
-    --tertiary-color: #638ECB; /* Azul intermedio */
-    --accent-color: #8AAEE0; /* Azul medio para acentos */
-    --border-color: #B1C9EF; /* Azul claro para bordes */
-    --light-bg: #F0F3FA; /* Fondo claro */
+    --primary-color: #395886;
+    --secondary-color: #395886;
+    --tertiary-color: #638ECB;
+    --accent-color: #8AAEE0;
+    --border-color: #B1C9EF;
+    --light-bg: #F0F3FA;
     --text-color: #333333;
     --shadow-color: rgba(61, 93, 238, 0.15);
-    --transition-speed: 0.3s; /* Igual que productos.css */
-    --transition-timing: ease; /* Igual que productos.css */
+    --transition-speed: 0.2s; /* Reducido de 0.3s */
+    --transition-timing: ease;
 }
 
 * {
-    scroll-behavior: smooth;
     box-sizing: border-box;
 }
 
@@ -34,7 +33,6 @@ body {
     left: 0;
     top: 0;
     overflow-y: auto;
-    transition: width var(--transition-speed) var(--transition-timing);
     z-index: 1000;
 }
 
@@ -60,96 +58,53 @@ body {
 .sidebar-header h1 {
     margin: 0;
     font-size: 1.8rem;
-    transition: opacity var(--transition-speed) var(--transition-timing);
 }
 
 .sidebar-menu {
     padding: 20px 0;
 }
 
-
-.menu-cerrar {
+.menu-item {
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    transition: background-color var(--transition-speed) ease;
     text-decoration: none;
     color: white;
-    position: absolute;
-    /* Fija el botón en la parte inferior */
-    bottom: 0;
-    /* Lo coloca en la parte inferior */
-    left: 0;
-    width: 100%;
-    /* Ocupa todo el ancho de la sidebar */
-    height: auto;
-    min-height: 40px;
-    /* Ajusta la altura mínima */
-    overflow: hidden;
+    position: relative;
 }
 
-.menu-cerrar::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0;
-    background: rgba(255, 255, 255, 0.1);
-    transition: width 0.3s ease;
-}
-
-.menu-cerrar:hover::before,
-.menu-cerrar.active::before {
-    width: 100%;
-}
-
-.menu-cerrar:hover,
-.menu-cerrar.active {
+/* Eliminamos la animación de brillo deslizante */
+.menu-item:hover, .menu-item.active {
     background-color: rgba(255, 255, 255, 0.1);
-    opacity: 0.9;
 }
 
-.menu-cerrar i {
+.menu-item i {
     margin-right: 10px;
     width: 20px;
     text-align: center;
 }
 
-
-
-.menu-item {
+.menu-cerrar {
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    transition: background-color var(--transition-speed) ease;
     text-decoration: none;
     color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-item::before {
-    content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s;
+    height: auto;
+    min-height: 40px;
 }
 
-.menu-item:hover::before {
-    left: 100%;
-}
-
-.menu-item:hover, .menu-item.active {
+.menu-cerrar:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    opacity: 0.9;
 }
 
-.menu-item i {
+.menu-cerrar i {
     margin-right: 10px;
     width: 20px;
     text-align: center;
@@ -161,9 +116,6 @@ body {
     padding: 20px;
     overflow-y: auto;
     height: 100vh;
-    scroll-behavior: smooth;
-    transition: margin-left var(--transition-speed) var(--transition-timing);
-    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
 .main-content::-webkit-scrollbar {
@@ -181,7 +133,7 @@ body {
 }
 
 .main-content::-webkit-scrollbar-thumb:hover {
-    background: var(--tertiary-color); /* Ajustado para consistencia */
+    background: var(--tertiary-color);
 }
 
 .header {
@@ -193,7 +145,6 @@ body {
     padding: 15px 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px var(--shadow-color);
-    animation: slideInDown 0.5s var(--transition-timing); /* Igual que productos.css */
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -204,39 +155,23 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    transition: all var(--transition-speed) var(--transition-timing);
+    transition: all var(--transition-speed) ease;
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    position: relative;
-    overflow: hidden;
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s var(--transition-timing); /* Igual que productos.css */
-}
-
-.btn:hover::before {
-    left: 100%;
-}
-
+/* Eliminamos el efecto de brillo deslizante */
 .btn-primary {
     background: var(--primary-color);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--tertiary-color); /* Igual que productos.css */
-    transform: translateY(-2px); /* Igual que productos.css */
-    box-shadow: 0 4px 12px rgba(57, 88, 134, 0.3);
+    background: var(--tertiary-color);
+    transform: translateY(-1px); /* Reducido de -2px */
+    box-shadow: 0 2px 8px rgba(57, 88, 134, 0.2); /* Reducido */
 }
 
 .btn-secondary {
@@ -246,8 +181,8 @@ body {
 
 .btn-secondary:hover {
     background: #545b62;
-    transform: translateY(-2px); /* Igual que productos.css */
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    transform: translateY(-1px); /* Reducido de -2px */
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2); /* Reducido */
 }
 
 .config-section {
@@ -256,7 +191,6 @@ body {
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 2px 10px var(--shadow-color);
-    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
 .config-section h3 {
@@ -283,13 +217,13 @@ body {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
-    transition: all var(--transition-speed) var(--transition-timing); /* Igual que productos.css */
+    transition: border-color var(--transition-speed) ease;
 }
 
 .form-control:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(57, 88, 134, 0.3); /* Igual que productos.css */
+    box-shadow: 0 0 3px rgba(57, 88, 134, 0.2); /* Reducido */
 }
 
 .form-row {
@@ -322,7 +256,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: background-color var(--transition-speed) var(--transition-timing);
+    transition: background-color var(--transition-speed) ease;
     border-radius: 24px;
 }
 
@@ -334,7 +268,7 @@ body {
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: transform var(--transition-speed) var(--transition-timing);
+    transition: transform var(--transition-speed) ease;
     border-radius: 50%;
 }
 
@@ -346,23 +280,22 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-.permission-table {
+.permissions-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px var(--shadow-color);
-    animation: fadeInUp 0.6s var(--transition-timing); /* Igual que productos.css */
 }
 
-.permission-table th, .permission-table td {
+.permissions-table th, .permissions-table td {
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
 }
 
-.permission-table th {
+.permissions-table th {
     background-color: var(--primary-color);
     color: white;
     font-weight: 500;
@@ -462,7 +395,7 @@ input:checked + .slider:before {
     background: #4caf50;
     border-radius: 50%;
     margin-right: 8px;
-    animation: spin 1s linear infinite; /* Usar spin de productos.css */
+    animation: pulse 2s infinite; /* Cambiado a pulse más suave */
 }
 
 .theme-selector {
@@ -477,12 +410,12 @@ input:checked + .slider:before {
     border-radius: 8px;
     cursor: pointer;
     border: 3px solid transparent;
-    transition: all var(--transition-speed) var(--transition-timing);
+    transition: border-color var(--transition-speed) ease;
+    position: relative;
 }
 
 .theme-option.selected {
     border-color: var(--primary-color);
-    transform: scale(1.1); /* Igual que productos.css */
 }
 
 .theme-option::after {
@@ -494,7 +427,7 @@ input:checked + .slider:before {
     color: white;
     font-weight: bold;
     opacity: 0;
-    transition: opacity var(--transition-speed) var(--transition-timing);
+    transition: opacity var(--transition-speed) ease;
 }
 
 .theme-option.selected::after {
@@ -523,7 +456,7 @@ input:checked + .slider:before {
 
 .security-bar {
     height: 100%;
-    transition: width var(--transition-speed) var(--transition-timing);
+    transition: width var(--transition-speed) ease;
 }
 
 .security-low .security-bar { width: 33%; background: #f44336; }
@@ -536,25 +469,15 @@ input:checked + .slider:before {
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    animation: spin 1s linear infinite; /* Igual que productos.css */
+    animation: spin 1s linear infinite;
     display: inline-block;
     margin-right: 10px;
 }
 
-/* Animaciones de productos.css */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Animaciones simplificadas */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 @keyframes spin {
@@ -566,6 +489,7 @@ input:checked + .slider:before {
     .sidebar {
         width: 70px;
         transform: translateX(-100%);
+        transition: transform var(--transition-speed) ease;
     }
 
     .sidebar.collapsed {
@@ -594,12 +518,11 @@ input:checked + .slider:before {
         width: 40px;
         height: 40px;
         cursor: pointer;
-        transition: all var(--transition-speed) var(--transition-timing);
+        transition: background-color var(--transition-speed) ease;
     }
 
     .sidebar-toggle:hover {
-        background: var(--tertiary-color); /* Igual que productos.css */
-        transform: scale(1.1); /* Igual que productos.css */
+        background: var(--tertiary-color);
     }
 
     .header {

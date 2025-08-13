@@ -30,6 +30,7 @@ try {
     $nombre = isset($input['nombre']) ? trim($input['nombre']) : '';
     $categoria_id = isset($input['categoria_id']) ? (int)$input['categoria_id'] : 0;
     $stock = isset($input['stock']) ? (int)$input['stock'] : 0;
+    $precio = isset($input['precio']) ? (float)$input['precio'] : 0.00; // Agregar precio
     $descripcion = isset($input['descripcion']) ? trim($input['descripcion']) : '';
     
     // Validaciones
@@ -45,6 +46,10 @@ try {
         throw new Exception('El stock no puede ser negativo');
     }
     
+    if ($precio < 0) {
+        throw new Exception('El precio no puede ser negativo');
+    }
+    
     // Verificar que la categoría existe
     $sql_categoria = "SELECT id_categorias FROM categorias WHERE id_categorias = ?";
     $stmt_categoria = $conexion->prepare($sql_categoria);
@@ -56,12 +61,12 @@ try {
         throw new Exception('La categoría seleccionada no existe');
     }
     
-    // Insertar producto
-    $sql = "INSERT INTO materiales (nombre_material, id_categorias, stock, disponibilidad, minimo_alarma, conf_recibido) 
-            VALUES (?, ?, ?, 1, 5, 'recibido')";
+    // Insertar producto con precio
+    $sql = "INSERT INTO materiales (nombre_material, id_categorias, stock, precio, disponibilidad, minimo_alarma, conf_recibido) 
+            VALUES (?, ?, ?, ?, 1, 5, 'recibido')";
     
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param('sii', $nombre, $categoria_id, $stock);
+    $stmt->bind_param('siid', $nombre, $categoria_id, $stock, $precio);
     
     if ($stmt->execute()) {
         $producto_id = $conexion->insert_id;
@@ -69,7 +74,6 @@ try {
         $usuario_id = $_SESSION['usuario_id'] ?? null;
         if ($usuario_id) {
             registrarHistorial($usuario_id, 'entrada', 'Se agregaron ' . $stock . ' unidades de ' . $nombre);
-
         }
         
         echo json_encode([
@@ -88,5 +92,7 @@ try {
     ]);
 }
 
-$conexion->close();
+if ($conexion && !$conexion->connect_error) {
+    $conexion->close();
+}
 ?>
