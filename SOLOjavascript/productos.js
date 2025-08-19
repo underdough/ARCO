@@ -96,7 +96,6 @@
                 const row = document.createElement('tr');
                 
                 const estadoClass = producto.estado === 'Disponible' ? 'status-disponible' : 
-
                 producto.estado === 'Stock Bajo' ? 'status-bajo' : 'status-agotado';
                 
                 row.innerHTML = `
@@ -106,9 +105,15 @@
                     <td>${producto.stock}</td>
                     <td>${formatearPrecio(producto.precio)}</td>
                     <td><span class="status ${estadoClass}">${producto.estado}</span></td>
-                    <td class="actions">
-                        <div class="action-icon edit" onclick="editarProducto(${producto.id})"><i class="fas fa-edit"></i></div>
-                        <div class="action-icon delete" onclick="eliminarProducto(${producto.id}, '${producto.nombre}')"><i class="fas fa-trash"></i></div>
+                    <td>
+                        <div class="actions">
+                            <a href="#" class="action-icon btn-editar" onclick="editarProducto(${producto.id})" title="Editar producto">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="action-icon btn-eliminar" onclick="eliminarProducto(${producto.id}, '${producto.nombre}')" title="Eliminar producto">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </td>
                 `;
                 

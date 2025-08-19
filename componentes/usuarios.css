@@ -336,13 +336,109 @@
     background-color: var(--light-bg);
 }
 
-/* Estilos existentes para los íconos */
-.actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
+/* Estilos adicionales para el modal de crear usuario */
+.password-toggle {
+    position: relative;
 }
 
+.toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.toggle-icon:hover {
+    color: var(--primary-color);
+}
+
+.alert {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-content h3 i {
+    font-size: 1.2em;
+}
+
+/* Mejorar el espaciado del formulario en el modal */
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.modal-content label {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-content input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
+}
+
+.modal-content button {
+    margin-top: 10px;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.modal-content button:hover {
+    background-color: var(--secondary-color);
+}
+
+.modal-content button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 .action-icon {
     width: 32px;
     height: 32px;
@@ -386,6 +482,294 @@
 .action-icon i {
     font-size: 14px;
     margin: 0;
+}
+
+.form-control {
+    width: 40%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:hover {
+    border-color: var(--tertiary-color);
+}
+
+.form-control::placeholder {
+    color: #999;
+    opacity: 0.8;
+}
+
+.form-control:disabled {
+    background-color: var(--light-bg);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Loading animation improvements */
+.loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    transform: translateX(-100%);
+    animation: loading 1.5s infinite;
+    will-change: transform;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 1000;
+        will-change: transform;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .header {
+        padding-left: 60px;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all var(--transition-speed) var(--transition-timing);
+        will-change: transform;
+    }
+    
+    .sidebar-toggle:hover {
+        background: var(--secondary-color);
+        transform: scale(1.1);
+    }
+}
+
+/* Ajustar el ancho de los campos de contraseña en el modal */
+.modal-content .password-toggle {
+    position: relative;
+    width: 100%;
+}
+
+.modal-content .password-toggle input {
+    width: 100%;
+    padding-right: 45px; /* Espacio para el ícono del ojo */
+    min-width: 250px; /* Ancho mínimo para que se vea bien */
+}
+
+.modal-content .toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.modal-content .toggle-icon:hover {
+    color: var(--primary-color);
+}
+
+/* Asegurar que todos los inputs del modal tengan el mismo ancho */
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"] {
+    width: 100%;
+    min-width: 250px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content input[type="email"]:focus,
+.modal-content input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
+}
+
+/* Ajustar el modal para que sea un poco más ancho si es necesario */
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 550px; /* Aumentado de 500px a 550px */
+    position: relative;
+    box-shadow: var(--shadow-md);
+    animation: fadeInUp 0.4s var(--transition-timing);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: var(--danger-color);
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-content input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
+}
+
+.modal-content button {
+    margin-top: 10px;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.modal-content button:hover {
+    background-color: var(--secondary-color);
+}
+
+.modal-content button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+/* Mejoras para los botones de acción */
+.actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 80px;
+}
+
+/* Mejorar el diseño de los iconos de acción */
+.action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-editar {
+    color: #1976d2;
+    border-color: #e3f2fd;
+}
+
+.btn-editar:hover {
+    background-color: #1976d2;
+    color: #fff;
+    border-color: #1976d2;
+}
+
+.btn-eliminar {
+    color: #d32f2f;
+    border-color: #ffebee;
+}
+
+.btn-eliminar:hover {
+    background-color: #d32f2f;
+    color: #fff;
+    border-color: #d32f2f;
+}
+
+.action-icon i {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Mejorar la columna de acciones */
+.users-table th:last-child,
+.users-table td:last-child {
+    text-align: center;
+    width: 120px;
+    min-width: 120px;
+}
+
+/* Responsive para botones de acción */
+@media (max-width: 768px) {
+    .actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .users-table th:last-child,
+    .users-table td:last-child {
+        width: 70px;
+        min-width: 70px;
+    }
 }
 
 .form-control {

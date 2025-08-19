@@ -31,13 +31,20 @@ $contrasena = $_POST['contrasena'];
 $confirmar = $_POST['confirmarContrasena'];
 
 // Validar número de documento
-if (!$numeroDocumento || $numeroDocumento <= 0) {
+$numeroDocumento = trim($_POST['numeroDocumento']);
+if (!is_numeric($numeroDocumento) || $numeroDocumento <= 0) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Número de documento inválido']);
     exit;
 }
 
-// Validar email
+// Validar que el número no exceda el límite de INT
+if ($numeroDocumento > 2147483647) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'El número de documento es demasiado largo. Máximo 10 dígitos.']);
+    exit;
+}
+
 if (!$email) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Correo electrónico inválido']);
@@ -112,7 +119,7 @@ try {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param(
         "ssssssssss",
-        $numeroDocumento,
+        $numeroDocumento, // Ya no usar filter_var con FILTER_VALIDATE_INT
         $nombre,
         $apellido,
         $rol,

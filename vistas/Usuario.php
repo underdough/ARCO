@@ -83,9 +83,9 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
         <div class="users-actions">
             <input type="text" class="form-control" placeholder="Buscar usuario..." />
-            <a href="crearUsu.html" class="btn-login">
+            <button class="btn-login" onclick="abrirModalCrearUsuario()">
                 <i class="fas fa-user-plus"></i> Nuevo Usuario
-            </a>
+            </button>
         </div>
 
         <div class="users-table">
@@ -105,6 +105,43 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
     </div>
 
+    <!-- MODAL CREAR USUARIO -->
+    <div id="crearUsuarioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModalCrear()">&times;</span>
+            <div id="contenidoModalCrear">
+                <h3><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h3>
+                <form id="formCrearUsuario">
+                    <div id="alertContainer"></div>
+                    
+                    <label for="nombreCompleto">Nombre Completo</label>
+                    <input type="text" id="nombreCompleto" name="nombreCompleto" required>
+                    
+                    <label for="numeroDocumento">Número de Documento</label>
+                    <input type="text" id="numeroDocumento" name="numeroDocumento" minlength="6" maxlength="12" pattern="[0-9]+" required>
+                    
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" required>
+                    
+                    <label for="contrasena">Contraseña</label>
+                    <div class="password-toggle">
+                        <input type="password" id="contrasena" name="contrasena" maxlength="20" minlength="8" required>
+                        <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('contrasena', this)"></i>
+                    </div>
+                    
+                    <label for="confirmarContrasena">Confirmar Contraseña</label>
+                    <div class="password-toggle">
+                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" maxlength="20" minlength="8" required>
+                        <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('confirmarContrasena', this)"></i>
+                    </div>
+                    
+                    <button type="submit" id="btnCrearUsuario">
+                        <i class="fas fa-save"></i> Crear Usuario
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('collapsed');
@@ -141,10 +178,99 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             document.getElementById('editarModal').style.display = 'none';
         }
 
+        // Función para abrir modal de crear usuario
+        function abrirModalCrearUsuario() {
+            document.getElementById('crearUsuarioModal').style.display = 'flex';
+        }
+        
+        // Función para cerrar modal de crear usuario
+        function cerrarModalCrear() {
+            document.getElementById('crearUsuarioModal').style.display = 'none';
+            document.getElementById('formCrearUsuario').reset();
+            document.getElementById('alertContainer').innerHTML = '';
+        }
+        
+        // Función para mostrar/ocultar contraseña
+        function togglePasswordVisibility(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // Función para mostrar mensajes de alerta
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'error' ? 'alert-error' : 'alert-success';
+            alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+        
+        // Manejar envío del formulario de crear usuario
+        document.getElementById('formCrearUsuario').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('contrasena').value;
+            const confirmPassword = document.getElementById('confirmarContrasena').value;
+            const submitBtn = document.getElementById('btnCrearUsuario');
+            const form = document.getElementById('formCrearUsuario');
+        
+            // Validación de contraseñas
+            if (password !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+        
+            // Mostrar estado de carga
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
+            submitBtn.disabled = true;
+        
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch('../servicios/registro.php', {
+                    method: 'POST',
+                    body: formData
+                });
+        
+                const result = await response.json();
+        
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    form.reset();
+                    
+                    // Cerrar modal y recargar tabla después de 2 segundos
+                    setTimeout(() => {
+                        cerrarModalCrear();
+                        location.reload(); // Recargar para mostrar el nuevo usuario
+                    }, 2000);
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión. Por favor, intenta nuevamente.', 'error');
+            } finally {
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Crear Usuario';
+                submitBtn.disabled = false;
+            }
+        });
+        
         // Cerrar modal al hacer clic fuera
         window.addEventListener('click', function(e) {
-            const modal = document.getElementById('editarModal');
-            if (e.target === modal) {
+            const modalCrear = document.getElementById('crearUsuarioModal');
+            const modalEditar = document.getElementById('editarModal');
+            
+            if (e.target === modalCrear) {
+                cerrarModalCrear();
+            }
+            if (e.target === modalEditar) {
                 cerrarModal();
             }
         });
