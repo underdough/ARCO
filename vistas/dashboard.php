@@ -84,7 +84,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
         
         <div class="dashboard-cards">
-            <div class="card" onclick="navigateTo('productos.html')">
+            <div class="card" onclick="navigateTo('productos.php')">
                 <div class="card-header">
                     <h3 class="card-title">Total Productos</h3>
                     <div class="card-icon">
@@ -95,7 +95,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 <div class="card-footer" id="footerProducts">Cargando datos...</div>
             </div>
             
-            <div class="card" onclick="navigateTo('categorias.html')">
+            <div class="card" onclick="navigateTo('categorias.php')">
                 <div class="card-header">
                     <h3 class="card-title">Categorías</h3>
                     <div class="card-icon">
@@ -106,7 +106,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 <div class="card-footer" id="footerCategories">Cargando datos...</div>
             </div>
             
-            <div class="card" onclick="navigateTo('movimientos.html')">
+            <div class="card" onclick="navigateTo('movimientos.php')">
                 <div class="card-header">
                     <h3 class="card-title">Movimientos Hoy</h3>
                     <div class="card-icon">
@@ -365,20 +365,55 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             // Efecto de transición antes de navegar
             document.body.style.opacity = '0.8';
             setTimeout(() => {
-                window.location.href = page;
+                // Corregir las rutas para que apunten a los archivos PHP correctos
+                let correctPage;
+                switch(page) {
+                    case 'productos.html':
+                        correctPage = 'productos.php';
+                        break;
+                    case 'categorias.html':
+                        correctPage = 'categorias.php';
+                        break;
+                    case 'movimientos.html':
+                        correctPage = 'movimientos.php';
+                        break;
+                    default:
+                        correctPage = page;
+                }
+                window.location.href = correctPage;
             }, 200);
         }
         
-        function showUserMenu() {
-            alert('Menú de usuario - Funcionalidad por implementar');
-        }
-        
         function showAlerts() {
-            alert('Mostrando alertas de stock bajo - Funcionalidad por implementar');
+            // Redirigir a una página de alertas o mostrar modal
+            window.location.href = 'productos.php?filter=low_stock';
         }
         
         function showActivityDetails(activityId) {
-            alert(`Mostrando detalles de la actividad ${activityId} - Funcionalidad por implementar`);
+            // Mostrar modal con detalles de la actividad
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                    <h3>Detalles de Actividad #${activityId}</h3>
+                    <p>Cargando detalles...</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Aquí puedes hacer una llamada AJAX para obtener más detalles
+        }
+        
+        function showUserMenu() {
+            // Implementar menú de usuario real
+            const userMenu = document.createElement('div');
+            userMenu.className = 'user-dropdown';
+            userMenu.innerHTML = `
+                <a href="configuracion.php">Configuración</a>
+                <a href="../servicios/logout.php">Cerrar Sesión</a>
+            `;
+            document.querySelector('.user-info').appendChild(userMenu);
         }
         
         async function refreshActivity() {
