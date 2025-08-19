@@ -539,44 +539,84 @@ if (isset($_POST['generar_reporte'])) {
     <div class="modal" id="reportModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Generar Nuevo Reporte</h3>
-                <button class="close-modal">&times;</button>
+                <div class="modal-title-section">
+                    <i class="fas fa-chart-line modal-icon"></i>
+                    <h3 class="modal-title">Generar Nuevo Reporte</h3>
+                </div>
+                <button class="close-modal" type="button">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <form method="post" action="reportes.php">
-                <div class="form-group">
-                    <label>Tipo de Reporte</label>
-                    <select class="form-control" name="reportType" required>
-                        <option value="" disabled selected>Seleccionar tipo</option>
-                        <option value="inventario">Inventario Actual</option>
-                        <option value="movimientos">Movimientos de Inventario</option>
-                        <option value="sales">Ventas por Categoría</option>
-                        <option value="lowstock">Productos con Stock Bajo</option>
-                        <option value="useractions">Acciones por Usuario</option>
-                    </select>
-                </div>
-                <div class="form-row">
+            
+            <form method="post" action="reportes.php" class="report-form">
+                <div class="form-section">
                     <div class="form-group">
-                        <label>Desde</label>
-                        <input type="date" class="form-control" name="reportDateFrom" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Hasta</label>
-                        <input type="date" class="form-control" name="reportDateTo" required>
+                        <label for="reportType">
+                            <i class="fas fa-file-alt"></i>
+                            Tipo de Reporte
+                        </label>
+                        <select class="form-control" name="reportType" id="reportType" required>
+                            <option value="" disabled selected>Seleccionar tipo</option>
+                            <option value="inventario">📦 Inventario Actual</option>
+                            <option value="movimientos">🔄 Movimientos de Inventario</option>
+                            <option value="sales">📊 Ventas por Categoría</option>
+                            <option value="lowstock">⚠️ Productos con Stock Bajo</option>
+                            <option value="useractions">👥 Acciones por Usuario</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Formato</label>
-                    <select class="form-control" name="reportFormat" required>
-                        <option value="pdf">PDF</option>
-                    </select>
+                
+                <div class="form-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reportDateFrom">
+                                <i class="fas fa-calendar-alt"></i>
+                                Fecha de Inicio
+                            </label>
+                            <input type="date" class="form-control" name="reportDateFrom" id="reportDateFrom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportDateTo">
+                                <i class="fas fa-calendar-check"></i>
+                                Fecha de Fin
+                            </label>
+                            <input type="date" class="form-control" name="reportDateTo" id="reportDateTo" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Notas</label>
-                    <textarea class="form-control" name="reportNotes" rows="3"></textarea>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="reportFormat">
+                            <i class="fas fa-file-pdf"></i>
+                            Formato de Salida
+                        </label>
+                        <select class="form-control" name="reportFormat" id="reportFormat" required>
+                            <option value="pdf">📄 PDF (Recomendado)</option>
+                        </select>
+                    </div>
                 </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="reportNotes">
+                            <i class="fas fa-sticky-note"></i>
+                            Notas Adicionales
+                            <span class="optional-label">(Opcional)</span>
+                        </label>
+                        <textarea class="form-control" name="reportNotes" id="reportNotes" rows="3" placeholder="Agregar comentarios o notas sobre este reporte..."></textarea>
+                    </div>
+                </div>
+                
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('reportModal').style.display='none'">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" name="generar_reporte">Generar</button>
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('reportModal').style.display='none'">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary" name="generar_reporte">
+                        <i class="fas fa-download"></i>
+                        Generar Reporte
+                    </button>
                 </div>
             </form>
         </div>
