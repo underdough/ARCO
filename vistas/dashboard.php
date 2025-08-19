@@ -195,14 +195,35 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 showLoading();
                 
                 const response = await fetch('../servicios/obtener_dashboard.php');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                
+                console.log('Datos recibidos:', data); // Para debugging
                 
                 if (data.success) {
                     updateDashboardCards(data.data);
                     updateActivityList(data.data.actividad_reciente);
                 } else {
                     console.error('Error al cargar datos:', data.error);
-                    showErrorMessage('Error al cargar los datos del dashboard');
+                    showErrorMessage('Error al cargar los datos del dashboard: ' + (data.error || 'Error desconocido'));
+                    
+                    // Mostrar mensaje específico en la actividad reciente
+                    const activityList = document.getElementById('activityList');
+                    activityList.innerHTML = `
+                        <li class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i>
+                            </div>
+                            <div class="activity-details">
+                                <div class="activity-title">Error al cargar actividad</div>
+                                <div class="activity-time">${data.error || 'Error de conexión'}</div>
+                            </div>
+                        </li>
+                    `;
                 }
                 
                 hideLoading();
@@ -210,6 +231,20 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 console.error('Error de conexión:', error);
                 hideLoading();
                 showErrorMessage('Error de conexión con el servidor');
+                
+                // Mostrar mensaje de error en actividad reciente
+                const activityList = document.getElementById('activityList');
+                activityList.innerHTML = `
+                    <li class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-wifi" style="color: #e74c3c;"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Sin conexión</div>
+                            <div class="activity-time">Verifique su conexión a internet</div>
+                        </div>
+                    </li>
+                `;
             }
         }
         
@@ -390,19 +425,87 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         }
         
         function showActivityDetails(activityId) {
-            // Mostrar modal con detalles de la actividad
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                    <h3>Detalles de Actividad #${activityId}</h3>
-                    <p>Cargando detalles...</p>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Aquí puedes hacer una llamada AJAX para obtener más detalles
+            // Obtener el movimiento real basado en el índice
+            fetch('../servicios/obtener_dashboard.php')
+                .then(response => response.json())
+                .then(dashboardData => {
+                    if (dashboardData.success && dashboardData.data.actividad_reciente[activityId - 1]) {
+                        const actividad = dashboardData.data.actividad_reciente[activityId - 1];
+                        
+                        // Crear modal
+                        const modal = document.createElement('div');
+                        modal.className = 'modal';
+                        modal.style.cssText = `
+                            position: fixed;
+                            z-index: 1000;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0,0,0,0.5);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        `;
+                        
+                        modal.innerHTML = `
+                            <div class="modal-content" style="
+                                background: white;
+                                padding: 25px;
+                                border-radius: 8px;
+                                max-width: 500px;
+                                width: 90%;
+                                position: relative;
+                                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                            ">
+                                <span class="close" onclick="this.parentElement.parentElement.remove()" style="
+                                    position: absolute;
+                                    right: 15px;
+                                    top: 15px;
+                                    font-size: 24px;
+                                    cursor: pointer;
+                                    color: #666;
+                                    font-weight: bold;
+                                ">&times;</span>
+                                <h3 style="margin-top: 0; color: #395886;">Detalles de Actividad</h3>
+                                <div style="margin-top: 20px;">
+                                    <p><strong>Tipo:</strong> ${actividad.tipo.charAt(0).toUpperCase() + actividad.tipo.slice(1)}</p>
+                                    <p><strong>Producto:</strong> ${actividad.producto}</p>
+                                    <p><strong>Cantidad:</strong> ${actividad.cantidad}</p>
+                                    <p><strong>Tiempo:</strong> ${actividad.tiempo}</p>
+                                    <p><strong>Usuario:</strong> ${actividad.usuario}</p>
+                                    <p><strong>Notas:</strong> ${actividad.notas || 'Sin notas'}</p>
+                                </div>
+                                <div style="margin-top: 20px; text-align: right;">
+                                    <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                            style="
+                                                background: #395886;
+                                                color: white;
+                                                border: none;
+                                                padding: 10px 20px;
+                                                border-radius: 5px;
+                                                cursor: pointer;
+                                            ">Cerrar</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(modal);
+                        
+                        // Cerrar modal al hacer clic fuera
+                        modal.addEventListener('click', function(e) {
+                            if (e.target === modal) {
+                                modal.remove();
+                            }
+                        });
+                    } else {
+                        alert('No se pudo cargar la información de la actividad');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al cargar los detalles de la actividad');
+                });
         }
         
         function showUserMenu() {
