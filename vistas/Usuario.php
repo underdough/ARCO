@@ -15,11 +15,12 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ARCO - Usuarios</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCO - Gestión de Usuarios</title>
+    <link rel="stylesheet" href="../componentes/modal-common.css">
+    <link rel="stylesheet" href="../componentes/usuarios.css">
     <link rel="shortcut icon" href="../componentes/img/logo2.png" />
     <link rel="stylesheet" href="../componentes/dashboard.css" />
     <link rel="stylesheet" href="../componentes/usuarios.css" />
@@ -75,18 +76,24 @@ $nombreCompleto = $nombre . ' ' . $apellido;
     <div class="main-content" id="mainContent">
         <div class="header">
             <h2>Gestión de Usuarios</h2>
-            <div class="user-info" onclick="showUserMenu()">
-                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Usuario" />
-                <span>Bienvenido, <strong id="userName"><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar usuario...">
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="abrirModalCrearUsuario()">
+                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                </button>
             </div>
         </div>
 
-        <div class="users-actions">
+        <!-- Eliminar completamente el div users-actions -->
+        <!-- <div class="users-actions">
             <input type="text" class="form-control" placeholder="Buscar usuario..." />
             <button class="btn-login" onclick="abrirModalCrearUsuario()">
                 <i class="fas fa-user-plus"></i> Nuevo Usuario
             </button>
-        </div>
+        </div> -->
 
         <div class="users-table">
             <?php if (isset($_GET['eliminado']) && $_GET['eliminado'] == '1') {
@@ -97,56 +104,92 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL EDITAR USUARIO -->
     <div id="editarModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="cerrarModal()">&times;</span>
-            <div id="contenidoModal"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-edit"></i> Editar Usuario
+                </h3>
+                <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="contenidoModal"></div>
+            </div>
         </div>
     </div>
 
     <!-- MODAL CREAR USUARIO -->
     <div id="crearUsuarioModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="cerrarModalCrear()">&times;</span>
-            <div id="contenidoModalCrear">
-                <h3><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h3>
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-plus"></i> Crear Nuevo Usuario
+                </h3>
+                <span class="close-modal" onclick="cerrarModalCrear()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="alertContainer"></div>
                 <form id="formCrearUsuario">
-                    <div id="alertContainer"></div>
-                    
-                    <label for="nombreCompleto">Nombre Completo</label>
-                    <input type="text" id="nombreCompleto" name="nombreCompleto" required>
-                    
-                    <label for="numeroDocumento">Número de Documento</label>
-                    <input type="text" id="numeroDocumento" name="numeroDocumento" minlength="6" maxlength="12" pattern="[0-9]+" required>
-                    
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" name="email" required>
-                    
-                    <label for="contrasena">Contraseña</label>
-                    <div class="password-toggle">
-                        <input type="password" id="contrasena" name="contrasena" maxlength="20" minlength="8" required>
-                        <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('contrasena', this)"></i>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombreCompleto">Nombre Completo</label>
+                            <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" required>
+                        </div>
                     </div>
                     
-                    <label for="confirmarContrasena">Confirmar Contraseña</label>
-                    <div class="password-toggle">
-                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" maxlength="20" minlength="8" required>
-                        <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('confirmarContrasena', this)"></i>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="numeroDocumento">Número de Documento</label>
+                            <input type="text" id="numeroDocumento" name="numeroDocumento" class="form-control" minlength="6" maxlength="12" pattern="[0-9]+" required>
+                        </div>
                     </div>
                     
-                    <button type="submit" id="btnCrearUsuario">
-                        <i class="fas fa-save"></i> Crear Usuario
-                    </button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contrasena">Contraseña</label>
+                            <div class="password-toggle">
+                                <input type="password" id="contrasena" name="contrasena" class="form-control" maxlength="20" minlength="8" required>
+                                <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('contrasena', this)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="confirmarContrasena">Confirmar Contraseña</label>
+                            <div class="password-toggle">
+                                <input type="password" id="confirmarContrasena" name="confirmarContrasena" class="form-control" maxlength="20" minlength="8" required>
+                                <i class="toggle-icon fas fa-eye" onclick="togglePasswordVisibility('confirmarContrasena', this)"></i>
+                            </div>
+                        </div>
+                    </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalCrear()">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="submit" form="formCrearUsuario" id="btnCrearUsuario" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Crear Usuario
+                </button>
             </div>
         </div>
     </div>
     <script>
+        // Toggle sidebar
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         });
 
+        // Close sidebar on mobile when clicking outside
         document.addEventListener('click', function(e) {
             const sidebar = document.getElementById('sidebar');
             const toggle = document.getElementById('sidebarToggle');
@@ -159,38 +202,78 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             window.location.href = 'menuUsu.html';
         }
 
-        // Abrir modal con AJAX
-        document.querySelectorAll('.btn-editar').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const userId = this.getAttribute('data-id');
-                fetch(`../servicios/editar_usuario.php?id=${userId}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.getElementById('contenidoModal').innerHTML = html;
-                        document.getElementById('editarModal').style.display = 'flex';
-                    })
-                    .catch(err => alert("Error al cargar formulario"));
-            });
-        });
-
-        function cerrarModal() {
-            document.getElementById('editarModal').style.display = 'none';
-        }
-
-        // Función para abrir modal de crear usuario
+        // ===== FUNCIONES DE MODALES =====
+        
+        // Abrir modal de crear usuario
         function abrirModalCrearUsuario() {
             document.getElementById('crearUsuarioModal').style.display = 'flex';
         }
         
-        // Función para cerrar modal de crear usuario
+        // Cerrar modal de crear usuario
         function cerrarModalCrear() {
             document.getElementById('crearUsuarioModal').style.display = 'none';
             document.getElementById('formCrearUsuario').reset();
             document.getElementById('alertContainer').innerHTML = '';
         }
         
-        // Función para mostrar/ocultar contraseña
+        // Cerrar modal de editar
+        function cerrarModal() {
+            document.getElementById('editarModal').style.display = 'none';
+        }
+
+        // Abrir modal de editar con AJAX
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-id');
+                    fetch(`../servicios/editar_usuario.php?id=${userId}`)
+                        .then(res => res.text())
+                        .then(html => {
+                            document.getElementById('contenidoModal').innerHTML = html;
+                            document.getElementById('editarModal').style.display = 'flex';
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert("Error al cargar formulario");
+                        });
+                });
+            });
+        });
+
+        // ===== EVENT LISTENERS GLOBALES =====
+        
+        // Cerrar modales con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const crearModal = document.getElementById('crearUsuarioModal');
+                const editarModal = document.getElementById('editarModal');
+                
+                if (crearModal.style.display === 'flex') {
+                    cerrarModalCrear();
+                }
+                if (editarModal.style.display === 'flex') {
+                    cerrarModal();
+                }
+            }
+        });
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function(e) {
+            const modalCrear = document.getElementById('crearUsuarioModal');
+            const modalEditar = document.getElementById('editarModal');
+            
+            if (e.target === modalCrear) {
+                cerrarModalCrear();
+            }
+            if (e.target === modalEditar) {
+                cerrarModal();
+            }
+        });
+
+        // ===== FUNCIONES AUXILIARES =====
+        
+        // Toggle visibilidad de contraseña
         function togglePasswordVisibility(inputId, icon) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -204,15 +287,17 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             }
         }
         
-        // Función para mostrar mensajes de alerta
+        // Mostrar mensajes de alerta
         function showAlert(message, type = 'error') {
             const alertContainer = document.getElementById('alertContainer');
             const alertClass = type === 'error' ? 'alert-error' : 'alert-success';
             alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
             setTimeout(() => alertContainer.innerHTML = '', 5000);
         }
+
+        // ===== MANEJO DEL FORMULARIO =====
         
-        // Manejar envío del formulario de crear usuario
+        // Envío del formulario de crear usuario
         document.getElementById('formCrearUsuario').addEventListener('submit', async function (e) {
             e.preventDefault();
             
@@ -248,7 +333,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                     // Cerrar modal y recargar tabla después de 2 segundos
                     setTimeout(() => {
                         cerrarModalCrear();
-                        location.reload(); // Recargar para mostrar el nuevo usuario
+                        location.reload();
                     }, 2000);
                 } else {
                     showAlert(result.message, 'error');
@@ -259,19 +344,6 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             } finally {
                 submitBtn.innerHTML = '<i class="fas fa-save"></i> Crear Usuario';
                 submitBtn.disabled = false;
-            }
-        });
-        
-        // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(e) {
-            const modalCrear = document.getElementById('crearUsuarioModal');
-            const modalEditar = document.getElementById('editarModal');
-            
-            if (e.target === modalCrear) {
-                cerrarModalCrear();
-            }
-            if (e.target === modalEditar) {
-                cerrarModal();
             }
         });
     </script>

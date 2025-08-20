@@ -369,9 +369,9 @@ if (isset($_POST['generar_reporte'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCO - Reportes</title>
-    <link rel="shortcut icon" href="../componentes/img/logo2.png" />
+    <link rel="stylesheet" href="../componentes/modal-common.css">
     <link rel="stylesheet" href="../componentes/reportes.css">
-    <!-- Añadir FontAwesome para iconos -->
+    <link rel="shortcut icon" href="../componentes/img/logo2.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>

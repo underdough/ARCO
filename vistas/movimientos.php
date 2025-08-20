@@ -11,8 +11,8 @@ if (!isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCO - Gestión de Movimientos</title>
-    <link rel="shortcut icon" href="../componentes/img/logo2.png" />
+    <title>ARCO - Movimientos de Inventario</title>
+    <link rel="stylesheet" href="../componentes/modal-common.css">
     <link rel="stylesheet" href="../componentes/movimientos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -154,34 +154,35 @@ if (!isset($_SESSION['usuario_id'])) {
                 <h3 class="modal-title">Registrar Nuevo Movimiento</h3>
                 <button class="close-modal">&times;</button>
             </div>
-            <form id="movementForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="movementType">Tipo de Movimiento</label>
-                        <select class="form-control" id="movementType" required>
-                            <option value="">Seleccionar tipo</option>
-                            <option value="entrada">Entrada</option>
-                            <option value="salida">Salida</option>
-                            <option value="ajuste">Ajuste</option>
-                        </select>
+            <div class="modal-body">
+                <form id="movementForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movementType">Tipo de Movimiento</label>
+                            <select class="form-control" id="movementType" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="entrada">Entrada</option>
+                                <option value="salida">Salida</option>
+                                <option value="ajuste">Ajuste</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="movementProduct">Producto</label>
+                            <select class="form-control" id="movementProduct" required>
+                                <option value="">Seleccionar producto</option>
+                                <!-- Las opciones se llenarán automáticamente -->
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="movementProduct">Producto</label>
-                        <select class="form-control" id="movementProduct" required>
-                            <option value="">Seleccionar producto</option>
-                            <!-- Las opciones se llenarán automáticamente -->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="movementDate">Fecha</label>
-                        <input type="date" class="form-control" id="movementDate" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="movementQuantity">Cantidad</label>
-                        <input type="number" class="form-control" id="movementQuantity" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movementDate">Fecha</label>
+                            <input type="date" class="form-control" id="movementDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="movementQuantity">Cantidad</label>
+                            <input type="number" class="form-control" id="movementQuantity" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="movementUser">Usuario</label>
@@ -191,18 +192,19 @@ if (!isset($_SESSION['usuario_id'])) {
                             <option value="3">Vendedor</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="movementNotes">Notas</label>
-                    <textarea class="form-control" id="movementNotes" rows="3"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="btnCancelMovement">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="movementNotes">Notas</label>
+                        <textarea class="form-control" id="movementNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnCancelMovement">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="movementForm">Guardar</button>
+            </div>
         </div>
     </div>
+    
     <!-- Modal para ver detalles del movimiento -->
     <div class="modal" id="viewMovementModal">
         <div class="modal-content">
@@ -220,7 +222,7 @@ if (!isset($_SESSION['usuario_id'])) {
                 <p><strong>Notas:</strong> <span id="detalleNotas"></span></p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-cerrar" id="cerrarDetalleBtn">Cerrar</button>
+                <button class="btn btn-secondary" id="cerrarDetalleBtn">Cerrar</button>
             </div>
         </div>
     </div>
@@ -382,6 +384,22 @@ if (!isset($_SESSION['usuario_id'])) {
                 const modal = document.getElementById('movementModal');
                 if (event.target === modal) {
                     modal.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    // Cerrar modal de nuevo movimiento
+                    const movementModal = document.getElementById('movementModal');
+                    if (movementModal.style.display === 'flex') {
+                        movementModal.style.display = 'none';
+                    }
+                    
+                    // Cerrar modal de detalle de movimiento
+                    const viewMovementModal = document.getElementById('viewMovementModal');
+                    if (viewMovementModal.style.display === 'flex') {
+                        viewMovementModal.style.display = 'none';
+                    }
                 }
             });
 

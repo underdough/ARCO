@@ -121,26 +121,31 @@ if (!isset($_SESSION['usuario_id'])) {
     </div>
 
     <!-- Modal para agregar/editar categoría -->
+    <!-- Modal mejorado - Reemplaza desde la línea 105 -->
+    <!-- Modal para agregar/editar categoría -->
     <div class="modal" id="categoryModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Agregar Nueva Categoría</h3>
                 <button class="close-modal">&times;</button>
             </div>
+            
             <form id="categoryForm">
                 <div class="form-group">
                     <label for="categoryName">Nombre de la Categoría</label>
-                    <input type="text" class="form-control" id="categoryName" required>
+                    <input type="text" class="form-control" id="categoryName" placeholder="Ingrese el nombre de la categoría" required>
                 </div>
+                
                 <div class="form-group">
                     <label for="categoryDescription">Descripción</label>
-                    <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                    <textarea class="form-control" id="categoryDescription" rows="3" placeholder="Descripción opcional de la categoría"></textarea>
                 </div>
+                
                 <div class="form-group">
                     <label for="categoryProducts">Cantidad de Productos</label>
                     <input type="number" class="form-control" id="categoryProducts" min="0" value="0" required>
                 </div>
-
+    
                 <div class="form-group">
                     <label for="categoryStatus">Estado</label>
                     <select class="form-control" id="categoryStatus" required>
@@ -148,11 +153,12 @@ if (!isset($_SESSION['usuario_id'])) {
                         <option value="0">Inactiva</option>
                     </select>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="btnCancelCategory">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
             </form>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnCancelCategory">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="categoryForm">Guardar</button>
+            </div>
         </div>
     </div>
 

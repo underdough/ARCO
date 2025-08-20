@@ -139,23 +139,82 @@
     }
 }
 
+/* Estilos para el header con barra de búsqueda y botones */
 .header {
-    animation: slideInDown 0.5s var(--transition-timing);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
+    animation: slideInDown 0.5s var(--transition-timing);
     position: sticky;
     top: 0;
-    background: white;
     z-index: 100;
-    box-shadow: var(--shadow-sm);
     backdrop-filter: blur(5px);
 }
 
-/* Button improvements */
+.header h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 25px;
+    padding: 8px 15px;
+    width: 300px;
+    transition: opacity 0.3s ease;
+}
+
+.search-bar:focus-within {
+    opacity: 0.9;
+}
+
+.search-bar input {
+    border: none;
+    background: transparent;
+    padding: 5px;
+    flex: 1;
+    outline: none;
+    transition: background-color 0.3s ease;
+    border-radius: 25px;
+}
+
+.search-bar input:focus {
+    background: #f8f9fa;
+}
+
+.search-bar i {
+    color: #666;
+    margin-right: 10px;
+}
+
+/* Estilos para los botones de acción */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
 .btn {
-    transition: all var(--transition-speed) var(--transition-timing);
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.3s ease;
     position: relative;
     overflow: hidden;
-    transform: translateZ(0);
 }
 
 .btn::before {
@@ -177,20 +236,59 @@
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    opacity: 0.9;
 }
 
-/* Table improvements */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Eliminar o comentar los estilos antiguos de users-actions si existen */
+/*
+.users-actions {
+    // Comentar o eliminar estos estilos
+}
+*/
+
+.users-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.users-actions .form-control {
+    width: 40%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.users-actions .form-control:hover {
+    border-color: var(--tertiary-color);
+}
+
+.users-actions .form-control::placeholder {
+    color: #999;
+    opacity: 0.8;
+}
+
 .users-table {
     width: 100%;
     border-collapse: collapse;
     border-radius: 8px;
     background: white;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0%;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 30px;
     animation: fadeIn 0.8s ease;
     max-height: 60vh;
     overflow-y: auto;
@@ -231,8 +329,8 @@
 }
 
 .modal-content {
+    padding: 0;
     background-color: #fff;
-    padding: 30px;
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
@@ -289,21 +387,31 @@
 .modal-content button:hover {
     background-color: var(--secondary-color);
 }
+/* ===== ESTILOS ESPECÍFICOS PARA USUARIOS ===== */
 
 .users-actions {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espacio entre el input y el botón "Nuevo Usuario" */
-    margin-bottom: 20px; /* Agrega espacio debajo de la barra de búsqueda */
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-.form-control {
+.users-actions .form-control {
     width: 40%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
     transition: border-color 0.3s;
+}
+
+.users-actions .form-control:hover {
+    border-color: var(--tertiary-color);
+}
+
+.users-actions .form-control::placeholder {
+    color: #999;
+    opacity: 0.8;
 }
 
 .users-table {
@@ -313,7 +421,7 @@
     background: white;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    margin-bottom: 30px; /* Mantén o ajusta este margen si aplica */
+    margin-bottom: 30px;
     animation: fadeIn 0.8s ease;
     max-height: 60vh;
     overflow-y: auto;
@@ -336,7 +444,14 @@
     background-color: var(--light-bg);
 }
 
-/* Estilos adicionales para el modal de crear usuario */
+.users-table th:last-child,
+.users-table td:last-child {
+    text-align: center;
+    width: 120px;
+    min-width: 120px;
+}
+
+/* ===== ESTILOS PARA TOGGLE DE CONTRASEÑA ===== */
 .password-toggle {
     position: relative;
 }
@@ -355,112 +470,60 @@
     color: var(--primary-color);
 }
 
+/* ===== ESTILOS PARA ALERTAS ===== */
 .alert {
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
-    border-radius: 5px;
+    border-radius: 6px;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
+    border: 1px solid transparent;
 }
 
 .alert-error {
     background-color: #f8d7da;
     color: #721c24;
-    border: 1px solid #f5c6cb;
+    border-color: #f5c6cb;
 }
 
 .alert-success {
     background-color: #d4edda;
     color: #155724;
-    border: 1px solid #c3e6cb;
+    border-color: #c3e6cb;
 }
 
-.modal-content h3 {
-    margin-bottom: 20px;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.modal-content h3 i {
-    font-size: 1.2em;
-}
-
-/* Mejorar el espaciado del formulario en el modal */
-.modal-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 13px;
-}
-
-.modal-content label {
-    margin-top: 0;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
-}
-
-.modal-content input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.modal-content input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
-}
-
-.modal-content button {
-    margin-top: 10px;
-    padding: 12px 20px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* ===== ESTILOS PARA BOTONES DE ACCIÓN ===== */
+.actions {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 1rem;
+    min-width: 80px;
 }
 
-.modal-content button:hover {
-    background-color: var(--secondary-color);
-}
-
-.modal-content button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
 .action-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border: 1px solid #ddd;
+    border: 1px solid #e0e0e0;
     background-color: #fff;
     text-decoration: none;
-    transition: all var(--transition-speed) var(--transition-timing);
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .action-icon:hover {
-    opacity: 1;
-    transform: scale(1.1);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .btn-editar {
     color: #1976d2;
+    border-color: #e3f2fd;
 }
 
 .btn-editar:hover {
@@ -471,6 +534,7 @@
 
 .btn-eliminar {
     color: #d32f2f;
+    border-color: #ffebee;
 }
 
 .btn-eliminar:hover {
@@ -484,43 +548,34 @@
     margin: 0;
 }
 
-.form-control {
-    width: 40%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-.form-control:hover {
-    border-color: var(--tertiary-color);
-}
-
-.form-control::placeholder {
-    color: #999;
-    opacity: 0.8;
-}
-
-.form-control:disabled {
-    background-color: var(--light-bg);
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Loading animation improvements */
-.loading::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-    transform: translateX(-100%);
-    animation: loading 1.5s infinite;
-    will-change: transform;
-}
-
-/* Responsive improvements */
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
+    .users-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .users-actions .form-control {
+        width: 100%;
+    }
+    
+    .actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .users-table th:last-child,
+    .users-table td:last-child {
+        width: 70px;
+        min-width: 70px;
+    }
+    
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
@@ -615,7 +670,59 @@
 /* Ajustar el modal para que sea un poco más ancho si es necesario */
 .modal-content {
     background-color: #fff;
-    padding: 30px;
+    padding: 0px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 550px; /* Aumentado de 500px a 550px */
+    position: relative;
+    box-shadow: var(--shadow-md);
+    animation: fadeInUp 0.4s var(--transition-timing);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: var(--danger-color);
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content label {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-content input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
+}
+
+/* Ajustar el modal para que sea un poco más ancho si es necesario */
+.modal-content {
+    background-color: #fff;
+    padding: 0px;
     border-radius: 10px;
     width: 90%;
     max-width: 550px; /* Aumentado de 500px a 550px */

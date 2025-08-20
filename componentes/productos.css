@@ -1,3 +1,6 @@
+/* Importar estilos comunes de modales */
+@import url('modal-common.css');
+
 /* Estilos específicos para productos */
 
 * {
@@ -526,159 +529,8 @@ tbody tr:hover {
     pointer-events: none;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background-color: rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.3s ease;
-    padding: 1rem;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal.show {
-    display: flex;
-}
-
-
-/* Modal container - Ajustes para eliminar scroll */
-.modal-content {
-    background: white;
-    border-radius: 12px;
-    padding: 20px; /* Reducido de 24px */
-    width: min(90%, 550px); /* Aumentado de 500px a 550px */
-    max-height: 90vh; /* Aumentado de 85vh a 90vh */
-    overflow-y: visible; /* Cambiado de auto a visible */
-    animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Ajustar espaciado de grupos de formulario */
-.form-group {
-    margin-bottom: 15px; /* Reducido de 20px */
-}
-
-/* Ajustar padding de header y footer */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px; /* Reducido de 24px */
-    padding-bottom: 12px; /* Reducido de 16px */
-    border-bottom: 2px solid var(--border-color);
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 15px; /* Reducido de 20px */
-    padding-top: 15px; /* Reducido de 20px */
-    border-top: 1px solid #eee;
-}
-
-/* Ajustar altura del textarea */
-.form-group textarea {
-    width: 95%;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    min-height: 60px; /* Altura mínima reducida */
-    resize: vertical;
-}
-
-/* Asegurar que el modal se centre correctamente */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    background-color: rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.3s ease;
-    padding: 0.5rem; /* Reducido de 1rem */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid var(--border-color);
-}
-
-/* Modal title styling */
-.modal-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin: 0;
-    letter-spacing: -0.01em;
-}
-
-.close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
-    transition: color 0.3s ease;
-}
-
-.close:hover {
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 95%;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 5px rgba(57, 169, 0, 0.3);
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
+/* Estilos específicos de productos que no están en modal-common.css */
+/* Los estilos de modal se han movido a modal-common.css */
 
 /* Sidebar toggle button */
 .sidebar-toggle {
@@ -960,7 +812,6 @@ tbody tr:hover {
     gap: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -1016,4 +867,183 @@ tbody tr:hover {
     animation: spin 1s linear infinite;
     display: inline-block;
     margin-right: 10px;
+}
+
+/* Estilos específicos para los botones de la interfaz de productos */
+
+/* Resetear estilos anteriores para estos elementos específicos */
+#sortSelect, #btnAddProduct {
+    all: unset;
+    box-sizing: border-box;
+}
+
+/* Estilo para el selector NOMBRE A-Z */
+#sortSelect {
+    background-color: #5f6a79;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    text-align: center;
+    display: inline-block;
+    min-width: 150px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+#sortSelect:hover {
+    background-color: #4d5866;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#sortSelect:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+#sortSelect option {
+    background-color: #5f6a79;
+    color: white;
+}
+
+/* Estilo para el botón NUEVO PRODUCTO */
+#btnAddProduct {
+    background-color: #395886;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+#btnAddProduct:hover {
+    background-color: #2d4373;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#btnAddProduct:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#btnAddProduct i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+#btnAddProduct:hover i {
+    transform: scale(1.1);
+}
+
+/* Estilo para el botón de filtrar (si lo necesitas en el futuro) */
+.btn-filtrar {
+    background-color: #5f6a79;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-filtrar:hover {
+    background-color: #4d5866;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+/* Estilos para los botones principales que coinciden con otras interfaces */
+
+/* Resetear estilos previos para estos elementos específicos */
+#sortSelect, #btnAddProduct {
+    all: unset;
+    box-sizing: border-box;
+}
+
+/* Estilo base común para ambos botones */
+#sortSelect, #btnAddProduct {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto hover común */
+#sortSelect::before, #btnAddProduct::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+#sortSelect:hover::before, #btnAddProduct:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+#sortSelect:hover, #btnAddProduct:hover {
+    opacity: 0.9;
+}
+
+/* Estilo específico para el botón secundario (NOMBRE A-Z) */
+#sortSelect {
+    background-color: #f0f0f0;
+    color: #333;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 10px) center;
+}
+
+/* Estilo específico para el botón primario (NUEVO PRODUCTO) */
+#btnAddProduct {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Ajustes adicionales para el contenedor de botones */
+.action-buttons {
+    display: flex;
+    gap: 10px;
 }

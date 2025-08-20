@@ -11,6 +11,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARCO - Gestión de Productos</title>
+    <link rel="stylesheet" href="../componentes/modal-common.css">
     <link rel="stylesheet" href="../componentes/productos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,35 +119,37 @@ if (!isset($_SESSION['usuario_id'])) {
                 <h3 class="modal-title">Agregar Nuevo Producto</h3>
                 <button class="close-modal">&times;</button>
             </div>
-            <form id="productForm">
-                <div class="form-group">
-                    <label for="productName">Nombre del Producto</label>
-                    <input type="text" class="form-control" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label for="productCategory">Categoría</label>
-                    <select class="form-control" id="productCategory" required>
-                        <option value="">Seleccionar categoría</option>
-                        <!-- Las categorías se cargarán dinámicamente -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productStock">Stock</label>
-                    <input type="number" class="form-control" id="productStock" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="productPrice">Precio</label>
-                    <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Descripción</label>
-                    <textarea class="form-control" id="productDescription" rows="3"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="btnCancelProduct">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productName">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">Categoría</label>
+                        <select class="form-control" id="productCategory" required>
+                            <option value="">Seleccionar categoría</option>
+                            <!-- Las categorías se cargarán dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">Stock</label>
+                        <input type="number" class="form-control" id="productStock" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice">Precio</label>
+                        <input type="number" class="form-control" id="productPrice" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Descripción</label>
+                        <textarea class="form-control" id="productDescription" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnCancelProduct">Cancelar</button>
+                <button type="submit" class="btn btn-primary" form="productForm">Guardar</button>
+            </div>
         </div>
     </div>
     

@@ -1,0 +1,329 @@
+/* ===== ESTILOS COMUNES PARA TODOS LOS MODALES ===== */
+/* Basado en el diseño existente del proyecto ARCO */
+
+/* Variables del proyecto */
+:root {
+    --modal-primary-color: #395886;
+    --modal-secondary-color: #638ECB;
+    --modal-border-color: #B1C9EF;
+    --modal-light-bg: #F0F3FA;
+    --modal-text-color: #333333;
+    --modal-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal base */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    min-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+    box-shadow: var(--modal-shadow);
+    animation: slideInDown 0.4s ease;
+    transition: opacity 0.3s ease;
+    margin: 0 auto;
+}
+
+.modal-content:hover {
+    opacity: 0.95;
+}
+
+/* Header del modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: var(--modal-primary-color);
+    color: white;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+}
+
+.modal-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 13px;
+
+}
+
+/* Formularios en modales */
+.modal form {
+    padding: 4px;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--modal-text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, opacity 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--modal-primary-color);
+    opacity: 0.9;
+}
+
+.form-control:hover {
+    border-color: var(--modal-secondary-color);
+}
+
+/* Textarea específico */
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+/* Select */
+select.form-control {
+    cursor: pointer;
+    background-color: white;
+}
+
+/* Footer del modal */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+    margin-top: 0;
+}
+
+/* Botones del modal */
+.modal-footer .btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.modal-footer .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.modal-footer .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.modal-footer .btn:hover {
+    opacity: 0.9;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-footer .btn-primary {
+    background-color: var(--modal-primary-color);
+    color: white;
+}
+
+.modal-footer .btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        min-width: 300px;
+        margin: 10px;
+    }
+    
+    .modal-header {
+        padding: 15px;
+    }
+    
+    .modal-title {
+        font-size: 1.1rem;
+    }
+    
+    .modal form,
+    .modal-body {
+        padding: 13px;
+    }
+    
+    .modal-footer {
+        padding: 15px;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 98%;
+        min-width: 280px;
+        margin: 5px;
+    }
+    
+    .form-control {
+        padding: 8px;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal form {
+        padding: 12px;
+    }
+}
+
+/* Clases de utilidad para diferentes tamaños de modal */
+.modal-sm .modal-content {
+    width: 400px;
+}
+
+.modal-lg .modal-content {
+    width: 700px;
+}
+
+.modal-xl .modal-content {
+    width: 900px;
+}
+
+/* Estados de validación */
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+.valid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #28a745;
+}
