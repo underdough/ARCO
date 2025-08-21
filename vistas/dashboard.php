@@ -492,15 +492,18 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                         
                         document.body.appendChild(modal);
                         
-                        // Cerrar modal al hacer clic fuera
-                        modal.addEventListener('click', function(e) {
-                            if (e.target === modal) {
+                        // AGREGAR FUNCIONALIDAD ESCAPE:
+                        const handleEscape = function(event) {
+                            if (event.key === 'Escape') {
                                 modal.remove();
+                                document.removeEventListener('keydown', handleEscape);
                             }
-                        });
-                    } else {
-                        alert('No se pudo cargar la información de la actividad');
-                    }
+                        };
+                        document.addEventListener('keydown', handleEscape);
+               
+                } else {
+                    alert('No se pudo cargar la información de la actividad');
+                }
                 })
                 .catch(error => {
                     console.error('Error:', error);

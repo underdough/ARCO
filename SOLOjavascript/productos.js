@@ -358,19 +358,14 @@
             // Cerrar modal
             document.querySelector('.close-modal').addEventListener('click', cerrarModalProducto);
             
-            // Cerrar modal con Escape
+            // MANTENER ESTE BLOQUE (funcionalidad Escape):
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     cerrarModalProducto();
                 }
             });
-            
-            // Cerrar modal al hacer clic fuera
-            document.getElementById('productModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    cerrarModalProducto();
-                }
-            });
+       
+            window.removeEventListener('click', function() {}); 
             
             // Formulario de producto
             document.getElementById('productForm').addEventListener('submit', function(e) {

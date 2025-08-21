@@ -375,18 +375,8 @@ if (!isset($_SESSION['usuario_id'])) {
             document.querySelector('#movementModal .close-modal').addEventListener('click', () => {
                 document.getElementById('movementModal').style.display = 'none';
             });
-
-            document.getElementById('btnCancelMovement').addEventListener('click', () => {
-                document.getElementById('movementModal').style.display = 'none';
-            });
-            // Cerrar modal haciendo clic fuera del contenido
-            window.addEventListener('click', function (event) {
-                const modal = document.getElementById('movementModal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
+            
+            // MANTENER ESTE BLOQUE (funcionalidad Escape):
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Escape') {
                     // Cerrar modal de nuevo movimiento
@@ -477,13 +467,6 @@ function cargarProductos() {
 
             document.getElementById('cerrarDetalleBtn').addEventListener('click', () => {
                 document.getElementById('viewMovementModal').style.display = 'none';
-            });
-
-            window.addEventListener('click', function (event) {
-                const modal = document.getElementById('viewMovementModal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
             });
 
             cargarProductos();

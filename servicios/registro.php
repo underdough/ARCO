@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Validar campos obligatorios
 if (
-    empty($_POST['nombreCompleto']) ||
+    empty($_POST['nombre']) ||
+    empty($_POST['apellido']) ||
     empty($_POST['numeroDocumento']) ||
     empty($_POST['email']) ||
     empty($_POST['contrasena']) ||
@@ -24,8 +25,9 @@ if (
     exit;
 }
 
-$nombreCompleto = trim($_POST['nombreCompleto']);
-$numeroDocumento = filter_var($_POST['numeroDocumento'], FILTER_VALIDATE_INT);
+$nombre = trim($_POST['nombre']);
+$apellido = trim($_POST['apellido']);
+$numeroDocumento = trim($_POST['numeroDocumento']);
 $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 $contrasena = $_POST['contrasena'];
 $confirmar = $_POST['confirmarContrasena'];
@@ -97,11 +99,6 @@ try {
         exit;
     }
     $stmt->close();
-    
-    // Separar nombre y apellido
-    $partes = explode(" ", $nombreCompleto, 2);
-    $nombre = $partes[0];
-    $apellido = isset($partes[1]) ? $partes[1] : "";
     
     // Hash de la contraseña
     $hash = password_hash($contrasena, PASSWORD_BCRYPT);

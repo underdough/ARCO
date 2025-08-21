@@ -133,8 +133,15 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 <form id="formCrearUsuario">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nombreCompleto">Nombre Completo</label>
-                            <input type="text" id="nombreCompleto" name="nombreCompleto" class="form-control" required>
+                            <label for="nombre">Nombre</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="apellido">Apellido</label>
+                            <input type="text" id="apellido" name="apellido" class="form-control" required>
                         </div>
                     </div>
                     
@@ -240,40 +247,99 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 });
             });
         });
-
-        // ===== EVENT LISTENERS GLOBALES =====
         
-        // Cerrar modales con tecla Escape
+        // Toggle visibilidad de contraseña
+        function togglePasswordVisibility(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // Mostrar mensajes de alerta
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'error' ? 'alert-error' : 'alert-success';
+            alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            setTimeout(() => alertContainer.innerHTML = '', 5000);
+        }
+
+        // ===== MANEJO DEL FORMULARIO =====
+        
+        // Envío del formulario de crear usuario
+        document.getElementById('formCrearUsuario').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('contrasena').value;
+            const confirmPassword = document.getElementById('confirmarContrasena').value;
+            const submitBtn = document.getElementById('btnCrearUsuario');
+            const form = document.getElementById('formCrearUsuario');
+        
+            // Validación de contraseñas
+            if (password !== confirmPassword) {
+                showAlert('Las contraseñas no coinciden', 'error');
+                return;
+            }
+        
+            // Mostrar estado de carga
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
+            submitBtn.disabled = true;
+        
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch('../servicios/registro.php', {
+                    method: 'POST',
+                    body: formData
+                });
+        
+                const result = await response.json();
+        
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    form.reset();
+                    
+                    // Cerrar modal y recargar tabla después de 2 segundos
+                    setTimeout(() => {
+                        cerrarModalCrear();
+                        location.reload();
+                    }, 2000);
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión. Por favor, intenta nuevamente.', 'error');
+            } finally {
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Crear Usuario';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // AGREGAR ESTE BLOQUE (funcionalidad Escape):
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                const crearModal = document.getElementById('crearUsuarioModal');
-                const editarModal = document.getElementById('editarModal');
-                
-                if (crearModal.style.display === 'flex') {
+                // Cerrar modal de crear usuario
+                const modalCrear = document.getElementById('crearUsuarioModal');
+                if (modalCrear.style.display === 'flex') {
                     cerrarModalCrear();
                 }
-                if (editarModal.style.display === 'flex') {
+                
+                // Cerrar modal de editar usuario
+                const modalEditar = document.getElementById('editarModal');
+                if (modalEditar.style.display === 'flex') {
                     cerrarModal();
                 }
             }
         });
 
-        // Cerrar modal al hacer clic fuera
-        window.addEventListener('click', function(e) {
-            const modalCrear = document.getElementById('crearUsuarioModal');
-            const modalEditar = document.getElementById('editarModal');
-            
-            if (e.target === modalCrear) {
-                cerrarModalCrear();
-            }
-            if (e.target === modalEditar) {
-                cerrarModal();
-            }
-        });
-
         // ===== FUNCIONES AUXILIARES =====
-        
-        // Toggle visibilidad de contraseña
         function togglePasswordVisibility(inputId, icon) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {

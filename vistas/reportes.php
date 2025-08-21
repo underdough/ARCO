@@ -642,14 +642,14 @@ if (isset($_POST['generar_reporte'])) {
                 });
             }
             
-            // Cerrar modal al hacer clic fuera de él
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
+            // AGREGAR ESTE BLOQUE (funcionalidad Escape):
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'flex') {
                     modal.style.display = 'none';
                 }
             });
             
-            // Inicializar carga de datos 
+            // Inicializar carga de datos
             cargarMovimientos();
             cargarCategorias();
             cargarStockBajo();
