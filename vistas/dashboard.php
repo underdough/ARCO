@@ -202,7 +202,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 
                 const data = await response.json();
                 
-                console.log('Datos recibidos:', data); // Para debugging
+                console.log('Datos recibidos:', data);
                 
                 if (data.success) {
                     updateDashboardCards(data.data);

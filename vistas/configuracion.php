@@ -4,7 +4,7 @@ if (!isset($_SESSION['usuario_id'])) {
     header('Location: ../login.html');
     exit();
 }
-require_once '../servicios/conexion.php'; // Ajusta la ruta según tu estructura
+require_once '../servicios/conexion.php'; 
 session_start();
 
 $conexion = conectarDB();
@@ -39,7 +39,6 @@ if ($result && $result->num_rows > 0) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Añadir FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -91,9 +90,7 @@ if ($result && $result->num_rows > 0) {
         </div>
 
 
-
-        <!-- Sección de Información de la Empresa -->
-        <form action="../servicios/guardar_empresa.php" method="POST" enctype="multipart/form-data"
+       <form action="../servicios/guardar_empresa.php" method="POST" enctype="multipart/form-data"
             id="companyInfoForm">
             <div class="config-section">
                 <h3><i class="fas fa-building"></i> Información de la Empresa</h3>

@@ -120,9 +120,6 @@ if (!isset($_SESSION['usuario_id'])) {
         </div>
     </div>
 
-    <!-- Modal para agregar/editar categoría -->
-    <!-- Modal mejorado - Reemplaza desde la línea 105 -->
-    <!-- Modal para agregar/editar categoría -->
     <div class="modal" id="categoryModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -214,21 +211,17 @@ if (!isset($_SESSION['usuario_id'])) {
         }, 300);
     }
 
-    // ✅ Abrir/Cerrar modal
     btnAddCategory.addEventListener('click', () => openModal('Agregar Nueva Categoría'));
     btnCancelCategory.addEventListener('click', closeCategoryModal);
     closeModal.addEventListener('click', closeCategoryModal);
 
-    // ✅ Cerrar con ESC
     document.addEventListener('keydown', event => {
         if (event.key === 'Escape' && modal.style.display === 'flex') {
             closeCategoryModal();
         }
     });
 
-    // ❌ NO cerrar con clic fuera del modal — No se agrega ningún window.onclick
 
-    // Formulario guardar
     document.getElementById('categoryForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -273,7 +266,7 @@ if (!isset($_SESSION['usuario_id'])) {
             .then(res => res.json())
             .then(data => {
 
-                const categorias = data.data || data; // por compatibilidad
+                const categorias = data.data || data;
 
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = '';

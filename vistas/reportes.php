@@ -791,7 +791,6 @@ if (isset($_POST['generar_reporte'])) {
         function descargarReporte(id) {
             // Descargar reporte
             window.location.href = `../servicios/descargar_reporte.php?id=${id}`;
-        }
-    </script>
+        }    </script>
 </body>
 </html>
