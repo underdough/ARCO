@@ -1,7 +1,9 @@
 <?php
 require_once 'conexion.php';
 $conexion = ConectarDB();
-require_once 'librerias/tcpdf/tcpdf.php';
+$tcpdfPath = realpath(__DIR__ . '/librerias/tcpdf/tcpdf.php');
+if (!$tcpdfPath || !file_exists($tcpdfPath)) { die('No se encuentra la librería TCPDF. Por favor instálela en servicios/librerias/tcpdf.'); }
+require_once $tcpdfPath;
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die('ID de reporte inválido');

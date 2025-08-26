@@ -54,7 +54,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuario.php" class="menu-item active">
+            <a href="Usuario.php" class="menu-item active">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>

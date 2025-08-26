@@ -1,7 +1,7 @@
 <?php
 require_once '../servicios/conexion.php';
 $conexion = ConectarDB();
-require_once '../servicios/librerias/tcpdf/tcpdf.php';
+// TCPDF se carga bajo demanda al momento de generar/visualizar un PDF
 
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
@@ -231,6 +231,15 @@ if (isset($_POST['generar_reporte'])) {
         // Cerrar statement de inserción
         $insertStmt->close();
 
+        // Verificar TCPDF e incluirlo bajo demanda
+        $tcpdfPath = realpath(__DIR__ . '/../servicios/librerias/tcpdf/tcpdf.php');
+        if (!$tcpdfPath || !file_exists($tcpdfPath)) {
+            error_log("TCPDF no encontrado en: " . (__DIR__ . '/../servicios/librerias/tcpdf/tcpdf.php'));
+            echo "<script>alert('No se encuentra la librería TCPDF. Por favor instálela en servicios/librerias/tcpdf.'); window.location.href='reportes.php';</script>";
+            exit;
+        }
+        require_once $tcpdfPath;
+
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Sistema ARCO');
@@ -347,7 +356,6 @@ if (isset($_POST['generar_reporte'])) {
         
         if ($format === 'pdf') {
             // Antes de mostrar el PDF, guardar en sesión que fue exitoso
-            session_start();
             $_SESSION['reporte_generado'] = true;
             $pdf->Output($titulo . '.pdf', 'I');
             exit; // Salir después de generar el PDF
@@ -397,7 +405,7 @@ if (isset($_POST['generar_reporte'])) {
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="usuario.php" class="menu-item">
+            <a href="Usuario.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>

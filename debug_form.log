@@ -1,0 +1,13 @@
+=== FORM SUBMISSION DEBUG ===
+POST data: Array
+(
+    [reportType] => sales
+    [reportDateFrom] => 2025-08-28
+    [reportDateTo] => 2025-08-31
+    [reportFormat] => pdf
+    [reportNotes] => prueba
+    [generar_reporte] => 
+)
+
+generar_reporte isset: YES
+

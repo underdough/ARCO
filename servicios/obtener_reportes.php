@@ -1,18 +1,9 @@
 <?php
 header('Content-Type: application/json');
+require_once __DIR__ . '/conexion.php';
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "arco_bdd";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Conexión fallida: " . $conn->connect_error]));
-}
+// Usar conexión centralizada
+$conn = ConectarDB();
 
 // Obtener el tipo de reporte solicitado
 $tipo = $_GET['tipo'] ?? 'movimientos';
@@ -42,11 +33,12 @@ switch ($tipo) {
         break;
         
     case 'stock_bajo':
-        $sql = "SELECT m.nombre_material, m.stock, m.minimo_alarma,
+        // Evitar dependencia de columna posiblemente inexistente 'minimo_alarma'
+        $sql = "SELECT m.nombre_material, m.stock,
                 COALESCE(c.nombre_cat, 'Sin categoría') as categoria
                 FROM materiales m 
                 LEFT JOIN categorias c ON m.id_categorias = c.id_categorias 
-                WHERE m.stock <= m.minimo_alarma 
+                WHERE m.stock <= 10 
                 ORDER BY m.stock ASC";
         break;
         
@@ -57,7 +49,7 @@ switch ($tipo) {
 
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $data[] = $row;
     }
@@ -65,6 +57,5 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 
-// Convert data to JSON
 echo json_encode($data);
 ?>
