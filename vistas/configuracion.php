@@ -5,7 +5,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 require_once '../servicios/conexion.php'; 
-session_start();
+
 
 $conexion = conectarDB();
 
