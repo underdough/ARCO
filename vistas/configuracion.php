@@ -6,6 +6,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 require_once '../servicios/conexion.php'; 
 
+
 $conexion = conectarDB();
 
 $empresa = [

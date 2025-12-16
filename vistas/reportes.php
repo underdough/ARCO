@@ -676,17 +676,28 @@ if (isset($_POST['generar_reporte'])) {
         });
         
         // Función para cargar movimientos 
+        // Función mejorada manteniendo simplicidad
         function cargarMovimientos() {
             fetch('../servicios/obtener_reportes.php?tipo=movimientos')
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('movimientosContainer');
                     if (data.length === 0) {
-                        container.innerHTML = '<div class="no-data"><i class="fas fa-info-circle"></i> No hay movimientos recientes</div>';
+                        container.innerHTML = `
+                            <div class="no-data" style="text-align: center; padding: 40px; color: #666;">
+                                <i class="fas fa-info-circle" style="font-size: 1.5rem; margin-bottom: 10px; display: block;"></i>
+                                <p style="margin: 0;">No hay movimientos recientes</p>
+                            </div>`;
                     } else {
-                        let html = '<div class="data-table"><table><thead><tr><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Usuario</th><th>Fecha</th></tr></thead><tbody>';
+                        let html = '<div class="data-table"><table><thead><tr>';
+                        html += '<th>Producto</th>';
+                        html += '<th>Tipo</th>';
+                        html += '<th>Cantidad</th>';
+                        html += '<th>Usuario</th>';
+                        html += '<th>Fecha</th>';
+                        html += '</tr></thead><tbody>';
+                        
                         data.forEach(item => {
-                            // Determinar clase del badge según el tipo de movimiento
                             let badgeClass = '';
                             switch((item.tipo || '').toLowerCase()) {
                                 case 'entrada':
@@ -717,7 +728,7 @@ if (isset($_POST['generar_reporte'])) {
                             html += `<tr>
                                 <td>${item.producto || 'N/A'}</td>
                                 <td><span class="${badgeClass}">${item.tipo || 'N/A'}</span></td>
-                                <td>${item.cantidad}</td>
+                                <td><strong>${item.cantidad}</strong></td>
                                 <td>${item.usuario || 'N/A'}</td>
                                 <td>${item.fecha_formateada}</td>
                             </tr>`;
@@ -729,7 +740,11 @@ if (isset($_POST['generar_reporte'])) {
                 })
                 .catch(error => {
                     console.error('Error cargando movimientos:', error);
-                    document.getElementById('movimientosContainer').innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle"></i> Error cargando datos</div>';
+                    document.getElementById('movimientosContainer').innerHTML = `
+                        <div class="error" style="text-align: center; padding: 40px; color: #dc3545;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem; margin-bottom: 10px; display: block;"></i>
+                            <p style="margin: 0;">Error cargando datos</p>
+                        </div>`;
                 });
         }
         
