@@ -281,7 +281,7 @@ composer require phpmailer/phpmailer
 
 2. **Probar recuperación de contraseña:**
    ```
-   http://localhost/ARCO/ARCO/vistas/recuperar-contra.php
+   http://localhost/ARCO/vistas/recuperar-contra.php
    ```
 
 3. **Ver el link directo:**
@@ -316,7 +316,7 @@ composer require phpmailer/phpmailer
 
 4. **Probar configuración:**
    ```
-   http://localhost/ARCO/ARCO/servicios/test_email.php
+   http://localhost/ARCO/servicios/test_email.php
    ```
 
 5. **Usar el sistema:**

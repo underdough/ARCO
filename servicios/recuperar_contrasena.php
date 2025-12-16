@@ -91,7 +91,7 @@ try {
     // Detectar la ruta correcta
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
-    $resetLink = $protocol . "://" . $host . "/ARCO/ARCO/vistas/restablecer-contra.php?token=" . $token;
+    $resetLink = $protocol . "://" . $host . "ARCO/vistas/restablecer-contra.php?token=" . $token;
     
     // Registrar en auditoría si la tabla existe
     $checkAuditoria = $conexion->query("SHOW TABLES LIKE 'auditoria'");

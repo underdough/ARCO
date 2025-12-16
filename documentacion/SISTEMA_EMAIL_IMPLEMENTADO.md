@@ -118,7 +118,7 @@ const SMTP_PASSWORD = 'tu_contraseña_app';
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ---
@@ -219,7 +219,7 @@ echo "SMTP configurado: " . ($config['smtp_configurado'] ? 'Sí' : 'No');
 
 ### Página de Prueba
 
-**URL:** `http://localhost/ARCO/ARCO/servicios/test_email.php`
+**URL:** `http://localhost/ARCO/servicios/test_email.php`
 
 **Funcionalidades:**
 - ✅ Verificar estado de PHPMailer
@@ -232,7 +232,7 @@ echo "SMTP configurado: " . ($config['smtp_configurado'] ? 'Sí' : 'No');
 
 ```bash
 # 1. Acceder a recuperación de contraseña
-http://localhost/ARCO/ARCO/vistas/recuperar-contra.php
+http://localhost/ARCO/vistas/recuperar-contra.php
 
 # 2. Ingresar email registrado
 # 3. Verificar que llegue el email

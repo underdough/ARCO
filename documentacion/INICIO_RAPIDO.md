@@ -39,7 +39,7 @@ $base_datos = "arco_bdd";
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/login.html
+http://localhost/ARCO/login.html
 ```
 
 **Credenciales por defecto:**
@@ -84,7 +84,7 @@ const SMTP_PASSWORD = 'tu_contraseña_app';
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ---
@@ -119,12 +119,12 @@ mysql -u root -p arco_bdd -e "SHOW TABLES;"
 Deberías ver tablas como: `usuarios`, `productos`, `categorias`, `movimientos`, etc.
 
 ### 2. Verificar Login
-- Abrir: `http://localhost/ARCO/ARCO/login.html`
+- Abrir: `http://localhost/ARCO/login.html`
 - Iniciar sesión con credenciales por defecto
 - Deberías ver el dashboard
 
 ### 3. Verificar Emails (si configuraste)
-- Abrir: `http://localhost/ARCO/ARCO/servicios/test_email.php`
+- Abrir: `http://localhost/ARCO/servicios/test_email.php`
 - Enviar email de prueba
 - Verificar que llegue el correo
 
@@ -139,7 +139,7 @@ Deberías ver tablas como: `usuarios`, `productos`, `categorias`, `movimientos`,
 
 ### Dashboard
 ```
-http://localhost/ARCO/ARCO/vistas/dashboard.php
+http://localhost/ARCO/vistas/dashboard.php
 ```
 - Métricas en tiempo real
 - Alertas de stock bajo
@@ -147,7 +147,7 @@ http://localhost/ARCO/ARCO/vistas/dashboard.php
 
 ### Gestión de Productos
 ```
-http://localhost/ARCO/ARCO/vistas/productos.php
+http://localhost/ARCO/vistas/productos.php
 ```
 - Crear, editar, eliminar productos
 - Gestión de categorías
@@ -155,7 +155,7 @@ http://localhost/ARCO/ARCO/vistas/productos.php
 
 ### Movimientos
 ```
-http://localhost/ARCO/ARCO/vistas/movimientos.php
+http://localhost/ARCO/vistas/movimientos.php
 ```
 - Registrar entradas y salidas
 - Filtrar por fecha y tipo
@@ -163,7 +163,7 @@ http://localhost/ARCO/ARCO/vistas/movimientos.php
 
 ### Reportes
 ```
-http://localhost/ARCO/ARCO/vistas/reportes.php
+http://localhost/ARCO/vistas/reportes.php
 ```
 - Generar reportes personalizados
 - Exportar en PDF/Excel
@@ -171,7 +171,7 @@ http://localhost/ARCO/ARCO/vistas/reportes.php
 
 ### Usuarios (Solo Admin)
 ```
-http://localhost/ARCO/ARCO/vistas/usuarios.php
+http://localhost/ARCO/vistas/usuarios.php
 ```
 - Crear usuarios
 - Asignar roles
@@ -179,7 +179,7 @@ http://localhost/ARCO/ARCO/vistas/usuarios.php
 
 ### Configuración (Solo Admin)
 ```
-http://localhost/ARCO/ARCO/vistas/configuracion.php
+http://localhost/ARCO/vistas/configuracion.php
 ```
 - Datos de la empresa
 - Configuración de emails
@@ -266,7 +266,7 @@ Tu Sistema ARCO está configurado y listo para usar.
 
 **Acceso:**
 ```
-http://localhost/ARCO/ARCO/login.html
+http://localhost/ARCO/login.html
 ```
 
 ---

@@ -38,7 +38,10 @@ try {
         throw new Exception("Código incorrecto o expirado. Por favor intente nuevamente.");
     }
     
-    // Código válido - completar login
+    // Código válido - marcar dispositivo como confiable
+    $tfa->markDeviceAsTrusted($userId);
+    
+    // Completar login
     $usuario = $_SESSION['temp_user_data'];
     $recordarme = $_SESSION['temp_recordarme'] ?? false;
     

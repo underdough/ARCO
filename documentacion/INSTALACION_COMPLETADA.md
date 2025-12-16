@@ -28,7 +28,7 @@ PHPMailer se ha instalado correctamente en tu sistema ARCO.
 
 Abre en tu navegador:
 ```
-http://localhost/ARCO/ARCO/verificar_phpmailer.php
+http://localhost/ARCO/verificar_phpmailer.php
 ```
 
 Este archivo verifica:
@@ -42,7 +42,7 @@ Este archivo verifica:
 
 Abre en tu navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ---
@@ -87,17 +87,17 @@ const SMTP_PASSWORD = 'tu_contraseña_app';
 
 **Opción A: Verificación Rápida**
 ```
-http://localhost/ARCO/ARCO/verificar_phpmailer.php
+http://localhost/ARCO/verificar_phpmailer.php
 ```
 
 **Opción B: Enviar Email de Prueba**
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 **Opción C: Probar Recuperación de Contraseña**
 ```
-http://localhost/ARCO/ARCO/vistas/recuperar-contra.php
+http://localhost/ARCO/vistas/recuperar-contra.php
 ```
 
 ---
@@ -263,7 +263,7 @@ El sistema de email está instalado y listo. Solo falta configurar tus credencia
 
 1. **Abrir:** `servicios/config_email.php`
 2. **Editar:** Credenciales SMTP
-3. **Probar:** `http://localhost/ARCO/ARCO/verificar_phpmailer.php`
+3. **Probar:** `http://localhost/ARCO/verificar_phpmailer.php`
 
 ---
 

@@ -103,13 +103,61 @@ try {
     
     // Verificar si tiene 2FA habilitado
     if ($usuario['two_factor_enabled']) {
+        $tfa = new TwoFactorAuth();
+        
+        // Verificar si el dispositivo ya es confiable
+        if ($tfa->isDeviceTrusted($usuario['id_usuarios'])) {
+            // Dispositivo confiable, permitir acceso directo sin 2FA
+            $_SESSION['usuario_id'] = $usuario['id_usuarios'];
+            $_SESSION['nombre'] = $usuario['nombre'];
+            $_SESSION['apellido'] = $usuario['apellido'];
+            $_SESSION['rol'] = $usuario['rol'];
+            $_SESSION['correo'] = $usuario['correo'];
+            $_SESSION['ultimo_acceso'] = date('Y-m-d H:i:s');
+            
+            // Actualizar último acceso
+            $stmt = $conexiondb->prepare("UPDATE usuarios SET ultimo_acceso = NOW() WHERE id_usuarios = ?");
+            $stmt->bind_param("i", $usuario['id_usuarios']);
+            $stmt->execute();
+            
+            // Registrar en auditoría
+            $stmt = $conexiondb->prepare("
+                INSERT INTO auditoria (usuario_id, accion, descripcion, ip_address, user_agent, fecha_hora)
+                VALUES (?, 'login', 'Inicio de sesión desde dispositivo confiable', ?, ?, NOW())
+            ");
+            $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'desconocida';
+            $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'desconocido';
+            $stmt->bind_param("iss", $usuario['id_usuarios'], $ipAddress, $userAgent);
+            $stmt->execute();
+            
+            // Configurar cookie de recordar si está habilitado
+            if ($recordarme) {
+                $token = bin2hex(random_bytes(32));
+                $expiracion = time() + (30 * 24 * 60 * 60); // 30 días
+                
+                setcookie('recordar_token', $token, $expiracion, '/', '', false, true);
+                
+                $stmt = $conexiondb->prepare("
+                    UPDATE usuarios 
+                    SET token_recordar = ?, token_recordar_expira = FROM_UNIXTIME(?)
+                    WHERE id_usuarios = ?
+                ");
+                $stmt->bind_param("sii", $token, $expiracion, $usuario['id_usuarios']);
+                $stmt->execute();
+            }
+            
+            // Redirigir al dashboard
+            header("Location: ../vistas/dashboard.php");
+            exit;
+        }
+        
+        // Dispositivo nuevo, solicitar 2FA
         // Guardar datos temporales para 2FA
         $_SESSION['temp_user_id'] = $usuario['id_usuarios'];
         $_SESSION['temp_user_data'] = $usuario;
         $_SESSION['temp_recordarme'] = $recordarme;
         
         // Generar y enviar código 2FA
-        $tfa = new TwoFactorAuth();
         $metodo = $usuario['two_factor_method'] ?? 'email';
         $codigo = $tfa->generateVerificationCode();
         

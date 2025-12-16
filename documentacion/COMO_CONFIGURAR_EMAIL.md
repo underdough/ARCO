@@ -69,7 +69,7 @@ composer require phpmailer/phpmailer
 
 1. **Abrir en el navegador:**
    ```
-   http://localhost/ARCO/ARCO/servicios/test_email.php
+   http://localhost/ARCO/servicios/test_email.php
    ```
 
 2. **Verificar el estado:**
@@ -86,7 +86,7 @@ composer require phpmailer/phpmailer
 
 1. **Ir a la página de login:**
    ```
-   http://localhost/ARCO/ARCO/login.html
+   http://localhost/ARCO/login.html
    ```
 
 2. **Hacer clic en "¿Olvidaste tu contraseña?"**
@@ -160,7 +160,7 @@ El sistema funciona automáticamente sin configurar nada. Cuando intentas recupe
 
 1. **Ir a recuperación de contraseña:**
    ```
-   http://localhost/ARCO/ARCO/vistas/recuperar-contra.php
+   http://localhost/ARCO/vistas/recuperar-contra.php
    ```
 
 2. **Ingresar un email registrado**
@@ -226,7 +226,7 @@ instalar_phpmailer.bat
 **Solución:**
 ```
 Verificar la ruta correcta:
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 
 O si tu instalación es diferente:
 http://localhost/ARCO/servicios/test_email.php
@@ -325,7 +325,7 @@ Si llegaste hasta aquí y todo funciona, ¡ya tienes el sistema de emails config
 
 1. **Página de Prueba:**
    ```
-   http://localhost/ARCO/ARCO/servicios/test_email.php
+   http://localhost/ARCO/servicios/test_email.php
    ```
 
 2. **Documentación:**

@@ -151,7 +151,7 @@ composer require phpmailer/phpmailer
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/verificar_2fa_setup.php
+http://localhost/ARCO/servicios/verificar_2fa_setup.php
 ```
 
 Este script:
@@ -181,7 +181,7 @@ const SMTP_PASSWORD = 'tu_contraseña_app';
 ### Paso 4: Probar Configuración
 
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ---

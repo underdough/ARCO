@@ -41,7 +41,7 @@
 El sistema ahora incluye **modo desarrollo** que muestra el link de recuperación directamente en la interfaz cuando el email no se puede enviar.
 
 **Pasos:**
-1. Ir a `http://localhost/ARCO/ARCO/vistas/recuperar-contra.php`
+1. Ir a `http://localhost/ARCO/vistas/recuperar-contra.php`
 2. Ingresar un correo válido registrado en el sistema
 3. Hacer clic en "Enviar Instrucciones"
 4. Si el email no se envía, aparecerá un cuadro amarillo con el link directo
@@ -87,7 +87,7 @@ Los enlaces de recuperación expiran en 1 hora por seguridad.
 
 1. **Verificar configuración de email:**
    ```
-   http://localhost/ARCO/ARCO/servicios/test_email.php
+   http://localhost/ARCO/servicios/test_email.php
    ```
 
 2. **Ver estado del sistema:**
@@ -138,7 +138,7 @@ const SMTP_PASSWORD = 'tu_contraseña_app'; // Contraseña de aplicación
 **4. Probar configuración:**
 
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 **5. Usar modo desarrollo (Alternativa):**
@@ -243,7 +243,7 @@ ARCO/
 
 **Ajustar rutas en los archivos:**
 ```javascript
-// Si está en /ARCO/ARCO/
+// Si está en /ARCO/
 fetch('../servicios/recuperar_contrasena.php')
 
 // Si está en /ARCO/
@@ -417,7 +417,7 @@ Antes de reportar un problema, verificar:
 - [ ] No hay errores en consola del navegador (F12)
 - [ ] Logs del servidor no muestran errores críticos
 - [ ] Permisos de archivos son correctos
-- [ ] Ruta de acceso es correcta (localhost/ARCO/ARCO/ o localhost/ARCO/)
+- [ ] Ruta de acceso es correcta (localhost/ARCO/ o localhost/ARCO/)
 
 ---
 

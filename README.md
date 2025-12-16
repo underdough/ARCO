@@ -163,7 +163,7 @@ El sistema incluye un módulo completo de envío de emails con soporte para múl
    ```
 
 3. **Probar configuración**:
-   - Abrir: `http://localhost/ARCO/ARCO/servicios/test_email.php`
+   - Abrir: `http://localhost/ARCO/servicios/test_email.php`
    - Enviar email de prueba
 
 **Proveedores Soportados:**

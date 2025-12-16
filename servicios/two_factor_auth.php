@@ -21,15 +21,92 @@ class TwoFactorAuth {
      */
     public function saveVerificationCode($userId, $code, $type = 'email') {
         $expiry = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'desconocida';
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'desconocido';
+        $deviceFingerprint = $this->generateDeviceFingerprint();
         
-        // Eliminar códigos anteriores del usuario
-        $stmt = $this->conn->prepare("DELETE FROM verification_codes WHERE user_id = ?");
+        // Eliminar códigos anteriores no verificados del usuario
+        $stmt = $this->conn->prepare("DELETE FROM verification_codes WHERE user_id = ? AND verified = 0");
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         
         // Insertar nuevo código
-        $stmt = $this->conn->prepare("INSERT INTO verification_codes (user_id, code, type, expires_at) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("isss", $userId, $code, $type, $expiry);
+        $stmt = $this->conn->prepare("
+            INSERT INTO verification_codes 
+            (user_id, code, type, expires_at, ip_address, user_agent, device_fingerprint) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->bind_param("issssss", $userId, $code, $type, $expiry, $ipAddress, $userAgent, $deviceFingerprint);
+        
+        return $stmt->execute();
+    }
+    
+    /**
+     * Genera una huella digital única del dispositivo
+     */
+    public function generateDeviceFingerprint() {
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+        
+        // Crear hash único basado en IP y User Agent
+        return hash('sha256', $ipAddress . '|' . $userAgent);
+    }
+    
+    /**
+     * Verifica si el dispositivo ya fue verificado anteriormente
+     */
+    public function isDeviceTrusted($userId) {
+        $deviceFingerprint = $this->generateDeviceFingerprint();
+        
+        $stmt = $this->conn->prepare("
+            SELECT COUNT(*) as count 
+            FROM verification_codes 
+            WHERE user_id = ? 
+            AND device_fingerprint = ? 
+            AND verified = 1
+        ");
+        $stmt->bind_param("is", $userId, $deviceFingerprint);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        
+        return $result['count'] > 0;
+    }
+    
+    /**
+     * Marca el dispositivo actual como verificado
+     */
+    public function markDeviceAsTrusted($userId) {
+        $deviceFingerprint = $this->generateDeviceFingerprint();
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'desconocida';
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'desconocido';
+        
+        // Verificar si ya existe un registro verificado para este dispositivo
+        $stmt = $this->conn->prepare("
+            SELECT id FROM verification_codes 
+            WHERE user_id = ? AND device_fingerprint = ? AND verified = 1
+            LIMIT 1
+        ");
+        $stmt->bind_param("is", $userId, $deviceFingerprint);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            // Ya existe, solo actualizar la fecha
+            $stmt = $this->conn->prepare("
+                UPDATE verification_codes 
+                SET created_at = NOW(), ip_address = ?, user_agent = ?
+                WHERE user_id = ? AND device_fingerprint = ? AND verified = 1
+            ");
+            $stmt->bind_param("ssis", $ipAddress, $userAgent, $userId, $deviceFingerprint);
+        } else {
+            // Crear nuevo registro de dispositivo confiable
+            $stmt = $this->conn->prepare("
+                INSERT INTO verification_codes 
+                (user_id, code, type, expires_at, verified, ip_address, user_agent, device_fingerprint) 
+                VALUES (?, '000000', 'trusted', DATE_ADD(NOW(), INTERVAL 1 YEAR), 1, ?, ?, ?)
+            ");
+            $stmt->bind_param("isss", $userId, $ipAddress, $userAgent, $deviceFingerprint);
+        }
         
         return $stmt->execute();
     }

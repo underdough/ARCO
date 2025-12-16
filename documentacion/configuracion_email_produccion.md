@@ -206,7 +206,7 @@ const SMTP_PASSWORD = 'tu_contraseña';
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ### 2. Verificar Estado

@@ -130,7 +130,7 @@ ingresa el siguiente código de verificación:
 
 Abrir en el navegador:
 ```
-http://localhost/ARCO/ARCO/servicios/verificar_2fa_setup.php
+http://localhost/ARCO/servicios/verificar_2fa_setup.php
 ```
 
 Este script verifica:
@@ -154,7 +154,7 @@ const SMTP_PASSWORD = 'tu_contraseña_app';
 #### 3. Probar Sistema
 
 ```
-http://localhost/ARCO/ARCO/servicios/test_email.php
+http://localhost/ARCO/servicios/test_email.php
 ```
 
 ---
@@ -212,7 +212,7 @@ composer require phpmailer/phpmailer
 
 Opción A - Automático:
 ```
-http://localhost/ARCO/ARCO/servicios/verificar_2fa_setup.php
+http://localhost/ARCO/servicios/verificar_2fa_setup.php
 ```
 
 Opción B - Manual:

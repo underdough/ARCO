@@ -9,8 +9,13 @@ CREATE TABLE IF NOT EXISTS `verification_codes` (
   `expires_at` DATETIME NOT NULL,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `attempts` INT DEFAULT 0,
+  `verified` TINYINT(1) DEFAULT 0,
+  `ip_address` VARCHAR(45) NULL,
+  `user_agent` VARCHAR(255) NULL,
+  `device_fingerprint` VARCHAR(64) NULL,
   INDEX `idx_user_code` (`user_id`, `code`),
   INDEX `idx_expires` (`expires_at`),
+  INDEX `idx_device` (`user_id`, `device_fingerprint`),
   FOREIGN KEY (`user_id`) REFERENCES `usuarios`(`id_usuarios`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
