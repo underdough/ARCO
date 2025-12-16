@@ -1,0 +1,68 @@
+# IDEs y Editores
+.vscode/*
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Composer
+/vendor/
+composer.lock
+composer.phar
+
+# Logs
+*.log
+logs/*.log
+servicios/*.log
+servicios/log_*.txt
+debug_*.log
+
+# Configuración local (credenciales sensibles)
+servicios/config_email_local.php
+.env
+.env.local
+
+# Archivos temporales
+*.tmp
+*.temp
+*.cache
+*.bak
+*.swp
+*~
+
+
+# Respaldos de base de datos
+respaldos/*.sql
+backups/*.sql
+*.sql.gz
+
+# Archivos subidos por usuarios
+uploads/*
+!uploads/.gitkeep
+
+# Reportes generados
+servicios/reportes/*.pdf
+servicios/reportes/*.xlsx
+servicios/reportes/*.csv
+
+# PHPMailer (si se instala manualmente)
+# Descomentar si instalas PHPMailer manualmente en servicios/PHPMailer/
+# servicios/PHPMailer/
+
+# Node modules (si usas npm)
+node_modules/
+
+# Sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de prueba
+test.php
+prueba.php
+debug.php

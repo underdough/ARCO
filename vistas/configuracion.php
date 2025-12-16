@@ -5,7 +5,6 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 require_once '../servicios/conexion.php'; 
-session_start();
 
 $conexion = conectarDB();
 
@@ -370,6 +369,76 @@ if ($result && $result->num_rows > 0) {
         }
         ?>
 
+
+        <!-- Sección de Autenticación de Dos Factores -->
+        <?php
+        $preferencias2FA = [
+            'two_factor_enabled' => 0,
+            'two_factor_method' => 'email'
+        ];
+
+        if ($usuarioId) {
+            $stmt = $conexion->prepare("SELECT two_factor_enabled, two_factor_method FROM usuarios WHERE id_usuarios = ?");
+            $stmt->bind_param("i", $usuarioId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $preferencias2FA = $row;
+            }
+        }
+        ?>
+
+        <form action="../servicios/guardar_2fa.php" method="POST" id="form2FA">
+            <div class="config-section">
+                <h3><i class="fas fa-shield-alt"></i> Autenticación de Dos Factores (2FA)</h3>
+                
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Activar Autenticación de Dos Factores</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enable2FA" name="enable2FA" value="1" 
+                                <?= $preferencias2FA['two_factor_enabled'] ? 'checked' : '' ?>>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <small style="color: #6b7280;">
+                        La autenticación de dos factores añade una capa adicional de seguridad a su cuenta.
+                    </small>
+                </div>
+
+                <div class="form-group" id="method2FAGroup" style="<?= $preferencias2FA['two_factor_enabled'] ? '' : 'display: none;' ?>">
+                    <label for="method2FA">Método de Verificación</label>
+                    <select class="form-control" id="method2FA" name="method2FA">
+                        <option value="email" <?= $preferencias2FA['two_factor_method'] == 'email' ? 'selected' : '' ?>>
+                            📧 Correo Electrónico
+                        </option>
+                        <option value="sms" <?= $preferencias2FA['two_factor_method'] == 'sms' ? 'selected' : '' ?>>
+                            📱 Mensaje SMS
+                        </option>
+                    </select>
+                    <small style="color: #6b7280;">
+                        Seleccione cómo desea recibir los códigos de verificación.
+                    </small>
+                </div>
+
+                <div class="section-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Configuración 2FA
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const checkbox = document.getElementById("enable2FA");
+                const methodGroup = document.getElementById("method2FAGroup");
+
+                checkbox.addEventListener("change", () => {
+                    methodGroup.style.display = checkbox.checked ? "block" : "none";
+                });
+            });
+        </script>
 
         <!-- Sección de Permisos de Usuario -->
         <form action="../servicios/guardar_permisos.php" method="POST" id="formPermisos">

@@ -1,60 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-    --color-primario: #395886; /* Azul principal */
-    --color-secundario: #395886; /* Azul oscuro */
-    --texto: #333;
-    --bg-color: #638ECB; /* Azul intermedio para fondo */
-    --color-error: #e74c3c;
-    --color-correcto: #27ae60;
-    --color-borde: #B1C9EF; /* Azul claro para bordes */
-    --accent-color: #8AAEE0; /* Azul medio para acentos */
-    --light-bg: #F0F3FA; /* Fondo claro */
+    --color-primario: #2563eb; /* Azul moderno */
+    --color-secundario: #1d4ed8; /* Azul oscuro */
+    --color-terciario: #3b82f6; /* Azul intermedio */
+    --texto: #1f2937;
+    --texto-secundario: #6b7280;
+    --bg-color: #f8fafc;
+    --color-error: #dc2626;
+    --color-correcto: #059669;
+    --color-warning: #d97706;
+    --color-borde: #e5e7eb;
+    --accent-color: #60a5fa;
+    --light-bg: #ffffff;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
-    background: var(--light-bg);
-    height: 100vh;
+    background: linear-gradient(135deg, var(--bg-color) 0%, #e0e7ff 100%);
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1rem;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .cont-auten {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: var(--light-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
     overflow: hidden;
-    width: 900px;
-    max-width: 95%;
+    width: 100%;
+    max-width: 1000px;
     display: flex;
-    min-height: 550px;
+    min-height: 600px;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .img-auten {
-    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-terciario) 50%, var(--color-secundario) 100%);
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    padding: 2rem;
+    padding: 3rem 2rem;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.img-auten::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.img-auten > div {
+    position: relative;
+    z-index: 2;
 }
 
 .img-auten h2 {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    font-weight: 700;
     margin-bottom: 1rem;
+    letter-spacing: -0.025em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .img-auten p {
-    font-size: 1.1rem;
-    opacity: 0.9;
+    font-size: 1.2rem;
+    opacity: 0.95;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+.img-auten img {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.img-auten img:hover {
+    transform: scale(1.05);
 }
 
 .form-auten {

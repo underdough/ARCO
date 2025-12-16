@@ -1,0 +1,45 @@
+{
+    "name": "arco/sistema-inventarios",
+    "description": "Sistema ARCO - Gestión de Inventarios",
+    "version": "2.0.0",
+    "type": "project",
+    "keywords": ["inventario", "gestion", "almacen", "php", "mysql"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Equipo ARCO",
+            "email": "soporte@arco-sistema.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-mbstring": "*",
+        "ext-mysqli": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "phpmailer/phpmailer": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arco\\": "aplicacion/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"echo '\\n✅ PHPMailer instalado correctamente\\n';\"",
+            "@php -r \"echo '📧 Configurar credenciales en: servicios/config_email.php\\n';\"",
+            "@php -r \"echo '🧪 Probar configuración en: servicios/test_email.php\\n\\n';\""
+        ],
+        "post-update-cmd": [
+            "@php -r \"echo '\\n✅ Dependencias actualizadas\\n\\n';\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.12"
+        }
+    }
+}

@@ -1,0 +1,34 @@
+Frontend:
+✅ mejora el css del login de ARCO - COMPLETADO
+✅ cambio de fuente en el sistema - COMPLETADO (Google Fonts Inter)
+✅ Alerta de js de productos en stock bajo - COMPLETADO (recursos/scripts/alertas-stock.js)
+✅ módulo de recuperación de contraseña satisfactoriamente hecho funcional - COMPLETADO
+✅ Sistema de envío de emails para producción - COMPLETADO (PHPMailer + múltiples proveedores SMTP)
+⏳ módulo de registro
+⏳ interfaces distinta para cada tipo de usuario
+
+Backend:
+Arreglos de configuración, aparece fatal error: Fatal error: Uncaught Error: Call to a member function bind_param() on false in C:\wamp64\www\ARCO\vistas\configuracion.php:253 Stack trace: #0 {main} thrown in C:\wamp64\www\ARCO\vistas\configuracion.php on line 253
+
+(en proceso)Cumplir requisito de autenticación de dos pasos, sms o correo:El sistema solicitará al usuario la verificación en dos pasos, dicha verificación se podrá hacer por número de teléfono (SMS) o por el correo electrónico, el usuario elegirá la opción que desee para hacer la verificación pero inicialmente será por correo electrónico,. 
+
+Gestión de Roles: el Admin debe hacer incluyendo la creación, edición, asignación de roles, eliminación o desactivación de cuentas. El administrador podrá acceder a una interfaz de administración que facilite el control total sobre las cuentas de usuario, garantizando una administración segura y eficiente de las operaciones.
+
+Asignar rol a los usuarios: El sistema debe permitir a los administradores asignar roles a los usuarios del sistema. Los roles definirán los permisos y accesos que cada usuario tiene dentro de la aplicación, permitiendo gestionar qué funciones pueden ejecutar según su perfil en la organización (funcionarios del almacén, administrador, supervisor, encargado del inventario/almacenista, administrador del sistema).
+
+Gestionar permisos a los usuarios: Este requisito define la funcionalidad para asignar y gestionar permisos a los usuarios del sistema según sus roles dentro de la organización (recepcionista, administrador, supervisor, encargado del inventario/almacenista). Los permisos regulan el acceso a las diferentes funcionalidades del sistema, garantizando que cada usuario deba realizar las tareas específicas de su rol.
+
+Verificar información de las órdenes de compra:En este requisito se define la funcionalidad para verificar la información de las órdenes de compra en el sistema. Lo que permite a los usuarios verificar las órdenes de compra, ingresando detalles clave como proveedor, materiales solicitados, cantidades, precios, fecha de pedido, fecha de la orden,  y estado de la orden (pendiente, recibida, cancelada). Esta funcionalidad es esencial para documentar y rastrear las adquisiciones de materiales , facilitando la integración con el inventario existente.
+
+Crear Formulario de Anomalías o Novedades: El sistema debe establecer la funcionalidad de crear un formulario de registro de anomalías o novedades en el sistema de gestión de inventarios. Debido a que a través de este formulario, los usuarios pueden reportar incidentes o irregularidades detectadas en el manejo de materiales o en el funcionamiento del sistema de inventarios. Las anomalías pueden incluir discrepancias en las cantidades, materiales dañados, errores en la recepción o envío, entre otros.
+
+Generación de comprobantes (mejora): El sistema debe permitir generar comprobantes que tendrán un uso para mostrar, los materiales extraídos, las cantidades, los responsables de la solicitud, y los destinos de los materiales. Este proceso asegura que cualquier movimiento de materiales quede registrado para control y auditoría interna.
+
+Gestión de Información de devoluciones: El sistema debe permitir registrar y gestionar la información de las devoluciones realizadas en el almacén para posteriormente ser registrada en el sistema. Las devoluciones pueden ser materiales que fueron entregados incorrectamente, materiales defectuosos, o materiales que no se requieren y necesitan ser devueltos al inventario.
+
+
+Gestión de Información de recibidos: El sistema debe permitir registrar y gestionar la información de los materiales que han sido recibidos en el almacén para ser posteriormente anexados en el sistema, ya sea como resultado de una orden de compra, devoluciones, o transferencias internas.
+
+Registro de auditoría (solo para administradores):El sistema va a crear y mantener un registro detallado de las acciones que realizan los usuarios dentro del sistema. Este registro va a incluir información como: la fecha, hora, usuario responsable, tipo de acción que ejecutó (creación, modificación, eliminación) y el detalle de los datos afectados.
+
+notas: pensar en qué factos diferencial debe haber en el sistema
