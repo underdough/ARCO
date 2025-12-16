@@ -55,47 +55,92 @@ class TwoFactorAuth {
     }
     
     /**
-     * Envía código por email
+     * Envía código por email usando PHPMailer
      */
     public function sendEmailCode($email, $code, $userName) {
-        $subject = "ARCO - Código de Verificación";
-        $message = "
-        <html>
+        require_once __DIR__ . '/email_sender.php';
+        
+        $asunto = "ARCO - Código de Verificación 2FA";
+        $mensaje = "
+        <!DOCTYPE html>
+        <html lang='es'>
         <head>
+            <meta charset='UTF-8'>
             <style>
-                body { font-family: Arial, sans-serif; }
+                body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
-                .content { padding: 20px; background: #f8fafc; }
-                .code { font-size: 24px; font-weight: bold; color: #2563eb; text-align: center; padding: 20px; background: white; border-radius: 8px; margin: 20px 0; }
-                .footer { text-align: center; color: #6b7280; font-size: 12px; }
+                .header { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                .content { padding: 30px; background: white; border-radius: 0 0 10px 10px; }
+                .code-box { background: #f8fafc; border: 2px dashed #2563eb; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center; }
+                .code { font-size: 32px; font-weight: bold; color: #2563eb; letter-spacing: 8px; font-family: 'Courier New', monospace; }
+                .info { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px; }
+                .footer { text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px; padding: 20px; }
+                .icon { font-size: 48px; margin-bottom: 10px; }
             </style>
         </head>
         <body>
             <div class='container'>
                 <div class='header'>
-                    <h1>Sistema ARCO</h1>
+                    <div class='icon'>🔐</div>
+                    <h1 style='margin: 0;'>Verificación de Dos Factores</h1>
+                    <p style='margin: 10px 0 0 0; opacity: 0.9;'>Sistema ARCO</p>
                 </div>
                 <div class='content'>
-                    <h2>Hola, {$userName}</h2>
-                    <p>Has solicitado acceso al sistema ARCO. Tu código de verificación es:</p>
-                    <div class='code'>{$code}</div>
-                    <p>Este código expira en 10 minutos.</p>
-                    <p>Si no solicitaste este código, ignora este mensaje.</p>
+                    <h2 style='color: #1f2937;'>Hola, {$userName}</h2>
+                    <p style='color: #4b5563; line-height: 1.6;'>
+                        Has iniciado sesión en el Sistema ARCO. Para completar el acceso, 
+                        ingresa el siguiente código de verificación:
+                    </p>
+                    
+                    <div class='code-box'>
+                        <p style='margin: 0 0 10px 0; color: #6b7280; font-size: 14px;'>Tu código de verificación es:</p>
+                        <div class='code'>{$code}</div>
+                    </div>
+                    
+                    <div class='info'>
+                        <p style='margin: 0; color: #92400e;'>
+                            <strong>⏰ Importante:</strong> Este código expira en <strong>10 minutos</strong>.
+                        </p>
+                    </div>
+                    
+                    <p style='color: #6b7280; font-size: 14px; line-height: 1.6;'>
+                        Si no solicitaste este código, ignora este mensaje y tu cuenta permanecerá segura.
+                        Nadie podrá acceder sin el código de verificación.
+                    </p>
+                    
+                    <hr style='border: none; border-top: 1px solid #e5e7eb; margin: 25px 0;'>
+                    
+                    <p style='color: #9ca3af; font-size: 12px; margin: 0;'>
+                        <strong>Consejos de seguridad:</strong><br>
+                        • No compartas este código con nadie<br>
+                        • ARCO nunca te pedirá este código por teléfono o email<br>
+                        • Si recibes este código sin haberlo solicitado, cambia tu contraseña inmediatamente
+                    </p>
                 </div>
                 <div class='footer'>
-                    <p>Sistema ARCO - Gestión de Inventarios</p>
+                    <p style='margin: 0 0 10px 0;'><strong>Sistema ARCO</strong></p>
+                    <p style='margin: 0;'>Gestión de Inventarios Profesional</p>
+                    <p style='margin: 10px 0 0 0; font-size: 12px;'>
+                        Este es un mensaje automático, no respondas a este correo.
+                    </p>
                 </div>
             </div>
         </body>
         </html>
         ";
         
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= "From: Sistema ARCO <noreply@arco.com>" . "\r\n";
-        
-        return mail($email, $subject, $message, $headers);
+        try {
+            $sender = new EmailSender();
+            $resultado = $sender->enviar($email, $userName, $asunto, $mensaje);
+            
+            // Log del resultado
+            error_log("2FA Email - Destinatario: $email, Código: $code, Resultado: " . ($resultado['success'] ? 'Éxito' : 'Fallo'));
+            
+            return $resultado['success'];
+        } catch (Exception $e) {
+            error_log("Error al enviar email 2FA: " . $e->getMessage());
+            return false;
+        }
     }
     
     /**
