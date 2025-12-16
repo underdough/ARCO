@@ -11,9 +11,9 @@ $conexion = ConectarDB();
 
 // Configura estos valores según tu base de datos
 $host = 'localhost';
-$user = 'tu_usuario';
+$user = 'root';
 $password = 'tu_contraseña';
-$database = 'nombre_base_datos';
+$database = 'arco_bdd';
 
 // Nombre del archivo
 $fecha = date("Ymd_His");

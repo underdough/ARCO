@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Sistema de Notificaciones - ARCO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #444;
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 8px;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .test-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+        }
+        
+        .btn-error {
+            background: #f44336;
+        }
+        
+        .btn-warning {
+            background: #ff9800;
+        }
+        
+        .btn-info {
+            background: #2196F3;
+        }
+        
+        .btn-scenario {
+            background: #9C27B0;
+        }
+        
+        .info-box {
+            background: #f5f5f5;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .info-box h3 {
+            color: #2196F3;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-bell"></i> Sistema de Notificaciones ARCO</h1>
+        <p class="subtitle">Prueba visual del sistema de notificaciones implementado en la gestión de usuarios</p>
+        
+        <div class="section">
+            <h2><i class="fas fa-palette"></i> Tipos de Notificaciones</h2>
+            <div class="button-grid">
+                <button class="test-btn btn-success" onclick="testSuccess()">
+                    <i class="fas fa-check-circle"></i> Éxito
+                </button>
+                <button class="test-btn btn-error" onclick="testError()">
+                    <i class="fas fa-exclamation-circle"></i> Error
+                </button>
+                <button class="test-btn btn-warning" onclick="testWarning()">
+                    <i class="fas fa-exclamation-triangle"></i> Advertencia
+                </button>
+                <button class="test-btn btn-info" onclick="testInfo()">
+                    <i class="fas fa-info-circle"></i> Información
+                </button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2><i class="fas fa-users-cog"></i> Escenarios de Gestión de Usuarios</h2>
+            <div class="button-grid">
+                <button class="test-btn btn-scenario" onclick="testCrearUsuario()">
+                    <i class="fas fa-user-plus"></i> Crear Usuario
+                </button>
+                <button class="test-btn btn-scenario" onclick="testEditarUsuario()">
+                    <i class="fas fa-user-edit"></i> Editar Usuario
+                </button>
+                <button class="test-btn btn-scenario" onclick="testDesactivar()">
+                    <i class="fas fa-user-slash"></i> Desactivar Usuario
+                </button>
+                <button class="test-btn btn-scenario" onclick="testEliminar()">
+                    <i class="fas fa-user-times"></i> Eliminar Usuario
+                </button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2><i class="fas fa-layer-group"></i> Pruebas Múltiples</h2>
+            <div class="button-grid">
+                <button class="test-btn btn-info" onclick="testMultiple()">
+                    <i class="fas fa-clone"></i> Múltiples Notificaciones
+                </button>
+                <button class="test-btn btn-warning" onclick="testSecuencia()">
+                    <i class="fas fa-stream"></i> Secuencia de Acciones
+                </button>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h3><i class="fas fa-lightbulb"></i> Características del Sistema</h3>
+            <ul>
+                <li>✅ Notificaciones toast en esquina superior derecha</li>
+                <li>✅ Auto-cierre después de 5 segundos</li>
+                <li>✅ Cierre manual con botón X</li>
+                <li>✅ Animaciones suaves de entrada y salida</li>
+                <li>✅ Apilamiento vertical de múltiples notificaciones</li>
+                <li>✅ Iconos y colores según tipo de mensaje</li>
+                <li>✅ Responsive y adaptable a todos los dispositivos</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de notificaciones (copiado del sistema real)
+        function showNotification(message, type = 'info') {
+            let container = document.getElementById('notificationContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'notificationContainer';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    max-width: 400px;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            const colors = {
+                success: '#4CAF50',
+                error: '#f44336',
+                warning: '#ff9800',
+                info: '#2196F3'
+            };
+            
+            notification.style.cssText = `
+                background: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                border-left: 4px solid ${colors[type]};
+                animation: slideIn 0.3s ease-out;
+                min-width: 300px;
+            `;
+            
+            notification.innerHTML = `
+                <i class="fas ${icons[type]}" style="color: ${colors[type]}; font-size: 20px;"></i>
+                <span style="flex: 1; color: #333; font-size: 14px;">${message}</span>
+                <button onclick="this.parentElement.remove()" style="
+                    background: none;
+                    border: none;
+                    color: #999;
+                    cursor: pointer;
+                    font-size: 18px;
+                    padding: 0;
+                    width: 20px;
+                    height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">×</button>
+            `;
+            
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Funciones de prueba
+        function testSuccess() {
+            showNotification('✅ Operación completada exitosamente', 'success');
+        }
+
+        function testError() {
+            showNotification('❌ Error: No se pudo completar la operación', 'error');
+        }
+
+        function testWarning() {
+            showNotification('⚠️ Advertencia: Esta acción requiere confirmación', 'warning');
+        }
+
+        function testInfo() {
+            showNotification('ℹ️ Información: Los cambios se guardarán automáticamente', 'info');
+        }
+
+        function testCrearUsuario() {
+            showNotification('✅ Usuario "Juan Pérez" creado exitosamente', 'success');
+        }
+
+        function testEditarUsuario() {
+            showNotification('✅ Usuario "María García" actualizado correctamente', 'success');
+        }
+
+        function testDesactivar() {
+            showNotification('✅ Usuario "Carlos López" desactivado correctamente', 'success');
+        }
+
+        function testEliminar() {
+            showNotification('✅ Usuario "Ana Martínez" eliminado del sistema', 'success');
+        }
+
+        function testMultiple() {
+            showNotification('Primera notificación', 'info');
+            setTimeout(() => showNotification('Segunda notificación', 'success'), 500);
+            setTimeout(() => showNotification('Tercera notificación', 'warning'), 1000);
+            setTimeout(() => showNotification('Cuarta notificación', 'error'), 1500);
+        }
+
+        function testSecuencia() {
+            showNotification('Iniciando proceso...', 'info');
+            setTimeout(() => showNotification('Validando datos...', 'info'), 1000);
+            setTimeout(() => showNotification('Guardando cambios...', 'warning'), 2000);
+            setTimeout(() => showNotification('✅ Proceso completado exitosamente', 'success'), 3000);
+        }
+    </script>
+</body>
+</html>

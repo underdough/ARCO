@@ -20,11 +20,32 @@ Backend:
    - Documentación completa en: documentacion/SISTEMA_2FA.md
    - Script de verificación: servicios/verificar_2fa_setup.php 
 
-Gestión de Roles: el Admin debe hacer incluyendo la creación, edición, asignación de roles, eliminación o desactivación de cuentas. El administrador podrá acceder a una interfaz de administración que facilite el control total sobre las cuentas de usuario, garantizando una administración segura y eficiente de las operaciones.
+✅ Gestión de Roles - COMPLETADO: Sistema avanzado de gestión de usuarios implementado
+   - Creación de usuarios con formulario completo y validaciones
+   - Edición de información de usuarios (nombre, documento, correo, rol, cargo, estado)
+   - Asignación de 5 roles: Administrador, Gerente, Supervisor, Almacenista, Usuario
+   - Eliminación de cuentas con confirmación y registro en auditoría
+   - Desactivación/Suspensión de cuentas sin eliminar
+   - Interfaz moderna con búsqueda en tiempo real
+   - Filtros por rol y estado
+   - Dashboard con estadísticas (total, activos, inactivos)
+   - Sistema de auditoría completo (registra todas las acciones)
+   - Documentación completa en: documentacion/GUIA_GESTION_USUARIOS.md
+   - Guía de instalación: documentacion/INSTALACION_GESTION_USUARIOS.md
+   - Acceso: vistas/gestion_usuarios.php
 
-Asignar rol a los usuarios: El sistema debe permitir a los administradores asignar roles a los usuarios del sistema. Los roles definirán los permisos y accesos que cada usuario tiene dentro de la aplicación, permitiendo gestionar qué funciones pueden ejecutar según su perfil en la organización (funcionarios del almacén, administrador, supervisor, encargado del inventario/almacenista, administrador del sistema).
+✅ Asignar rol a los usuarios - COMPLETADO: Implementado en el sistema de gestión de usuarios
+   - 5 roles disponibles: Administrador, Gerente, Supervisor, Almacenista, Usuario
+   - Asignación de roles al crear usuario
+   - Modificación de roles al editar usuario
+   - Validación de roles permitidos
+   - Campo adicional de Cargo/Área para organización del inventario
+   - Registro de cambios de rol en auditoría
 
-Gestionar permisos a los usuarios: Este requisito define la funcionalidad para asignar y gestionar permisos a los usuarios del sistema según sus roles dentro de la organización (recepcionista, administrador, supervisor, encargado del inventario/almacenista). Los permisos regulan el acceso a las diferentes funcionalidades del sistema, garantizando que cada usuario deba realizar las tareas específicas de su rol.
+⏳ Gestionar permisos a los usuarios: Pendiente de implementación
+   - Base preparada con sistema de roles
+   - Requiere definir permisos específicos por módulo
+   - Sugerencia: Implementar tabla de permisos y relación roles-permisos
 
 Verificar información de las órdenes de compra:En este requisito se define la funcionalidad para verificar la información de las órdenes de compra en el sistema. Lo que permite a los usuarios verificar las órdenes de compra, ingresando detalles clave como proveedor, materiales solicitados, cantidades, precios, fecha de pedido, fecha de la orden,  y estado de la orden (pendiente, recibida, cancelada). Esta funcionalidad es esencial para documentar y rastrear las adquisiciones de materiales , facilitando la integración con el inventario existente.
 
