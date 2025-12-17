@@ -32,7 +32,7 @@ function obtenerMenuUsuario($rol) {
     
     // Descripciones estándar para el menú (como en la imagen de referencia)
     $descripcionesEstandar = [
-        'dashboard' => 'Panel de Control',
+        'dashboard' => 'Inicio',
         'productos' => 'Gestión de Productos',
         'categorias' => 'Gestión de Categorías',
         'movimientos' => 'Movimientos de Inventario',
@@ -120,22 +120,182 @@ function generarMenuHTML($paginaActual = '') {
     $rol = $_SESSION['rol'] ?? 'usuario';
     $modulos = obtenerMenuUsuario($rol);
     
-    $html = '<div class="sidebar-menu">';
+    // Estilos inline para el sidebar mejorado
+    $html = '<style>
+        /* Estilos base del sidebar */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            position: fixed !important;
+            overflow: hidden !important;
+        }
+        .sidebar-header {
+            flex-shrink: 0 !important;
+        }
+        .sidebar-menu {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+            min-height: 0 !important;
+            overflow: hidden !important;
+        }
+        .sidebar-menu .menu-items-container {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            padding: 5px 0 !important;
+        }
+        .sidebar-menu .menu-item {
+            display: flex !important;
+            align-items: center !important;
+            padding: 8px 15px !important;
+            margin: 1px 6px !important;
+            border-radius: 5px !important;
+            font-size: 12px !important;
+            text-decoration: none !important;
+            color: inherit !important;
+            transition: background 0.2s !important;
+        }
+        .sidebar-menu .menu-item i {
+            width: 20px !important;
+            margin-right: 10px !important;
+            text-align: center !important;
+        }
+        .sidebar-menu .menu-separator {
+            height: 1px !important;
+            background: rgba(255,255,255,0.15) !important;
+            margin: 6px 6px !important;
+        }
+        .sidebar-menu .menu-footer {
+            flex-shrink: 0 !important;
+            padding: 10px 6px 10px 6px !important;
+            margin: 0 !important;
+            border-top: 1px solid rgba(255,255,255,0.15) !important;
+            background: inherit !important;
+            box-sizing: border-box !important;
+        }
+        .sidebar-menu .menu-cerrar,
+        .sidebar .menu-cerrar {
+            display: flex !important;
+            align-items: center !important;
+            padding: 8px 9px !important;
+            margin: 0 !important;
+            border-radius: 5px !important;
+            font-size: 12px !important;
+            text-decoration: none !important;
+            color: inherit !important;
+            background: rgba(255,255,255,0.05) !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+        }
+        .sidebar-menu .menu-cerrar:hover,
+        .sidebar .menu-cerrar:hover {
+            background: rgba(220,53,69,0.3) !important;
+        }
+        .sidebar-menu .menu-cerrar i,
+        .sidebar .menu-cerrar i {
+            width: 20px !important;
+            min-width: 20px !important;
+            margin-right: 10px !important;
+            text-align: center !important;
+            flex-shrink: 0 !important;
+        }
+    </style>';
     
+    $html .= '<div class="sidebar-menu">';
+    $html .= '<div class="menu-items-container">';
+    
+    // Agrupar módulos por categoría
+    $gruposPrincipales = ['dashboard', 'productos', 'categorias', 'movimientos'];
+    $gruposGestion = ['usuarios', 'ordenes_compra', 'devoluciones'];
+    $gruposReportes = ['reportes', 'anomalias', 'anomalias_reportes'];
+    $gruposConfig = ['configuracion'];
+    
+    $modulosRenderizados = [];
+    
+    // Renderizar grupo principal
     foreach ($modulos as $modulo) {
-        $activo = ($modulo['nombre'] === $paginaActual) ? ' active' : '';
-        $icono = $modulo['icono'] ?: 'fa-circle';
-        
-        $html .= sprintf(
-            '<a href="%s" class="menu-item%s">
-                <i class="fas %s"></i>
-                <span class="menu-text">%s</span>
-            </a>',
-            htmlspecialchars($modulo['ruta']),
-            $activo,
-            htmlspecialchars($icono),
-            htmlspecialchars($modulo['descripcion'])
-        );
+        if (in_array($modulo['nombre'], $gruposPrincipales)) {
+            $activo = ($modulo['nombre'] === $paginaActual) ? ' active' : '';
+            $icono = $modulo['icono'] ?: 'fa-circle';
+            $html .= sprintf(
+                '<a href="%s" class="menu-item%s">
+                    <i class="fas %s"></i>
+                    <span class="menu-text">%s</span>
+                </a>',
+                htmlspecialchars($modulo['ruta']),
+                $activo,
+                htmlspecialchars($icono),
+                htmlspecialchars($modulo['descripcion'])
+            );
+            $modulosRenderizados[] = $modulo['nombre'];
+        }
+    }
+    
+    // Separador
+    $html .= '<div class="menu-separator"></div>';
+    
+    // Renderizar grupo gestión
+    foreach ($modulos as $modulo) {
+        if (in_array($modulo['nombre'], $gruposGestion)) {
+            $activo = ($modulo['nombre'] === $paginaActual) ? ' active' : '';
+            $icono = $modulo['icono'] ?: 'fa-circle';
+            $html .= sprintf(
+                '<a href="%s" class="menu-item%s">
+                    <i class="fas %s"></i>
+                    <span class="menu-text">%s</span>
+                </a>',
+                htmlspecialchars($modulo['ruta']),
+                $activo,
+                htmlspecialchars($icono),
+                htmlspecialchars($modulo['descripcion'])
+            );
+            $modulosRenderizados[] = $modulo['nombre'];
+        }
+    }
+    
+    // Separador
+    $html .= '<div class="menu-separator"></div>';
+    
+    // Renderizar grupo reportes
+    foreach ($modulos as $modulo) {
+        if (in_array($modulo['nombre'], $gruposReportes)) {
+            $activo = ($modulo['nombre'] === $paginaActual) ? ' active' : '';
+            $icono = $modulo['icono'] ?: 'fa-circle';
+            $html .= sprintf(
+                '<a href="%s" class="menu-item%s">
+                    <i class="fas %s"></i>
+                    <span class="menu-text">%s</span>
+                </a>',
+                htmlspecialchars($modulo['ruta']),
+                $activo,
+                htmlspecialchars($icono),
+                htmlspecialchars($modulo['descripcion'])
+            );
+            $modulosRenderizados[] = $modulo['nombre'];
+        }
+    }
+    
+    // Separador
+    $html .= '<div class="menu-separator"></div>';
+    
+    // Renderizar grupo configuración
+    foreach ($modulos as $modulo) {
+        if (in_array($modulo['nombre'], $gruposConfig)) {
+            $activo = ($modulo['nombre'] === $paginaActual) ? ' active' : '';
+            $icono = $modulo['icono'] ?: 'fa-circle';
+            $html .= sprintf(
+                '<a href="%s" class="menu-item%s">
+                    <i class="fas %s"></i>
+                    <span class="menu-text">%s</span>
+                </a>',
+                htmlspecialchars($modulo['ruta']),
+                $activo,
+                htmlspecialchars($icono),
+                htmlspecialchars($modulo['descripcion'])
+            );
+            $modulosRenderizados[] = $modulo['nombre'];
+        }
     }
     
     // Agregar enlace de Permisos solo para administrador
@@ -150,11 +310,15 @@ function generarMenuHTML($paginaActual = '') {
         );
     }
     
-    // Enlace de cerrar sesión
+    $html .= '</div>'; // Cierre menu-items-container
+    
+    // Footer con enlace de cerrar sesión (siempre al fondo)
+    $html .= '<div class="menu-footer">';
     $html .= '<a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
             </a>';
+    $html .= '</div>';
     
     $html .= '</div>';
     
