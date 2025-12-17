@@ -54,6 +54,6 @@ if ($resultado && $resultado->num_rows > 0) {
         <tr><td><strong>Notas</strong></td><td><?= $mov['notas'] ?></td></tr>
     </table>
     <br>
-    <button class="no-print" onclick="window.location.href='../vistas/movimientos.html'">Volver</button>
+    <button class="no-print" onclick="window.location.href='../vistas/movimientos.php'">Volver</button>
 </body>
 </html>

@@ -77,6 +77,14 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
+            <a href="anomalias.php" class="menu-item">
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="menu-text">Anomalías</span>
+            </a>
+            <a href="anomalias_reportes.php" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span class="menu-text">Reportes Anomalías</span>
+            </a>
             <a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>

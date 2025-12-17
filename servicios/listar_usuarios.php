@@ -2,6 +2,38 @@
 require_once 'conexion.php';
 $conexion = ConectarDB();
 
+// Verificar si es una petición AJAX
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    header('Content-Type: application/json');
+    
+    try {
+        $sql = "SELECT id_usuarios, nombre, apellido, rol, correo, estado FROM usuarios WHERE estado = 'activo' ORDER BY nombre, apellido";
+        $resultado = $conexion->query($sql);
+        
+        $usuarios = [];
+        if ($resultado && $resultado->num_rows > 0) {
+            while ($row = $resultado->fetch_assoc()) {
+                $usuarios[] = $row;
+            }
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'usuarios' => $usuarios
+        ]);
+        
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+    
+    $conexion->close();
+    exit;
+}
+
+// Código original para vista HTML
 $sql = "SELECT id_usuarios, nombre, apellido, rol, correo, estado FROM usuarios";
 $resultado = $conexion->query($sql);
 

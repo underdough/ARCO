@@ -7,4 +7,4 @@
  * para el sistema de dispositivos confiables
  */
 
-require_once 'conexi
+require_once 'conexion.php'; 

@@ -55,6 +55,14 @@ if (!isset($_SESSION['usuario_id'])) {
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
             </a>
+            <a href="anomalias.php" class="menu-item">
+                <i class="fas fa-exclamation-circle"></i>
+                <span class="menu-text">Anomalías</span>
+            </a>
+            <a href="anomalias_reportes.php" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span class="menu-text">Reportes Anomalías</span>
+            </a>
             <a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="menu-text">Cerrar Sesión</span>
@@ -204,7 +212,7 @@ if (!isset($_SESSION['usuario_id'])) {
             </div>
         </div>
     </div>
-    
+
     <!-- Modal para ver detalles del movimiento -->
     <div class="modal" id="viewMovementModal">
         <div class="modal-content">
@@ -229,7 +237,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             let movimientosData = []; // Variable para almacenar todos los movimientos
 
             function cargarMovimientos(filtros = {}) {
@@ -238,16 +246,16 @@ if (!isset($_SESSION['usuario_id'])) {
                 if (filtros.busqueda !== undefined) {
                     tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> Buscando...</td></tr>';
                 }
-                
+
                 // Construir URL con parámetros de filtro
                 let url = '../servicios/filtrar_movimientos.php';
                 const params = new URLSearchParams();
-                
+
                 if (filtros.tipo) params.append('tipo', filtros.tipo);
                 if (filtros.usuario) params.append('usuario', filtros.usuario);
                 if (filtros.fecha) params.append('fecha', filtros.fecha);
                 if (filtros.busqueda !== undefined) params.append('busqueda', filtros.busqueda);
-                
+
                 if (params.toString()) {
                     url += '?' + params.toString();
                 }
@@ -267,12 +275,12 @@ if (!isset($_SESSION['usuario_id'])) {
             function mostrarMovimientos(movimientos) {
                 const tbody = document.querySelector('.movements-table tbody');
                 tbody.innerHTML = '';
-                
+
                 if (movimientos.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">No se encontraron movimientos</td></tr>';
                     return;
                 }
-                
+
                 movimientos.forEach(mov => {
                     const fila = document.createElement('tr');
                     fila.innerHTML = `
@@ -296,12 +304,15 @@ if (!isset($_SESSION['usuario_id'])) {
                         const id = viewBtn.dataset.id;
                         fetch(`../servicios/obtener_detalle_movimiento.php?id=${id}`)
                             .then(res => res.json())
-                            .then(mov => {
-                                mostrarModalDetalleMovimiento(mov);
+                            .then(data => {
+                                console.log('📦 RESPUESTA DETALLE MOVIMIENTO:', data);
+                                console.log('📦 TIPO DE DATO:', Array.isArray(data) ? 'ARRAY' : typeof data);
+                                mostrarModalDetalleMovimiento(Array.isArray(data) ? data[0] : data);
                             })
                             .catch(err => {
-                                alert('Error al obtener detalles: ' + err);
+                                console.error('❌ Error fetch detalle:', err);
                             });
+
                     });
 
                     // Evento imprimir
@@ -315,7 +326,7 @@ if (!isset($_SESSION['usuario_id'])) {
             // Funcionalidad del botón de filtrar
             const filterBtn = document.querySelector('.btn-secondary');
             const filterPanel = document.getElementById('filterPanel');
-            
+
             filterBtn.addEventListener('click', function() {
                 if (filterPanel.style.display === 'none' || filterPanel.style.display === '') {
                     filterPanel.style.display = 'block';
@@ -327,13 +338,13 @@ if (!isset($_SESSION['usuario_id'])) {
             // Funcionalidad del formulario de filtros
             document.getElementById('filterForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 const filtros = {
                     tipo: document.getElementById('filterTipo').value,
                     usuario: document.getElementById('filterUsuario').value,
                     fecha: document.getElementById('filterFecha').value
                 };
-                
+
                 cargarMovimientos(filtros);
             });
 
@@ -346,14 +357,16 @@ if (!isset($_SESSION['usuario_id'])) {
             // Funcionalidad de la barra de búsqueda
             const searchInput = document.getElementById('searchInput');
             let searchTimeout;
-            
+
             searchInput.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     const busqueda = this.value.trim();
                     console.log('Buscando:', busqueda); // Para debug
                     if (busqueda.length >= 1 || busqueda.length === 0) {
-                        cargarMovimientos({ busqueda: busqueda });
+                        cargarMovimientos({
+                            busqueda: busqueda
+                        });
                     }
                 }, 300); // Reducido a 300ms para respuesta más rápida
             });
@@ -363,19 +376,21 @@ if (!isset($_SESSION['usuario_id'])) {
                 if (e.key === 'Enter') {
                     clearTimeout(searchTimeout);
                     const busqueda = this.value.trim();
-                    cargarMovimientos({ busqueda: busqueda });
+                    cargarMovimientos({
+                        busqueda: busqueda
+                    });
                 }
             });
 
             // Mostrar modal al hacer clic en "Nuevo Movimiento"
-            document.getElementById('btnAddMovement').addEventListener('click', function () {
+            document.getElementById('btnAddMovement').addEventListener('click', function() {
                 document.getElementById('movementModal').style.display = 'flex';
             });
             // Cerrar modal al hacer clic en "Cancelar" o la X
             document.querySelector('#movementModal .close-modal').addEventListener('click', () => {
                 document.getElementById('movementModal').style.display = 'none';
             });
-            
+
             // MANTENER ESTE BLOQUE (funcionalidad Escape):
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Escape') {
@@ -384,7 +399,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     if (movementModal.style.display === 'flex') {
                         movementModal.style.display = 'none';
                     }
-                    
+
                     // Cerrar modal de detalle de movimiento
                     const viewMovementModal = document.getElementById('viewMovementModal');
                     if (viewMovementModal.style.display === 'flex') {
@@ -393,58 +408,58 @@ if (!isset($_SESSION['usuario_id'])) {
                 }
             });
 
-            document.getElementById('movementForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+            document.getElementById('movementForm').addEventListener('submit', function(e) {
+                e.preventDefault();
 
-    const tipo = document.getElementById('movementType').value;
-    const fecha = document.getElementById('movementDate').value;
-    const producto = document.getElementById('movementProduct').value;
-    const cantidad = document.getElementById('movementQuantity').value;
-    const notas = document.getElementById('movementNotes').value;
+                const tipo = document.getElementById('movementType').value;
+                const fecha = document.getElementById('movementDate').value;
+                const producto = document.getElementById('movementProduct').value;
+                const cantidad = document.getElementById('movementQuantity').value;
+                const notas = document.getElementById('movementNotes').value;
 
-    const formData = new FormData();
-    formData.append('tipo', tipo);
-    formData.append('fecha', fecha);
-    formData.append('producto', producto);
-    formData.append('cantidad', cantidad);
-    formData.append('notas', notas);
+                const formData = new FormData();
+                formData.append('tipo', tipo);
+                formData.append('fecha', fecha);
+                formData.append('producto', producto);
+                formData.append('cantidad', cantidad);
+                formData.append('notas', notas);
 
-    fetch('../servicios/guardar_movimiento.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert('✅ ' + data.message);
-            document.getElementById('movementModal').style.display = 'none';
-            cargarMovimientos(); // vuelve a cargar la tabla
-        } else {
-            alert('❌ ' + data.message);
-        }
-    })
-    .catch(err => {
-        console.error('Error al guardar movimiento:', err);
-        alert('❌ Error al enviar los datos');
-    });
-});
-
-function cargarProductos() {
-    fetch('../servicios/obtener_productos.php')
-        .then(res => res.json())
-        .then(data => {
-            const select = document.getElementById('movementProduct');
-            data.forEach(producto => {
-                const option = document.createElement('option');
-                option.value = producto.id; // debe coincidir con el campo en tu tabla productos
-                option.textContent = producto.nombre; // o el campo que uses como nombre visible
-                select.appendChild(option);
+                fetch('../servicios/guardar_movimiento.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('✅ ' + data.message);
+                            document.getElementById('movementModal').style.display = 'none';
+                            cargarMovimientos(); // vuelve a cargar la tabla
+                        } else {
+                            alert('❌ ' + data.message);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error al guardar movimiento:', err);
+                        alert('❌ Error al enviar los datos');
+                    });
             });
-        })
-        .catch(err => {
-            console.error('Error al cargar productos:', err);
-        });
-}
+
+            function cargarProductos() {
+                fetch('../servicios/obtener_productos.php')
+                    .then(res => res.json())
+                    .then(data => {
+                        const select = document.getElementById('movementProduct');
+                        data.forEach(producto => {
+                            const option = document.createElement('option');
+                            option.value = producto.id; // debe coincidir con el campo en tu tabla productos
+                            option.textContent = producto.nombre; // o el campo que uses como nombre visible
+                            select.appendChild(option);
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Error al cargar productos:', err);
+                    });
+            }
 
 
 
