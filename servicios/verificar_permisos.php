@@ -165,7 +165,9 @@ function obtenerMatrizPermisos($rol) {
     $conn = ConectarDB();
     
     $sql = "SELECT 
+                m.id_modulo,
                 m.nombre AS modulo,
+                p.id_permiso,
                 p.codigo AS permiso,
                 p.nombre AS permiso_nombre,
                 rp.activo
@@ -187,7 +189,9 @@ function obtenerMatrizPermisos($rol) {
         }
         $matriz[$fila['modulo']][$fila['permiso']] = [
             'nombre' => $fila['permiso_nombre'],
-            'activo' => $fila['activo'] == 1
+            'activo' => $fila['activo'] == 1,
+            'id_modulo' => $fila['id_modulo'],
+            'id_permiso' => $fila['id_permiso']
         ];
     }
     

@@ -110,7 +110,8 @@ INSERT INTO `modulos` (`nombre`, `descripcion`, `icono`, `ruta`, `orden`, `activ
 ('configuracion', 'Configuración del Sistema', 'fa-cog', 'configuracion.php', 7, 1),
 ('ordenes_compra', 'Órdenes de Compra', 'fa-shopping-cart', 'ordenes_compra.php', 8, 1),
 ('devoluciones', 'Gestión de Devoluciones', 'fa-undo', 'devoluciones.php', 9, 1),
-('recepcion', 'Recepción de Materiales', 'fa-truck-loading', 'recepcion.php', 10, 1);
+('recepcion', 'Recepción de Materiales', 'fa-truck-loading', 'recepcion.php', 10, 1),
+('anomalias_novedades', 'Anomalías y Novedades', 'fa-exclamation-triangle', 'anomalias_novedades.php', 11, 1);
 
 -- =====================================================
 -- INSERTAR PERMISOS/ACCIONES
@@ -188,6 +189,12 @@ INSERT INTO `modulo_permisos` (`id_modulo`, `id_permiso`)
 SELECT m.id_modulo, p.id_permiso
 FROM modulos m, permisos p
 WHERE m.nombre = 'recepcion' AND p.codigo IN ('ver', 'crear', 'editar');
+
+-- Anomalías y Novedades: Ver, Crear, Editar, Eliminar, Exportar
+INSERT INTO `modulo_permisos` (`id_modulo`, `id_permiso`)
+SELECT m.id_modulo, p.id_permiso
+FROM modulos m, permisos p
+WHERE m.nombre = 'anomalias_novedades' AND p.codigo IN ('ver', 'crear', 'editar', 'eliminar', 'exportar');
 
 -- =====================================================
 -- ASIGNAR PERMISOS POR ROL
@@ -269,6 +276,12 @@ WHERE m.nombre = 'recepcion'
   AND mp.id_modulo = m.id_modulo 
   AND mp.id_permiso = p.id_permiso;
 
+-- Anomalías y Novedades: Ver, Crear, Editar, Exportar (sin eliminar)
+INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
+SELECT 'gerente', m.id_modulo, p.id_permiso, 1
+FROM modulos m, permisos p
+WHERE m.nombre = 'anomalias_novedades' AND p.codigo IN ('ver', 'crear', 'editar', 'exportar');
+
 -- ========== SUPERVISOR: Supervisión y aprobación ==========
 -- Dashboard: Ver
 INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
@@ -318,6 +331,12 @@ SELECT 'supervisor', m.id_modulo, p.id_permiso, 1
 FROM modulos m, permisos p
 WHERE m.nombre = 'recepcion' AND p.codigo = 'ver';
 
+-- Anomalías y Novedades: Ver, Crear, Exportar
+INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
+SELECT 'supervisor', m.id_modulo, p.id_permiso, 1
+FROM modulos m, permisos p
+WHERE m.nombre = 'anomalias_novedades' AND p.codigo IN ('ver', 'crear', 'exportar');
+
 -- ========== ALMACENISTA: Gestión operativa de inventario ==========
 -- Dashboard: Ver
 INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
@@ -361,6 +380,12 @@ SELECT 'almacenista', m.id_modulo, p.id_permiso, 1
 FROM modulos m, permisos p
 WHERE m.nombre = 'devoluciones' AND p.codigo IN ('ver', 'crear');
 
+-- Anomalías y Novedades: Ver, Crear
+INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
+SELECT 'almacenista', m.id_modulo, p.id_permiso, 1
+FROM modulos m, permisos p
+WHERE m.nombre = 'anomalias_novedades' AND p.codigo IN ('ver', 'crear');
+
 -- ========== USUARIO: Acceso básico de consulta ==========
 -- Dashboard: Ver
 INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
@@ -391,6 +416,12 @@ INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
 SELECT 'usuario', m.id_modulo, p.id_permiso, 1
 FROM modulos m, permisos p
 WHERE m.nombre = 'reportes' AND p.codigo = 'ver';
+
+-- Anomalías y Novedades: Solo ver
+INSERT INTO `rol_permisos` (`rol`, `id_modulo`, `id_permiso`, `activo`)
+SELECT 'usuario', m.id_modulo, p.id_permiso, 1
+FROM modulos m, permisos p
+WHERE m.nombre = 'anomalias_novedades' AND p.codigo = 'ver';
 
 -- =====================================================
 -- CONSULTAS DE VERIFICACIÓN

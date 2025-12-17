@@ -155,6 +155,9 @@ $nombreCompleto = $nombre . ' ' . $apellido;
         <div class="recent-activity">
             <div class="activity-header">
                 <h3>Matriz de Permisos por Módulo</h3>
+                <button class="btn-login" id="btnSaveChanges" style="padding: 10px 20px; background: #28a745; display: none;">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
             </div>
             <div id="matrixContainer" style="overflow-x: auto; padding: 20px;">
                 <p style="text-align: center; color: #999; padding: 40px;">Seleccione un rol para ver sus permisos...</p>
@@ -283,6 +286,66 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                     loadPermissions(this.value);
                 });
             }
+            
+            // Botón guardar cambios
+            const btnSaveChanges = document.getElementById('btnSaveChanges');
+            if (btnSaveChanges) {
+                btnSaveChanges.addEventListener('click', async function() {
+                    const rol = document.getElementById('roleSelect').value;
+                    
+                    if (!confirm(`¿Guardar los cambios de permisos para el rol "${rol}"?\n\nEsta acción modificará los permisos del rol en el sistema.`)) {
+                        return;
+                    }
+                    
+                    // Recopilar todos los checkboxes
+                    const checkboxes = document.querySelectorAll('.permission-checkbox');
+                    const permisos = [];
+                    
+                    checkboxes.forEach(checkbox => {
+                        permisos.push({
+                            id_modulo: parseInt(checkbox.dataset.idModulo),
+                            id_permiso: parseInt(checkbox.dataset.idPermiso),
+                            activo: checkbox.checked
+                        });
+                    });
+                    
+                    try {
+                        btnSaveChanges.disabled = true;
+                        btnSaveChanges.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                        
+                        const response = await fetch('../servicios/actualizar_permisos_rol.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                rol: rol,
+                                permisos: permisos
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            alert(`✓ Permisos actualizados correctamente\n\nRegistros actualizados: ${data.actualizados}`);
+                            btnSaveChanges.style.background = '#28a745';
+                            btnSaveChanges.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+                            
+                            // Recargar permisos
+                            loadPermissions(rol);
+                        } else {
+                            alert('Error al guardar permisos: ' + data.error);
+                            btnSaveChanges.disabled = false;
+                            btnSaveChanges.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Error de conexión: ' + error.message);
+                        btnSaveChanges.disabled = false;
+                        btnSaveChanges.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+                    }
+                });
+            }
         }
 
         async function loadPermissions(rol) {
@@ -340,11 +403,16 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
         function renderPermissionsMatrix(matriz, rol) {
             const container = document.getElementById('matrixContainer');
+            const btnSave = document.getElementById('btnSaveChanges');
             
             if (!matriz || Object.keys(matriz).length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No hay permisos asignados a este rol</p>';
+                btnSave.style.display = 'none';
                 return;
             }
+            
+            // Mostrar botón guardar
+            btnSave.style.display = 'inline-block';
             
             // Obtener todos los permisos únicos
             const allPermissions = new Set();
@@ -355,7 +423,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             const permissionsArray = Array.from(allPermissions);
             
             let html = `
-                <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 800px;" id="permissionsTable">
                     <thead>
                         <tr style="background: #f8f9fa;">
                             <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6; position: sticky; left: 0; background: #f8f9fa;">Módulo</th>
@@ -366,15 +434,29 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             `;
             
             Object.entries(matriz).forEach(([modulo, permisos]) => {
-                html += `<tr style="border-bottom: 1px solid #eee;">`;
+                html += `<tr style="border-bottom: 1px solid #eee;" data-modulo="${modulo}">`;
                 html += `<td style="padding: 12px; font-weight: 500; position: sticky; left: 0; background: white;">${capitalizeFirst(modulo.replace('_', ' '))}</td>`;
                 
                 permissionsArray.forEach(permiso => {
-                    const hasPermission = permisos[permiso] && permisos[permiso].activo;
-                    const icon = hasPermission 
-                        ? '<i class="fas fa-check-circle" style="color: #28a745; font-size: 18px;"></i>' 
-                        : '<i class="fas fa-times-circle" style="color: #dc3545; font-size: 18px;"></i>';
-                    html += `<td style="padding: 12px; text-align: center;">${icon}</td>`;
+                    const permisoData = permisos[permiso];
+                    const hasPermission = permisoData && permisoData.activo;
+                    const id_modulo = permisoData ? permisoData.id_modulo : '';
+                    const id_permiso = permisoData ? permisoData.id_permiso : '';
+                    
+                    html += `<td style="padding: 12px; text-align: center;">`;
+                    if (permisoData) {
+                        html += `<input type="checkbox" 
+                                       class="permission-checkbox" 
+                                       data-modulo="${modulo}" 
+                                       data-permiso="${permiso}"
+                                       data-id-modulo="${id_modulo}"
+                                       data-id-permiso="${id_permiso}"
+                                       ${hasPermission ? 'checked' : ''}
+                                       style="width: 20px; height: 20px; cursor: pointer;">`;
+                    } else {
+                        html += '<span style="color: #ccc;">N/A</span>';
+                    }
+                    html += `</td>`;
                 });
                 
                 html += `</tr>`;
@@ -386,6 +468,15 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             `;
             
             container.innerHTML = html;
+            
+            // Agregar event listeners a los checkboxes
+            document.querySelectorAll('.permission-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Marcar que hay cambios pendientes
+                    btnSave.style.background = '#ffc107';
+                    btnSave.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Cambios Pendientes';
+                });
+            });
         }
 
         function renderPermissionsTable(modulos, matriz) {

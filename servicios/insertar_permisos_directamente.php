@@ -60,7 +60,8 @@ $modulo_permisos_config = [
     'configuracion' => ['ver', 'editar'],
     'ordenes_compra' => ['ver', 'crear', 'editar', 'aprobar', 'exportar'],
     'devoluciones' => ['ver', 'crear', 'editar', 'aprobar'],
-    'recepcion' => ['ver', 'crear', 'editar']
+    'recepcion' => ['ver', 'crear', 'editar'],
+    'anomalias_novedades' => ['ver', 'crear', 'editar', 'eliminar', 'exportar']
 ];
 
 $insertados = 0;
@@ -99,7 +100,8 @@ $rol_permisos_config = [
         'configuracion' => ['ver', 'editar'],
         'ordenes_compra' => ['ver', 'crear', 'editar', 'aprobar', 'exportar'],
         'devoluciones' => ['ver', 'crear', 'editar', 'aprobar'],
-        'recepcion' => ['ver', 'crear', 'editar']
+        'recepcion' => ['ver', 'crear', 'editar'],
+        'anomalias_novedades' => ['ver', 'crear', 'editar', 'eliminar', 'exportar']
     ],
     'gerente' => [
         'dashboard' => ['ver'],
@@ -111,7 +113,8 @@ $rol_permisos_config = [
         'configuracion' => ['ver', 'editar'],
         'ordenes_compra' => ['ver', 'crear', 'editar', 'aprobar', 'exportar'],
         'devoluciones' => ['ver', 'crear', 'editar', 'aprobar'],
-        'recepcion' => ['ver', 'crear', 'editar']
+        'recepcion' => ['ver', 'crear', 'editar'],
+        'anomalias_novedades' => ['ver', 'crear', 'editar', 'exportar']
     ],
     'supervisor' => [
         'dashboard' => ['ver'],
@@ -121,7 +124,8 @@ $rol_permisos_config = [
         'reportes' => ['ver', 'exportar'],
         'ordenes_compra' => ['ver', 'aprobar'],
         'devoluciones' => ['ver', 'aprobar'],
-        'recepcion' => ['ver']
+        'recepcion' => ['ver'],
+        'anomalias_novedades' => ['ver', 'crear', 'exportar']
     ],
     'almacenista' => [
         'dashboard' => ['ver'],
@@ -130,14 +134,16 @@ $rol_permisos_config = [
         'movimientos' => ['ver', 'crear', 'editar'],
         'reportes' => ['ver'],
         'recepcion' => ['ver', 'crear', 'editar'],
-        'devoluciones' => ['ver', 'crear']
+        'devoluciones' => ['ver', 'crear'],
+        'anomalias_novedades' => ['ver', 'crear']
     ],
     'usuario' => [
         'dashboard' => ['ver'],
         'productos' => ['ver'],
         'categorias' => ['ver'],
         'movimientos' => ['ver'],
-        'reportes' => ['ver']
+        'reportes' => ['ver'],
+        'anomalias_novedades' => ['ver']
     ]
 ];
 
