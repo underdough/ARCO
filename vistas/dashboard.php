@@ -63,6 +63,12 @@ $nombreCompleto = $nombre . ' ' . $apellido;
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
+            <?php if ($_SESSION['rol'] === 'administrador'): ?>
+            <a href="gestion_permisos.php" class="menu-item">
+                <i class="fas fa-user-shield"></i>
+                <span class="menu-text">Permisos</span>
+            </a>
+            <?php endif; ?>
             <a href="configuracion.php" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>

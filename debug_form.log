@@ -11,3 +11,29 @@ POST data: Array
 
 generar_reporte isset: YES
 
+=== FORM SUBMISSION DEBUG ===
+POST data: Array
+(
+    [reportType] => movimientos
+    [reportDateFrom] => 2025-09-16
+    [reportDateTo] => 2025-12-16
+    [reportFormat] => pdf
+    [reportNotes] => 
+    [generar_reporte] => 
+)
+
+generar_reporte isset: YES
+
+=== FORM SUBMISSION DEBUG ===
+POST data: Array
+(
+    [reportType] => movimientos
+    [reportDateFrom] => 2025-06-10
+    [reportDateTo] => 2025-12-16
+    [reportFormat] => pdf
+    [reportNotes] => 
+    [generar_reporte] => 
+)
+
+generar_reporte isset: YES
+

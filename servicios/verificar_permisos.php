@@ -1,195 +1,199 @@
 <?php
 /**
- * Sistema de Verificación de Permisos
- * Verifica si un usuario tiene permiso para realizar una acción específica
+ * Servicio de Verificación de Permisos
+ * Verifica si un usuario tiene permiso para realizar una acción en un módulo
  */
 
 require_once 'conexion.php';
 
-class SistemaPermisos {
-    private $conn;
-    private $cache_permisos = [];
+/**
+ * Verifica si un rol tiene un permiso específico en un módulo
+ * 
+ * @param string $rol Rol del usuario
+ * @param string $modulo Nombre del módulo
+ * @param string $permiso Código del permiso (ver, crear, editar, eliminar, etc.)
+ * @return bool True si tiene permiso, False si no
+ */
+function tienePermiso($rol, $modulo, $permiso) {
+    $conn = ConectarDB();
     
-    public function __construct() {
-        $this->conn = ConectarDB();
+    $sql = "SELECT COUNT(*) as tiene_permiso
+            FROM rol_permisos rp
+            JOIN modulos m ON rp.id_modulo = m.id_modulo
+            JOIN permisos p ON rp.id_permiso = p.id_permiso
+            WHERE rp.rol = ? 
+              AND m.nombre = ? 
+              AND p.codigo = ?
+              AND rp.activo = 1
+              AND m.activo = 1
+              AND p.activo = 1";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $rol, $modulo, $permiso);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $fila = $resultado->fetch_assoc();
+    
+    $stmt->close();
+    $conn->close();
+    
+    return $fila['tiene_permiso'] > 0;
+}
+
+/**
+ * Obtiene todos los permisos de un rol para un módulo
+ * 
+ * @param string $rol Rol del usuario
+ * @param string $modulo Nombre del módulo
+ * @return array Array de códigos de permisos
+ */
+function obtenerPermisosModulo($rol, $modulo) {
+    $conn = ConectarDB();
+    
+    $sql = "SELECT p.codigo
+            FROM rol_permisos rp
+            JOIN modulos m ON rp.id_modulo = m.id_modulo
+            JOIN permisos p ON rp.id_permiso = p.id_permiso
+            WHERE rp.rol = ? 
+              AND m.nombre = ?
+              AND rp.activo = 1
+              AND m.activo = 1
+              AND p.activo = 1";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $rol, $modulo);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    
+    $permisos = [];
+    while ($fila = $resultado->fetch_assoc()) {
+        $permisos[] = $fila['codigo'];
     }
     
-    /**
-     * Verificar si el usuario actual tiene un permiso específico
-     * @param string $codigo_permiso Código del permiso (ej: 'productos.crear')
-     * @return bool
-     */
-    public function tienePermiso($codigo_permiso) {
-        if (!isset($_SESSION['usuario_id']) || !isset($_SESSION['rol'])) {
-            return false;
-        }
-        
-        $rol = $_SESSION['rol'];
-        
-        // Administrador siempre tiene todos los permisos
-        if ($rol === 'administrador') {
-            return true;
-        }
-        
-        // Verificar en caché
-        $cache_key = $rol . '_' . $codigo_permiso;
-        if (isset($this->cache_permisos[$cache_key])) {
-            return $this->cache_permisos[$cache_key];
-        }
-        
-        // Consultar en base de datos
-        $sql = "SELECT COUNT(*) as tiene 
-                FROM roles_permisos rp
-                INNER JOIN permisos p ON rp.id_permiso = p.id_permiso
-                WHERE rp.rol = ? 
-                AND p.codigo_permiso = ?
-                AND p.activo = 1";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $rol, $codigo_permiso);
-        $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-        
-        $tiene = $resultado['tiene'] > 0;
-        
-        // Guardar en caché
-        $this->cache_permisos[$cache_key] = $tiene;
-        
-        return $tiene;
-    }
+    $stmt->close();
+    $conn->close();
     
-    /**
-     * Obtener todos los permisos de un rol
-     * @param string $rol Nombre del rol
-     * @return array
-     */
-    public function obtenerPermisosRol($rol) {
-        $sql = "SELECT p.* 
-                FROM roles_permisos rp
-                INNER JOIN permisos p ON rp.id_permiso = p.id_permiso
-                WHERE rp.rol = ? AND p.activo = 1
-                ORDER BY p.modulo, p.accion";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $rol);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-        
-        $permisos = [];
-        while ($fila = $resultado->fetch_assoc()) {
-            $permisos[] = $fila;
-        }
-        
-        $stmt->close();
-        return $permisos;
-    }
+    return $permisos;
+}
+
+/**
+ * Obtiene todos los módulos a los que un rol tiene acceso
+ * 
+ * @param string $rol Rol del usuario
+ * @return array Array de módulos con sus permisos
+ */
+function obtenerModulosAccesibles($rol) {
+    $conn = ConectarDB();
     
-    /**
-     * Obtener permisos agrupados por módulo
-     * @param string $rol Nombre del rol
-     * @return array
-     */
-    public function obtenerPermisosAgrupadosPorModulo($rol) {
-        $permisos = $this->obtenerPermisosRol($rol);
-        $agrupados = [];
-        
-        foreach ($permisos as $permiso) {
-            $modulo = $permiso['modulo'];
-            if (!isset($agrupados[$modulo])) {
-                $agrupados[$modulo] = [];
-            }
-            $agrupados[$modulo][] = $permiso;
-        }
-        
-        return $agrupados;
-    }
+    $sql = "SELECT DISTINCT 
+                m.id_modulo,
+                m.nombre,
+                m.descripcion,
+                m.icono,
+                m.ruta,
+                m.orden
+            FROM rol_permisos rp
+            JOIN modulos m ON rp.id_modulo = m.id_modulo
+            WHERE rp.rol = ?
+              AND rp.activo = 1
+              AND m.activo = 1
+            ORDER BY m.orden";
     
-    /**
-     * Verificar acceso a un módulo completo
-     * @param string $modulo Nombre del módulo
-     * @return bool
-     */
-    public function tieneAccesoModulo($modulo) {
-        if (!isset($_SESSION['rol'])) {
-            return false;
-        }
-        
-        $rol = $_SESSION['rol'];
-        
-        if ($rol === 'administrador') {
-            return true;
-        }
-        
-        $sql = "SELECT COUNT(*) as tiene 
-                FROM roles_permisos rp
-                INNER JOIN permisos p ON rp.id_permiso = p.id_permiso
-                WHERE rp.rol = ? 
-                AND p.modulo = ?
-                AND p.activo = 1";
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $rol, $modulo);
-        $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-        
-        return $resultado['tiene'] > 0;
-    }
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $rol);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
     
-    /**
-     * Redirigir si no tiene permiso
-     * @param string $codigo_permiso Código del permiso requerido
-     * @param string $redirect_url URL de redirección (opcional)
-     */
-    public function requierePermiso($codigo_permiso, $redirect_url = 'dashboard.php') {
-        if (!$this->tienePermiso($codigo_permiso)) {
-            header("Location: $redirect_url?error=No tiene permisos para acceder a esta función");
-            exit;
-        }
-    }
-    
-    /**
-     * Obtener descripción del rol
-     * @param string $rol Nombre del rol
-     * @return string
-     */
-    public function obtenerDescripcionRol($rol) {
-        $descripciones = [
-            'administrador' => 'Acceso completo al sistema',
-            'gerente' => 'Gestión completa excepto permisos de sistema',
-            'supervisor' => 'Supervisión y aprobación de operaciones',
-            'almacenista' => 'Gestión de inventario y movimientos',
-            'recepcionista' => 'Registro de entradas y salidas',
-            'usuario' => 'Consulta básica del sistema'
+    $modulos = [];
+    while ($fila = $resultado->fetch_assoc()) {
+        $modulos[] = [
+            'id' => $fila['id_modulo'],
+            'nombre' => $fila['nombre'],
+            'descripcion' => $fila['descripcion'],
+            'icono' => $fila['icono'],
+            'ruta' => $fila['ruta'],
+            'orden' => $fila['orden'],
+            'permisos' => obtenerPermisosModulo($rol, $fila['nombre'])
         ];
-        
-        return $descripciones[$rol] ?? 'Sin descripción';
+    }
+    
+    $stmt->close();
+    $conn->close();
+    
+    return $modulos;
+}
+
+/**
+ * Verifica si un usuario puede acceder a un módulo
+ * 
+ * @param string $rol Rol del usuario
+ * @param string $modulo Nombre del módulo
+ * @return bool True si puede acceder, False si no
+ */
+function puedeAccederModulo($rol, $modulo) {
+    return tienePermiso($rol, $modulo, 'ver');
+}
+
+/**
+ * Middleware para verificar permisos
+ * Redirige si no tiene permiso
+ * 
+ * @param string $modulo Nombre del módulo
+ * @param string $permiso Código del permiso requerido
+ */
+function requierePermiso($modulo, $permiso = 'ver') {
+    session_start();
+    
+    if (!isset($_SESSION['rol'])) {
+        header("Location: ../login.html?error=Debe iniciar sesión");
+        exit;
+    }
+    
+    if (!tienePermiso($_SESSION['rol'], $modulo, $permiso)) {
+        header("Location: dashboard.php?error=No tiene permisos para realizar esta acción");
+        exit;
     }
 }
 
 /**
- * Función helper para verificar permisos rápidamente
- * @param string $codigo_permiso
- * @return bool
+ * Obtiene matriz de permisos para un rol (para debugging)
+ * 
+ * @param string $rol Rol del usuario
+ * @return array Matriz de permisos
  */
-function tiene_permiso($codigo_permiso) {
-    static $sistema = null;
-    if ($sistema === null) {
-        $sistema = new SistemaPermisos();
+function obtenerMatrizPermisos($rol) {
+    $conn = ConectarDB();
+    
+    $sql = "SELECT 
+                m.nombre AS modulo,
+                p.codigo AS permiso,
+                p.nombre AS permiso_nombre,
+                rp.activo
+            FROM rol_permisos rp
+            JOIN modulos m ON rp.id_modulo = m.id_modulo
+            JOIN permisos p ON rp.id_permiso = p.id_permiso
+            WHERE rp.rol = ?
+            ORDER BY m.orden, p.nombre";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $rol);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    
+    $matriz = [];
+    while ($fila = $resultado->fetch_assoc()) {
+        if (!isset($matriz[$fila['modulo']])) {
+            $matriz[$fila['modulo']] = [];
+        }
+        $matriz[$fila['modulo']][$fila['permiso']] = [
+            'nombre' => $fila['permiso_nombre'],
+            'activo' => $fila['activo'] == 1
+        ];
     }
-    return $sistema->tienePermiso($codigo_permiso);
-}
-
-/**
- * Función helper para requerir permiso
- * @param string $codigo_permiso
- */
-function requiere_permiso($codigo_permiso) {
-    static $sistema = null;
-    if ($sistema === null) {
-        $sistema = new SistemaPermisos();
-    }
-    $sistema->requierePermiso($codigo_permiso);
+    
+    $stmt->close();
+    $conn->close();
+    
+    return $matriz;
 }
 ?>

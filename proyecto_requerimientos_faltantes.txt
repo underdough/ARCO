@@ -42,10 +42,32 @@ Backend:
    - Campo adicional de Cargo/Área para organización del inventario
    - Registro de cambios de rol en auditoría
 
-⏳ Gestionar permisos a los usuarios: Pendiente de implementación
-   - Base preparada con sistema de roles
-   - Requiere definir permisos específicos por módulo
-   - Sugerencia: Implementar tabla de permisos y relación roles-permisos
+✅ Gestionar permisos a los usuarios - COMPLETADO: Sistema completo de permisos granulares
+   - Base de datos completa con 5 tablas:
+     * `modulos`: 10 módulos del sistema (dashboard, productos, categorías, movimientos, usuarios, reportes, configuración, órdenes_compra, devoluciones, recepción)
+     * `permisos`: 8 tipos de permisos (ver, crear, editar, eliminar, exportar, importar, aprobar, auditar)
+     * `modulo_permisos`: Permisos disponibles por módulo
+     * `rol_permisos`: Permisos asignados a cada rol
+     * `auditoria_permisos`: Registro de cambios en permisos
+   - Permisos predefinidos para cada rol:
+     * Administrador: Acceso total a todos los módulos y acciones
+     * Gerente: Acceso amplio excepto gestión completa de usuarios
+     * Supervisor: Supervisión y aprobación de operaciones
+     * Almacenista: Gestión operativa de inventario
+     * Usuario: Acceso básico de consulta
+   - API PHP completa:
+     * tienePermiso($rol, $modulo, $permiso)
+     * obtenerPermisosModulo($rol, $modulo)
+     * obtenerModulosAccesibles($rol)
+     * puedeAccederModulo($rol, $modulo)
+     * requierePermiso($modulo, $permiso) - Middleware
+     * obtenerMatrizPermisos($rol)
+   - Servicios:
+     * servicios/verificar_permisos.php - Funciones de verificación
+     * servicios/obtener_permisos_usuario.php - API JSON
+   - Ejemplos de uso completos en: ejemplos/ejemplo_uso_permisos.php
+   - Documentación completa en: documentacion/SISTEMA_PERMISOS.md
+   - Script SQL: base-datos/sistema_permisos_completo.sql
 
 Verificar información de las órdenes de compra:En este requisito se define la funcionalidad para verificar la información de las órdenes de compra en el sistema. Lo que permite a los usuarios verificar las órdenes de compra, ingresando detalles clave como proveedor, materiales solicitados, cantidades, precios, fecha de pedido, fecha de la orden,  y estado de la orden (pendiente, recibida, cancelada). Esta funcionalidad es esencial para documentar y rastrear las adquisiciones de materiales , facilitando la integración con el inventario existente.
 

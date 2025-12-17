@@ -1,0 +1,56 @@
+═══════════════════════════════════════════════════════════
+  SOLUCIÓN RÁPIDA: Instalar Permisos (2 clics)
+═══════════════════════════════════════════════════════════
+
+PROBLEMA:
+Los permisos muestran 0 en todas las estadísticas.
+Módulos: [], Matriz: [], Estadísticas: 0
+
+CAUSA:
+Las tablas de permisos están vacías o no existen.
+
+═══════════════════════════════════════════════════════════
+  SOLUCIÓN EN 2 PASOS (30 segundos)
+═══════════════════════════════════════════════════════════
+
+PASO 1: Hacer clic en "Instalar Permisos"
+   └─ Botón VERDE en la página de permisos
+   └─ Se abrirá una nueva pestaña
+   └─ Esperar a que termine (5-10 segundos)
+
+PASO 2: Recargar la página
+   └─ Presionar F5
+   └─ Los permisos deberían aparecer
+
+═══════════════════════════════════════════════════════════
+  VERIFICACIÓN
+═══════════════════════════════════════════════════════════
+
+Después de instalar, deberías ver:
+
+✓ Módulos Accesibles: 10
+✓ Permisos Totales: 80
+✓ Permisos Activos: 80
+
+Y la matriz con checks verdes (✓)
+
+═══════════════════════════════════════════════════════════
+  ALTERNATIVA: Instalación Manual
+═══════════════════════════════════════════════════════════
+
+Si el botón no funciona:
+
+1. Abrir: http://localhost/ARCO/servicios/instalar_permisos.php
+2. Esperar a que termine
+3. Volver a: http://localhost/ARCO/vistas/gestion_permisos.php
+4. Presionar F5
+
+═══════════════════════════════════════════════════════════
+  BOTONES DISPONIBLES
+═══════════════════════════════════════════════════════════
+
+🔵 Ver Permisos     - Recargar permisos del rol seleccionado
+🔴 Debug            - Ver estado de las tablas en BD
+🟢 Instalar Permisos - Crear tablas y datos automáticamente
+
+═══════════════════════════════════════════════════════════
