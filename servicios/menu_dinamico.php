@@ -25,7 +25,9 @@ function obtenerMenuUsuario($rol) {
         'configuracion' => 'configuracion.php',
         'ordenes_compra' => 'ordenes_compra.php',
         'devoluciones' => 'devoluciones.php',
-        'permisos' => 'gestion_permisos.php'
+        'permisos' => 'gestion_permisos.php',
+        'anomalias' => 'anomalias.php',
+        'anomalias_reportes' => 'anomalias_reportes.php'
     ];
     
     // Descripciones estándar para el menú (como en la imagen de referencia)
@@ -39,7 +41,9 @@ function obtenerMenuUsuario($rol) {
         'configuracion' => 'Configuración del Sistema',
         'ordenes_compra' => 'Órdenes de Compra',
         'devoluciones' => 'Gestión de Devoluciones',
-        'permisos' => 'Permisos'
+        'permisos' => 'Permisos',
+        'anomalias' => 'Anomalías',
+        'anomalias_reportes' => 'Reportes de Anomalías'
     ];
     
     // Iconos estándar para el menú
@@ -53,14 +57,16 @@ function obtenerMenuUsuario($rol) {
         'configuracion' => 'fa-cog',
         'ordenes_compra' => 'fa-shopping-cart',
         'devoluciones' => 'fa-undo',
-        'permisos' => 'fa-user-shield'
+        'permisos' => 'fa-user-shield',
+        'anomalias' => 'fa-exclamation-circle',
+        'anomalias_reportes' => 'fa-chart-line'
     ];
     
     // Módulos que existen actualmente en el sistema
     $modulosExistentes = [
         'dashboard', 'productos', 'categorias', 'movimientos', 
         'usuarios', 'reportes', 'configuracion',
-        'ordenes_compra', 'devoluciones'
+        'ordenes_compra', 'devoluciones', 'anomalias', 'anomalias_reportes'
     ];
     
     $sql = "SELECT DISTINCT 
