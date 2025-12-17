@@ -1,14 +1,24 @@
 <?php
-require_once '../servicios/conexion.php';
-$conexion = ConectarDB();
-// TCPDF se carga bajo demanda al momento de generar/visualizar un PDF
-
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
-    // Usuario no autenticado, redirigir al login
     header("Location: ../login.html");
     exit;
 }
+
+require_once '../servicios/conexion.php';
+$conexion = ConectarDB();
+
+// Incluir sistema de permisos
+require_once '../servicios/middleware_permisos.php';
+require_once '../servicios/menu_dinamico.php';
+
+// Verificar acceso al módulo
+verificarAccesoModulo('reportes');
+
+// Obtener permisos del usuario para este módulo
+$permisos = obtenerPermisosUsuario('reportes');
+$puedeCrear = in_array('crear', $permisos);
+$puedeExportar = in_array('exportar', $permisos);
 // Verificar si se generó un reporte exitosamente
 $reporteGenerado = false;
 if (isset($_SESSION['reporte_generado']) && $_SESSION['reporte_generado'] === true) {
@@ -383,59 +393,20 @@ if (isset($_POST['generar_reporte'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>ARCO</h1>
-            <p class="subtitle">Gestión de Inventario</p>
-        </div>
-        <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
-            </a>
-            <a href="productos.php" class="menu-item">
-                <i class="fas fa-box"></i>
-                <span class="menu-text">Productos</span>
-            </a>
-            <a href="categorias.php" class="menu-item">
-                <i class="fas fa-tags"></i>
-                <span class="menu-text">Categorías</span>
-            </a>
-            <a href="movimientos.php" class="menu-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span class="menu-text">Movimientos</span>
-            </a>
-            <a href="gestion_usuarios.php" class="menu-item">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Usuarios</span>
-            </a>
-            <a href="reportes.php" class="menu-item active">
-                <i class="fas fa-chart-bar"></i>
-                <span class="menu-text">Reportes</span>
-            </a>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador'): ?>
-            <a href="gestion_permisos.php" class="menu-item">
-                <i class="fas fa-user-shield"></i>
-                <span class="menu-text">Permisos</span>
-            </a>
-            <?php endif; ?>
-            <a href="configuracion.php" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Configuración</span>
-            </a>
-            <a href="../servicios/logout.php" class="menu-cerrar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="menu-text">Cerrar Sesión</span>
-            </a>
-        </div>
-    </div>
+    <?php echo generarSidebarCompleto('reportes'); ?>
     
     <div class="main-content">
         <div class="header">
             <h2>Reportes</h2>
+            <?php if ($puedeCrear): ?>
             <button class="btn btn-primary" id="btnGenerateReport">
                 <i class="fas fa-plus"></i> Generar Nuevo Reporte
             </button>
+            <?php else: ?>
+            <button class="btn btn-primary" disabled title="No tiene permisos">
+                <i class="fas fa-plus"></i> Generar Nuevo Reporte
+            </button>
+            <?php endif; ?>
         </div>
         
         <?php if ((isset($_GET['success']) && $_GET['success'] == '1') || $reporteGenerado): ?>

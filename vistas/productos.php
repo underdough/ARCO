@@ -4,6 +4,20 @@ if (!isset($_SESSION['usuario_id'])) {
     header('Location: ../login.html');
     exit();
 }
+
+// Incluir sistema de permisos
+require_once '../servicios/middleware_permisos.php';
+require_once '../servicios/menu_dinamico.php';
+
+// Verificar acceso al módulo
+verificarAccesoModulo('productos');
+
+// Obtener permisos del usuario para este módulo
+$permisos = obtenerPermisosUsuario('productos');
+$puedeCrear = in_array('crear', $permisos);
+$puedeEditar = in_array('editar', $permisos);
+$puedeEliminar = in_array('eliminar', $permisos);
+$puedeExportar = in_array('exportar', $permisos);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -19,52 +33,7 @@ if (!isset($_SESSION['usuario_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>ARCO</h1>
-            <p class="subtlo">Gestión de Inventario</p>
-        </div>
-        <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
-            </a>
-            <a href="productos.php" class="menu-item active">
-                <i class="fas fa-box"></i>
-                <span class="menu-text">Productos</span>
-            </a>
-            <a href="categorias.php" class="menu-item">
-                <i class="fas fa-tags"></i>
-                <span class="menu-text">Categorías</span>
-            </a>
-            <a href="movimientos.php" class="menu-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span class="menu-text">Movimientos</span>
-            </a>
-            <a href="gestion_usuarios.php" class="menu-item">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Usuarios</span>
-            </a>
-            <a href="reportes.php" class="menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span class="menu-text">Reportes</span>
-            </a>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador'): ?>
-            <a href="gestion_permisos.php" class="menu-item">
-                <i class="fas fa-user-shield"></i>
-                <span class="menu-text">Permisos</span>
-            </a>
-            <?php endif; ?>
-            <a href="configuracion.php" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Configuración</span>
-            </a>
-            <a href="../servicios/logout.php" class="menu-cerrar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="menu-text">Cerrar Sesión</span>
-            </a>
-        </div>
-    </div>
+    <?php echo generarSidebarCompleto('productos'); ?>
     
     <div class="main-content">
         <div class="header">
@@ -84,9 +53,15 @@ if (!isset($_SESSION['usuario_id'])) {
                     <option value="precio-ASC">Precio Menor-Mayor</option>
                     <option value="precio-DESC">Precio Mayor-Menor</option>
                 </select>
+                <?php if ($puedeCrear): ?>
                 <button class="btn btn-primary" id="btnAddProduct">
                     <i class="fas fa-plus"></i> Nuevo Producto
                 </button>
+                <?php else: ?>
+                <button class="btn btn-primary" disabled title="No tiene permisos para crear productos">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+                <?php endif; ?>
             </div>
         </div>
         
@@ -166,5 +141,17 @@ if (!isset($_SESSION['usuario_id'])) {
     
     <script src="../SOLOjavascript/productos.js"></script>
     <script src="../public/js/admin-verification.js"></script>
+    <?php echo generarScriptPermisos('productos'); ?>
+    <script>
+        // Aplicar permisos a botones de acción en la tabla
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!tienePermiso('editar')) {
+                ocultarSinPermiso('.action-icon.edit', 'editar');
+            }
+            if (!tienePermiso('eliminar')) {
+                ocultarSinPermiso('.action-icon.delete', 'eliminar');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -13,6 +13,7 @@ if ($_SESSION['rol'] !== 'administrador') {
 }
 
 require_once '../servicios/conexion.php';
+require_once '../servicios/menu_dinamico.php';
 
 $nombre = $_SESSION['nombre'] ?? '';
 $apellido = $_SESSION['apellido'] ?? '';
@@ -401,44 +402,7 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             <h1>ARCO</h1>
             <p class="subtlo">Gestión de Inventario</p>
         </div>
-        <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
-            </a>
-            <a href="productos.php" class="menu-item">
-                <i class="fas fa-box"></i>
-                <span class="menu-text">Productos</span>
-            </a>
-            <a href="categorias.php" class="menu-item">
-                <i class="fas fa-tags"></i>
-                <span class="menu-text">Categorías</span>
-            </a>
-            <a href="movimientos.php" class="menu-item">
-                <i class="fas fa-exchange-alt"></i>
-                <span class="menu-text">Movimientos</span>
-            </a>
-            <a href="gestion_usuarios.php" class="menu-item active">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Usuarios</span>
-            </a>
-            <a href="reportes.php" class="menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span class="menu-text">Reportes</span>
-            </a>
-            <a href="gestion_permisos.php" class="menu-item">
-                <i class="fas fa-user-shield"></i>
-                <span class="menu-text">Permisos</span>
-            </a>
-            <a href="configuracion.php" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Configuración</span>
-            </a>
-            <a href="../servicios/logout.php" class="menu-cerrar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="menu-text">Cerrar Sesión</span>
-            </a>
-        </div>
+        <?php echo generarMenuHTML('usuarios'); ?>
     </div>
 
     <div class="main-content" id="mainContent">

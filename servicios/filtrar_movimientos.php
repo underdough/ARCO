@@ -9,6 +9,7 @@ $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : '';
 $usuario = isset($_GET['usuario']) ? $_GET['usuario'] : '';
 $fecha = isset($_GET['fecha']) ? $_GET['fecha'] : '';
 $busqueda = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
+$producto_id = isset($_GET['producto_id']) ? (int)$_GET['producto_id'] : 0;
 
 // Construir la consulta SQL con filtros
 $sql = "SELECT
@@ -44,6 +45,12 @@ if (!empty($fecha)) {
     $sql .= " AND DATE(m.fecha) = ?";
     $params[] = $fecha;
     $types .= "s";
+}
+
+if ($producto_id > 0) {
+    $sql .= " AND m.producto_id = ?";
+    $params[] = $producto_id;
+    $types .= "i";
 }
 
 if (!empty($busqueda)) {

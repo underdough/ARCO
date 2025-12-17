@@ -4,6 +4,19 @@ if (!isset($_SESSION['usuario_id'])) {
     header('Location: ../login.html');
     exit();
 }
+
+// Incluir sistema de permisos
+require_once '../servicios/middleware_permisos.php';
+require_once '../servicios/menu_dinamico.php';
+
+// Verificar acceso al módulo
+verificarAccesoModulo('movimientos');
+
+// Obtener permisos del usuario para este módulo
+$permisos = obtenerPermisosUsuario('movimientos');
+$puedeCrear = in_array('crear', $permisos);
+$puedeEditar = in_array('editar', $permisos);
+$puedeExportar = in_array('exportar', $permisos);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,52 +34,7 @@ if (!isset($_SESSION['usuario_id'])) {
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>ARCO</h1>
-            <p class="subtlo">Gestión de Inventario</p>
-        </div>
-        <div class="sidebar-menu">
-            <a href="dashboard.php" class="menu-item">
-                <i class="fas fa-tachometer-alt"></i>
-                <span class="menu-text">Inicio</span>
-            </a>
-            <a href="productos.php" class="menu-item">
-                <i class="fas fa-box"></i>
-                <span class="menu-text">Productos</span>
-            </a>
-            <a href="categorias.php" class="menu-item">
-                <i class="fas fa-tags"></i>
-                <span class="menu-text">Categorías</span>
-            </a>
-            <a href="movimientos.php" class="menu-item active">
-                <i class="fas fa-exchange-alt"></i>
-                <span class="menu-text">Movimientos</span>
-            </a>
-            <a href="gestion_usuarios.php" class="menu-item">
-                <i class="fas fa-users"></i>
-                <span class="menu-text">Usuarios</span>
-            </a>
-            <a href="reportes.php" class="menu-item">
-                <i class="fas fa-chart-bar"></i>
-                <span class="menu-text">Reportes</span>
-            </a>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador'): ?>
-            <a href="gestion_permisos.php" class="menu-item">
-                <i class="fas fa-user-shield"></i>
-                <span class="menu-text">Permisos</span>
-            </a>
-            <?php endif; ?>
-            <a href="configuracion.php" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span class="menu-text">Configuración</span>
-            </a>
-            <a href="../servicios/logout.php" class="menu-cerrar">
-                <i class="fas fa-sign-out-alt"></i>
-                <span class="menu-text">Cerrar Sesión</span>
-            </a>
-        </div>
-    </div>
+    <?php echo generarSidebarCompleto('movimientos'); ?>
 
     <div class="main-content">
         <div class="header">
@@ -79,9 +47,20 @@ if (!isset($_SESSION['usuario_id'])) {
                 <button class="btn btn-secondary">
                     <i class="fas fa-filter"></i> Filtrar
                 </button>
+                <?php if ($puedeExportar): ?>
+                <button class="btn btn-secondary" id="btnExportar">
+                    <i class="fas fa-download"></i> Exportar
+                </button>
+                <?php endif; ?>
+                <?php if ($puedeCrear): ?>
                 <button class="btn btn-primary" id="btnAddMovement">
                     <i class="fas fa-plus"></i> Nuevo Movimiento
                 </button>
+                <?php else: ?>
+                <button class="btn btn-primary" disabled title="No tiene permisos para crear movimientos">
+                    <i class="fas fa-plus"></i> Nuevo Movimiento
+                </button>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -95,6 +74,8 @@ if (!isset($_SESSION['usuario_id'])) {
                             <option value="entrada">Entrada</option>
                             <option value="salida">Salida</option>
                             <option value="ajuste">Ajuste</option>
+                            <option value="recibido">Recibido (OC)</option>
+                            <option value="devolucion">Devolución</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -170,6 +151,8 @@ if (!isset($_SESSION['usuario_id'])) {
                                 <option value="entrada">Entrada</option>
                                 <option value="salida">Salida</option>
                                 <option value="ajuste">Ajuste</option>
+                                <option value="recibido">Recibido (desde OC)</option>
+                                <option value="devolucion">Devolución</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -302,8 +285,15 @@ if (!isset($_SESSION['usuario_id'])) {
                         const id = viewBtn.dataset.id;
                         fetch(`../servicios/obtener_detalle_movimiento.php?id=${id}`)
                             .then(res => res.json())
-                            .then(mov => {
-                                mostrarModalDetalleMovimiento(mov);
+                            .then(response => {
+                                if (response.success && response.data) {
+                                    mostrarModalDetalleMovimiento(response.data);
+                                } else if (response.id) {
+                                    // Formato directo (compatibilidad)
+                                    mostrarModalDetalleMovimiento(response);
+                                } else {
+                                    alert('Error: ' + (response.error || 'No se encontró el movimiento'));
+                                }
                             })
                             .catch(err => {
                                 alert('Error al obtener detalles: ' + err);
@@ -456,13 +446,13 @@ function cargarProductos() {
 
 
             function mostrarModalDetalleMovimiento(mov) {
-                document.getElementById('detalleId').innerText = mov.id;
-                document.getElementById('detalleFecha').innerText = mov.fecha;
-                document.getElementById('detalleTipo').innerText = mov.tipo;
-                document.getElementById('detalleProducto').innerText = mov.producto;
-                document.getElementById('detalleCantidad').innerText = mov.cantidad;
-                document.getElementById('detalleUsuario').innerText = mov.usuario_nombre || 'Sin nombre';
-                document.getElementById('detalleNotas').innerText = mov.notas;
+                document.getElementById('detalleId').innerText = mov.id || '-';
+                document.getElementById('detalleFecha').innerText = mov.fecha || '-';
+                document.getElementById('detalleTipo').innerText = mov.tipo || '-';
+                document.getElementById('detalleProducto').innerText = mov.producto || '-';
+                document.getElementById('detalleCantidad').innerText = mov.cantidad || '-';
+                document.getElementById('detalleUsuario').innerText = mov.usuario_nombre || mov.usuario || 'Sin nombre';
+                document.getElementById('detalleNotas').innerText = mov.notas || 'Sin notas';
 
                 document.getElementById('viewMovementModal').style.display = 'flex';
             }
@@ -480,6 +470,7 @@ function cargarProductos() {
             cargarMovimientos();
         });
     </script>
+    <?php echo generarScriptPermisos('movimientos'); ?>
 </body>
 
 </html>

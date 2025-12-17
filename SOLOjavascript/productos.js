@@ -107,6 +107,15 @@
                     <td><span class="status ${estadoClass}">${producto.estado}</span></td>
                     <td>
                         <div class="actions">
+                            <a href="#" class="action-icon btn-entrada" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'entrada')" title="Entrada de stock" style="color: #28a745;">
+                                <i class="fas fa-plus-circle"></i>
+                            </a>
+                            <a href="#" class="action-icon btn-salida" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'salida')" title="Salida de stock" style="color: #dc3545;">
+                                <i class="fas fa-minus-circle"></i>
+                            </a>
+                            <a href="#" class="action-icon btn-historial" onclick="verHistorialProducto(${producto.id}, '${producto.nombre}')" title="Ver historial">
+                                <i class="fas fa-history"></i>
+                            </a>
                             <a href="#" class="action-icon btn-editar" onclick="editarProducto(${producto.id})" title="Editar producto">
                                 <i class="fas fa-edit"></i>
                             </a>
@@ -463,3 +472,133 @@
             styleSheet.textContent = additionalStyles;
             document.head.appendChild(styleSheet);
         });
+
+
+// =====================================================
+// FUNCIONES DE MOVIMIENTO RÁPIDO
+// =====================================================
+
+// Movimiento rápido desde productos
+function movimientoRapido(productoId, productoNombre, tipo) {
+    event.preventDefault();
+    
+    const tipoLabel = tipo === 'entrada' ? 'ENTRADA' : 'SALIDA';
+    const cantidad = prompt(`${tipoLabel} de stock para "${productoNombre}"\n\nIngrese la cantidad:`);
+    
+    if (cantidad === null) return; // Cancelado
+    
+    const cantidadNum = parseInt(cantidad);
+    if (isNaN(cantidadNum) || cantidadNum <= 0) {
+        mostrarNotificacion('Ingrese una cantidad válida mayor a 0', 'error');
+        return;
+    }
+    
+    const notas = prompt('Notas (opcional):') || '';
+    
+    const formData = new FormData();
+    formData.append('tipo', tipo);
+    formData.append('fecha', new Date().toISOString().split('T')[0]);
+    formData.append('producto', productoId);
+    formData.append('cantidad', cantidadNum);
+    formData.append('notas', notas || `${tipoLabel} rápida desde módulo de productos`);
+    
+    fetch('../servicios/guardar_movimiento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            mostrarNotificacion(`✅ ${tipoLabel} registrada. Stock: ${data.stock_anterior} → ${data.stock_nuevo}`, 'success');
+            cargarProductos(); // Recargar tabla
+        } else {
+            mostrarNotificacion('❌ ' + data.message, 'error');
+        }
+    })
+    .catch(err => {
+        mostrarNotificacion('Error de conexión: ' + err.message, 'error');
+    });
+}
+
+// Ver historial de movimientos de un producto
+function verHistorialProducto(productoId, productoNombre) {
+    event.preventDefault();
+    
+    // Crear modal de historial si no existe
+    let modal = document.getElementById('historialModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'historialModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h3 class="modal-title">Historial de Movimientos</h3>
+                    <button class="close-modal" onclick="document.getElementById('historialModal').style.display='none'">&times;</button>
+                </div>
+                <div class="modal-body" id="historialContent" style="max-height: 400px; overflow-y: auto;">
+                    <p>Cargando...</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="document.getElementById('historialModal').style.display='none'">Cerrar</button>
+                    <button class="btn btn-primary" onclick="window.location.href='movimientos.php'">
+                        <i class="fas fa-exchange-alt"></i> Ir a Movimientos
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    modal.style.display = 'flex';
+    document.getElementById('historialContent').innerHTML = '<p style="text-align:center;"><i class="fas fa-spinner fa-spin"></i> Cargando historial...</p>';
+    
+    // Cargar historial del producto
+    fetch(`../servicios/filtrar_movimientos.php?producto_id=${productoId}`)
+        .then(res => res.json())
+        .then(movimientos => {
+            const content = document.getElementById('historialContent');
+            
+            if (movimientos.length === 0) {
+                content.innerHTML = `<p style="text-align:center; color: #666;">No hay movimientos registrados para "${productoNombre}"</p>`;
+                return;
+            }
+            
+            let html = `<h4 style="margin-bottom: 15px;">Producto: ${productoNombre}</h4>`;
+            html += `<table style="width:100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                    <tr style="background: #f5f5f5;">
+                        <th style="padding: 8px; border: 1px solid #ddd;">Fecha</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Tipo</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Cantidad</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Usuario</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Notas</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            movimientos.forEach(mov => {
+                const tipoColor = mov.tipo === 'entrada' || mov.tipo === 'recibido' ? '#28a745' : 
+                                  mov.tipo === 'salida' || mov.tipo === 'devolucion' ? '#dc3545' : '#ffc107';
+                html += `
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${mov.fecha}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">
+                            <span style="background: ${tipoColor}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px;">
+                                ${mov.tipo}
+                            </span>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${mov.cantidad}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${mov.usuario_nombre || '-'}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${mov.notas || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            content.innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById('historialContent').innerHTML = `<p style="color: red;">Error al cargar historial: ${err.message}</p>`;
+        });
+}
