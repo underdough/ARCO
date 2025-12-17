@@ -26,31 +26,32 @@ if (!isset($_GET['id'])) {
 try {
     $conexion = ConectarDB();
     $id = (int) $_GET['id'];
-    
+
     $sql = "SELECT 
-                m.id, 
-                m.fecha, 
-                m.tipo, 
-                m.cantidad, 
-                m.notas,
-                m.creado_en,
-                COALESCE(mat.nombre_material, 'Producto no encontrado') AS producto,
-                COALESCE(CONCAT(u.nombre, ' ', u.apellido), 'Usuario Sistema') AS usuario
-            FROM movimientos m
-            LEFT JOIN materiales mat ON m.producto_id = mat.id_material
-            LEFT JOIN usuarios u ON m.usuario_id = u.id_usuarios
-            WHERE m.id = ?
-            LIMIT 1";
-    
+    m.id, 
+    m.fecha, 
+    m.tipo, 
+    m.cantidad, 
+    m.notas,
+    m.creado_en,
+    COALESCE(mat.nombre_material, 'Producto no encontrado') AS producto,
+    COALESCE(CONCAT(u.nombre, ' ', u.apellido), 'Usuario Sistema') AS usuario_nombre
+FROM movimientos m
+LEFT JOIN materiales mat ON m.producto_id = mat.id_material
+LEFT JOIN usuarios u ON m.usuario_id = u.id_usuarios
+WHERE m.id = ?
+LIMIT 1
+";
+
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
-    
+
     if ($resultado && $row = $resultado->fetch_assoc()) {
         // Formatear la fecha
         $fecha_formateada = date('d/m/Y H:i:s', strtotime($row['creado_en']));
-        
+
         echo json_encode([
             'success' => true,
             'data' => [
@@ -69,14 +70,12 @@ try {
             'error' => 'Movimiento no encontrado'
         ]);
     }
-    
+
     $stmt->close();
     $conexion->close();
-    
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
         'error' => 'Error al obtener detalles: ' . $e->getMessage()
     ]);
 }
-?>

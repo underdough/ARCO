@@ -134,6 +134,10 @@ $tipoLabel = isset($tipoLabels[$mov['tipo']]) ? $tipoLabels[$mov['tipo']] : ucfi
     </p>
     
     <br>
+<<<<<<< HEAD
     <button class="no-print" onclick="window.history.back()">Volver</button>
+=======
+    <button class="no-print" onclick="window.location.href='../vistas/movimientos.php'">Volver</button>
+>>>>>>> 2e36db876ae13f731d23c5ac13955d55e0f7c93f
 </body>
 </html>
