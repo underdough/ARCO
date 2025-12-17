@@ -4,6 +4,16 @@ if (!isset($_SESSION['usuario_id'])) {
     header('Location: ../login.html');
     exit();
 }
+
+// Incluir middleware de permisos
+require_once '../servicios/middleware_permisos.php';
+
+// Verificar acceso al módulo de productos
+verificarAccesoModulo('productos');
+
+// Obtener permisos del usuario
+$permisos = obtenerPermisosUsuario('productos');
+$infoUsuario = obtenerInfoUsuario();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,6 +27,12 @@ if (!isset($_SESSION['usuario_id'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        // Permisos del usuario disponibles en JavaScript
+        window.userPermissions = <?php echo generarPermisosJS('productos'); ?>;
+        window.userInfo = <?php echo json_encode($infoUsuario); ?>;
+    </script>
 </head>
 <body>
     <div class="sidebar">
@@ -29,11 +45,11 @@ if (!isset($_SESSION['usuario_id'])) {
                 <i class="fas fa-tachometer-alt"></i>
                 <span class="menu-text">Inicio</span>
             </a>
-            <a href="productos.php" class="menu-item active">
+            <a href="productos_protegido.php" class="menu-item active">
                 <i class="fas fa-box"></i>
                 <span class="menu-text">Productos</span>
             </a>
-            <a href="categorias.php" class="menu-item">
+            <a href="categorias_protegido.php" class="menu-item">
                 <i class="fas fa-tags"></i>
                 <span class="menu-text">Categorías</span>
             </a>
@@ -49,23 +65,9 @@ if (!isset($_SESSION['usuario_id'])) {
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
-            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador'): ?>
-            <a href="gestion_permisos.php" class="menu-item">
-                <i class="fas fa-user-shield"></i>
-                <span class="menu-text">Permisos</span>
-            </a>
-            <?php endif; ?>
             <a href="configuracion.php" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
-            </a>
-            <a href="anomalias.php" class="menu-item">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="menu-text">Anomalías</span>
-            </a>
-            <a href="anomalias_reportes.php" class="menu-item">
-                <i class="fas fa-chart-line"></i>
-                <span class="menu-text">Reportes Anomalías</span>
             </a>
             <a href="../servicios/logout.php" class="menu-cerrar">
                 <i class="fas fa-sign-out-alt"></i>
@@ -77,9 +79,13 @@ if (!isset($_SESSION['usuario_id'])) {
     <div class="main-content">
         <div class="header">
             <h2>Gestión de Productos</h2>
+            <div class="user-badge">
+                <i class="fas fa-user-shield"></i>
+                <span><?php echo htmlspecialchars($infoUsuario['nombre_completo']); ?> (<?php echo ucfirst($infoUsuario['rol']); ?>)</span>
+            </div>
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Buscar productos...">
+                <input type="text" placeholder="Buscar productos..." id="searchInput">
             </div>
             <div class="action-buttons">
                 <select id="sortSelect" class="btn btn-secondary" style="margin-right: 10px;">
@@ -92,8 +98,20 @@ if (!isset($_SESSION['usuario_id'])) {
                     <option value="precio-ASC">Precio Menor-Mayor</option>
                     <option value="precio-DESC">Precio Mayor-Menor</option>
                 </select>
-                <button class="btn btn-primary" id="btnAddProduct">
+                
+                <!-- Botón crear solo visible si tiene permiso -->
+                <button class="btn btn-primary" id="btnAddProduct" <?php echo mostrarSiTienePermiso('productos', 'crear'); ?>>
                     <i class="fas fa-plus"></i> Nuevo Producto
+                </button>
+                
+                <!-- Botón importar solo visible si tiene permiso -->
+                <button class="btn btn-secondary" id="btnImportProducts" <?php echo mostrarSiTienePermiso('productos', 'importar'); ?>>
+                    <i class="fas fa-file-import"></i> Importar
+                </button>
+                
+                <!-- Botón exportar solo visible si tiene permiso -->
+                <button class="btn btn-secondary" id="btnExportProducts" <?php echo mostrarSiTienePermiso('productos', 'exportar'); ?>>
+                    <i class="fas fa-file-export"></i> Exportar
                 </button>
             </div>
         </div>
@@ -112,7 +130,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
-                    <!-- Los productos se cargarán dinámicamente desde la base de datos -->
+                    <!-- Los productos se cargarán dinámicamente -->
                 </tbody>
             </table>
         </div>
@@ -143,7 +161,6 @@ if (!isset($_SESSION['usuario_id'])) {
                         <label for="productCategory">Categoría</label>
                         <select class="form-control" id="productCategory" required>
                             <option value="">Seleccionar categoría</option>
-                            <!-- Las categorías se cargarán dinámicamente -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -172,7 +189,6 @@ if (!isset($_SESSION['usuario_id'])) {
         <i class="fas fa-bars"></i>
     </button>
     
-    <script src="../SOLOjavascript/productos.js"></script>
-    <script src="../public/js/admin-verification.js"></script>
+    <script src="../SOLOjavascript/productos_protegido.js"></script>
 </body>
 </html>

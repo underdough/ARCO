@@ -65,7 +65,7 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-exchange-alt"></i>
                 <span class="menu-text">Movimientos</span>
             </a>
-            <a href="Usuario.php" class="menu-item">
+            <a href="gestion_usuarios.php" class="menu-item">
                 <i class="fas fa-users"></i>
                 <span class="menu-text">Usuarios</span>
             </a>
@@ -73,6 +73,12 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-chart-bar"></i>
                 <span class="menu-text">Reportes</span>
             </a>
+            <?php if (isset($_SESSION['rol']) && $_SESSION['rol'] === 'administrador'): ?>
+            <a href="gestion_permisos.php" class="menu-item">
+                <i class="fas fa-user-shield"></i>
+                <span class="menu-text">Permisos</span>
+            </a>
+            <?php endif; ?>
             <a href="configuracion.php" class="menu-item active">
                 <i class="fas fa-cog"></i>
                 <span class="menu-text">Configuración</span>
@@ -345,40 +351,6 @@ if ($result && $result->num_rows > 0) {
 
 
 
-        <?php
-        $usuarioId = $_SESSION['usuario_id'] ?? null;
-
-        // Inicializar permisos vacíos
-        $permisosGuardados = [];
-
-        // Consultar permisos si hay usuario
-        if ($usuarioId) {
-            $sql = "SELECT * FROM permisos_usuario WHERE usuario_id = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("i", $usuarioId);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-
-            while ($perm = $resultado->fetch_assoc()) {
-                $modulo = $perm['modulo'];
-                $permisosGuardados[$modulo] = [
-                    'ver' => $perm['ver'],
-                    'crear' => $perm['crear'],
-                    'editar' => $perm['editar'],
-                    'eliminar' => $perm['eliminar']
-                ];
-            }
-
-            // Obtener también el rol del usuario si está guardado
-            $stmt = $conexion->prepare("SELECT rol FROM usuarios WHERE id_usuarios = ?");
-            $stmt->bind_param("i", $usuarioId);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            $rolGuardado = $resultado->fetch_assoc()['rol'] ?? '';
-        }
-        ?>
-
-
         <!-- Sección de Autenticación de Dos Factores -->
         <?php
         $preferencias2FA = [
@@ -449,131 +421,4 @@ if ($result && $result->num_rows > 0) {
             });
         </script>
 
-        <!-- Sección de Permisos de Usuario -->
-        <form action="../servicios/guardar_permisos.php" method="POST" id="formPermisos">
-            <div class="config-section" id="userPermissionsSection">
-                <h3><i class="fas fa-user-shield"></i> Permisos de Usuario</h3>
 
-                <div class="form-group">
-                    <label for="userRoles">Rol del Usuario</label>
-                    <select class="form-control" id="userRoles" name="userRole">
-                        <select class="form-control" id="userRoles" name="userRole">
-                            <option value="admin" <?= $rolGuardado == 'admin' ? 'selected' : '' ?>>Administrador</option>
-                            <option value="manager" <?= $rolGuardado == 'manager' ? 'selected' : '' ?>>Gerente</option>
-                            <option value="operator" <?= $rolGuardado == 'operator' ? 'selected' : '' ?>>Operador</option>
-                            <option value="viewer" <?= $rolGuardado == 'viewer' ? 'selected' : '' ?>>Visualizador</option>
-                        </select>
-
-                    </select>
-                </div>
-
-                <table class="permissions-table">
-                    <thead>
-                        <tr>
-                            <th>Módulo</th>
-                            <th>Ver</th>
-                            <th>Crear</th>
-                            <th>Editar</th>
-                            <th>Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Cada fila representa un módulo -->
-                        <tr>
-                            <td>Productos</td>
-                            <td><input type="checkbox" name="permisos[productos][ver]"
-                                    <?= !empty($permisosGuardados['productos']['ver']) ? 'checked' : '' ?>>
-                            </td>
-                            <td><input type="checkbox" name="permisos[productos][crear]"
-                                    <?= !empty($permisosGuardados['productos']['ver']) ? 'checked' : '' ?>>
-                            </td>
-                            <td><input type="checkbox" name="permisos[productos][editar]"
-                                    <?= !empty($permisosGuardados['productos']['ver']) ? 'checked' : '' ?>>
-                            </td>
-                            <td><input type="checkbox" name="permisos[productos][eliminar]"
-                                    <?= !empty($permisosGuardados['productos']['ver']) ? 'checked' : '' ?>>
-                            </td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td>Categorías</td>
-                            <td><input type="checkbox" name="permisos[categorias][ver]"
-                                    <?= !empty($permisosGuardados['categorias']['ver']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[categorias][crear]"
-                                    <?= !empty($permisosGuardados['categorias']['crear']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[categorias][editar]"
-                                    <?= !empty($permisosGuardados['categorias']['editar']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[categorias][eliminar]"
-                                    <?= !empty($permisosGuardados['categorias']['eliminar']) ? 'checked' : '' ?>></td>
-                        </tr>
-                        <tr>
-                            <td>Movimientos</td>
-                            <td><input type="checkbox" name="permisos[movimientos][ver]"
-                                    <?= !empty($permisosGuardados['movimientos']['ver']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[movimientos][crear]"
-                                    <?= !empty($permisosGuardados['movimientos']['crear']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[movimientos][editar]"
-                                    <?= !empty($permisosGuardados['movimientos']['editar']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[movimientos][eliminar]"
-                                    <?= !empty($permisosGuardados['movimientos']['eliminar']) ? 'checked' : '' ?>></td>
-                        </tr>
-                        <tr>
-                            <td>Reportes</td>
-                            <td><input type="checkbox" name="permisos[reportes][ver]"
-                                    <?= !empty($permisosGuardados['reportes']['ver']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[reportes][crear]"
-                                    <?= !empty($permisosGuardados['reportes']['crear']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[reportes][editar]"
-                                    <?= !empty($permisosGuardados['reportes']['editar']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[reportes][eliminar]"
-                                    <?= !empty($permisosGuardados['reportes']['eliminar']) ? 'checked' : '' ?>></td>
-                        </tr>
-                        <tr>
-                            <td>Usuarios</td>
-                            <td><input type="checkbox" name="permisos[usuarios][ver]"
-                                    <?= !empty($permisosGuardados['usuarios']['ver']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[usuarios][crear]"
-                                    <?= !empty($permisosGuardados['usuarios']['crear']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[usuarios][editar]"
-                                    <?= !empty($permisosGuardados['usuarios']['editar']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[usuarios][eliminar]"
-                                    <?= !empty($permisosGuardados['usuarios']['eliminar']) ? 'checked' : '' ?>></td>
-                        </tr>
-                        <tr>
-                            <td>Configuración</td>
-                            <td><input type="checkbox" name="permisos[configuracion][ver]"
-                                    <?= !empty($permisosGuardados['configuracion']['ver']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[configuracion][crear]"
-                                    <?= !empty($permisosGuardados['configuracion']['crear']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[configuracion][editar]"
-                                    <?= !empty($permisosGuardados['configuracion']['editar']) ? 'checked' : '' ?>></td>
-                            <td><input type="checkbox" name="permisos[configuracion][eliminar]"
-                                    <?= !empty($permisosGuardados['configuracion']['eliminar']) ? 'checked' : '' ?>></td>
-                        </tr>
-
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="section-actions">
-                    <button type="button" class="btn btn-secondary" id="resetPermissions">
-                        <i class="fas fa-undo"></i> Restablecer
-                    </button>
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            const resetBtn = document.getElementById("resetPermissions");
-                            const form = document.getElementById("formPermisos");
-
-                            resetBtn.addEventListener("click", function () {
-                                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
-                                checkboxes.forEach(checkbox => checkbox.checked = false);
-                            });
-                        });
-                    </script>
-
-                    <button type="submit" class="btn btn-primary" id="savePermissions">
-                        <i class="fas fa-save"></i> Guardar Permisos
-                    </button>
-                </div>
-            </div>
-        </form>
