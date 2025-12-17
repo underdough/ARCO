@@ -1,5 +1,6 @@
 /* ===== ESTILOS COMUNES PARA TODOS LOS MODALES ===== */
 /* Basado en el diseño existente del proyecto ARCO */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 /* Variables del proyecto */
 :root {
@@ -9,6 +10,16 @@
     --modal-light-bg: #F0F3FA;
     --modal-text-color: #333333;
     --modal-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Fuente para modales */
+.modal, .modal * {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Proteger fuente de íconos */
+.modal i, .modal .fas, .modal .fa, .modal .far, .modal .fab {
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
 }
 
 /* Modal base */

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,9 +7,14 @@
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #f5f7fa;
     display: flex;
+}
+
+/* Proteger fuente de íconos */
+i, .fas, .fa, .far, .fab, .fal, .fad {
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
 }
 
 /* Sidebar */

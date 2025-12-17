@@ -1,6 +1,7 @@
 @import url('modal-common.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* Estilos específicos para categorías */
+/* Estilos específicos para movimientos */
 :root {
     --primary-color: #395886; /* Azul principal */
     --secondary-color: #395886; /* Azul oscuro */
@@ -21,6 +22,12 @@ body {
     margin: 0;
     background: var(--light-bg);
     overflow: auto;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Proteger fuente de íconos */
+i, .fas, .fa, .far, .fab, .fal, .fad {
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
 }
 
 .sidebar {

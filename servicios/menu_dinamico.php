@@ -48,7 +48,7 @@ function obtenerMenuUsuario($rol) {
     
     // Iconos estándar para el menú
     $iconosEstandar = [
-        'dashboard' => 'fa-tachometer-alt',
+        'dashboard' => 'fa-home',
         'productos' => 'fa-box',
         'categorias' => 'fa-tags',
         'movimientos' => 'fa-exchange-alt',
@@ -122,6 +122,9 @@ function generarMenuHTML($paginaActual = '') {
     
     // Estilos inline para el sidebar mejorado
     $html = '<style>
+        /* Importar fuente Poppins */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+        
         /* Estilos base del sidebar */
         .sidebar {
             display: flex !important;
@@ -129,6 +132,19 @@ function generarMenuHTML($paginaActual = '') {
             height: 100vh !important;
             position: fixed !important;
             overflow: hidden !important;
+            z-index: 1000 !important;
+            transition: transform 0.3s ease !important;
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+        .sidebar *:not(i):not(.fas):not(.fa):not(.far):not(.fab) {
+            font-family: inherit !important;
+        }
+        .sidebar i,
+        .sidebar .fas,
+        .sidebar .fa,
+        .sidebar .far,
+        .sidebar .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
         }
         .sidebar-header {
             flex-shrink: 0 !important;
@@ -199,6 +215,85 @@ function generarMenuHTML($paginaActual = '') {
             margin-right: 10px !important;
             text-align: center !important;
             flex-shrink: 0 !important;
+        }
+        
+        /* Botón flotante para móviles */
+        .menu-toggle-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: #395886;
+            color: white;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 20px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .menu-toggle-btn:hover {
+            background: #34495e;
+            transform: scale(1.05);
+        }
+        .menu-toggle-btn.active {
+            background: #e74c3c;
+        }
+        .menu-toggle-btn.active i:before {
+            content: "\\f00d";
+        }
+        
+        /* Overlay para cerrar menú */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+        }
+        
+        /* Media query para móviles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px !important;
+                transform: translateX(-100%) !important;
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0) !important;
+                width: 250px !important;
+            }
+            .sidebar.mobile-open .sidebar-header h1,
+            .sidebar.mobile-open .menu-text {
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+            /* Ocultar botón toggle original del dashboard */
+            .sidebar-toggle {
+                display: none !important;
+            }
+            .menu-toggle-btn {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+            .sidebar-overlay {
+                display: block;
+                pointer-events: none;
+            }
+            .sidebar-overlay.active {
+                pointer-events: auto;
+            }
         }
     </style>';
     
@@ -321,6 +416,60 @@ function generarMenuHTML($paginaActual = '') {
     $html .= '</div>';
     
     $html .= '</div>';
+    
+    // JavaScript para crear botón flotante y overlay fuera del sidebar
+    $html .= '<script>
+        (function() {
+            // Crear elementos solo si no existen
+            if (!document.getElementById("menuToggleBtn")) {
+                // Crear overlay
+                var overlay = document.createElement("div");
+                overlay.className = "sidebar-overlay";
+                overlay.id = "sidebarOverlay";
+                document.body.appendChild(overlay);
+                
+                // Crear botón flotante
+                var btn = document.createElement("button");
+                btn.className = "menu-toggle-btn";
+                btn.id = "menuToggleBtn";
+                btn.setAttribute("aria-label", "Abrir menú");
+                btn.innerHTML = \'<i class="fas fa-bars"></i>\';
+                document.body.appendChild(btn);
+            }
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                var toggleBtn = document.getElementById("menuToggleBtn");
+                var sidebar = document.querySelector(".sidebar");
+                var overlay = document.getElementById("sidebarOverlay");
+                
+                if (toggleBtn && sidebar && overlay) {
+                    toggleBtn.addEventListener("click", function() {
+                        sidebar.classList.toggle("mobile-open");
+                        overlay.classList.toggle("active");
+                        toggleBtn.classList.toggle("active");
+                    });
+                    
+                    overlay.addEventListener("click", function() {
+                        sidebar.classList.remove("mobile-open");
+                        overlay.classList.remove("active");
+                        toggleBtn.classList.remove("active");
+                    });
+                    
+                    // Cerrar menú al hacer clic en un enlace (móvil)
+                    var menuItems = sidebar.querySelectorAll(".menu-item, .menu-cerrar");
+                    menuItems.forEach(function(item) {
+                        item.addEventListener("click", function() {
+                            if (window.innerWidth <= 768) {
+                                sidebar.classList.remove("mobile-open");
+                                overlay.classList.remove("active");
+                                toggleBtn.classList.remove("active");
+                            }
+                        });
+                    });
+                }
+            });
+        })();
+    </script>';
     
     return $html;
 }

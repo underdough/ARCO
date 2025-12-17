@@ -159,6 +159,25 @@ body::before {
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 
+/* Ocultar el ícono nativo de mostrar contraseña en navegadores */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-clear-button {
+    display: none !important;
+}
+
+input::-webkit-contacts-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+
 .password-toggle {
     position: relative;
 }
