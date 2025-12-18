@@ -107,7 +107,7 @@ ARCO es un sistema web completo para la gestión integral de inventarios empresa
 ├── /recursos/                 # Recursos estáticos
 │   └── /scripts/              # Scripts auxiliares
 │
-├── /servicios/                # Servicios backend (API REST)
+├── /servicios/                # Servicios backend
 │   ├── /librerias/            # Librerías externas
 │   ├── /reportes/             # Reportes generados
 │   ├── conexion.php           # Conexión a base de datos
@@ -209,7 +209,7 @@ ARCO es un sistema web completo para la gestión integral de inventarios empresa
    - Editar `servicios/conexion.php` con tus credenciales:
    ```php
    const SERVIDOR = 'localhost';
-   const PUERTO = 3306;
+   const PUERTO = <!--puerto que desee usar: 3306(predeterminado por MYSQL)-->;
    const NOMBRE_BD = 'arco_bdd';
    const USUARIO = 'tu_usuario';
    const CONTRASEÑA = 'tu_contraseña';
@@ -238,7 +238,7 @@ Editar `servicios/conexion.php`:
 
 ```php
 const SERVIDOR = 'localhost';
-const PUERTO = 3306;
+const PUERTO = <!--puerto que desee usar: 3306(predeterminado por MYSQL)-->;
 const NOMBRE_BD = 'arco_bdd';
 const USUARIO = 'tu_usuario';
 const CONTRASEÑA = 'tu_contraseña';
