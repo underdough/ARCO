@@ -32,6 +32,7 @@ Navegación rápida por toda la documentación del sistema ARCO.
 ## 📋 Información Adicional
 
 - **[Requerimientos Faltantes](proyecto_requerimientos_faltantes.txt)** - Listado de requerimientos pendientes
+- **[Corrección de Rutas de Logo](CORRECCION_RUTAS_LOGO.md)** - Solución de errores de rutas y Trusted Types
 
 ## 🧪 Pruebas
 
@@ -56,6 +57,7 @@ Ver carpeta `/tests` para archivos de prueba:
 ├── SISTEMA_ARCO_GUIA.md             # Guía general
 ├── SOLUCION_PROBLEMAS.md            # Troubleshooting
 ├── INFORMACION_EMPRESA_COMPROBANTES.md # Datos de empresa
+├── CORRECCION_RUTAS_LOGO.md         # Corrección de rutas (NUEVO)
 ├── instalar_estadisticas.sql        # Script de BD
 └── proyecto_requerimientos_faltantes.txt # Requerimientos
 ```

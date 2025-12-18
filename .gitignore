@@ -38,6 +38,7 @@ backups/*.sql
 # Archivos subidos por usuarios
 uploads/*
 !uploads/.gitkeep
+/recursos/logos
 
 # Reportes generados
 servicios/reportes/*.pdf

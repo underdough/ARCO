@@ -2,6 +2,26 @@
 
 ## ✅ Tareas Completadas
 
+### 0. Corrección de Rutas de Logo y Trusted Types (Tarea 13)
+
+#### Error Trusted Types en Comprobantes
+- **Archivos:** `servicios/imprimir_movimiento.php`, `servicios/imprimir_orden_compra.php`, `servicios/imprimir_devolucion.php`
+- **Problema:** Uso de `onload="window.print()"` en atributos HTML
+- **Solución:** Cambio a event listener `DOMContentLoaded`
+- **Resultado:** ✅ Errores Trusted Types resueltos
+
+#### Error 404 en Logo (Ruta Duplicada)
+- **Archivos:** `servicios/guardar_empresa_mejorado.php`, `vistas/configuracion.php`
+- **Problema:** Ruta duplicada `/ARCO//ARCO/recursos/logos/...` causaba error 404
+- **Causa:** Inconsistencia entre cómo se guardaba y accedía la ruta
+- **Solución:**
+  - Cambio en `guardar_empresa_mejorado.php`: Guardar ruta como `/ARCO/recursos/logos/`
+  - Cambio en `configuracion.php`: Acceso directo sin `../`
+- **Resultado:** ✅ Logo se carga correctamente en todos los comprobantes
+- **Documentación:** Creado `CORRECCION_RUTAS_LOGO.md`
+
+**⚠️ Nota importante:** Usuario debe subir logo nuevamente para que se guarde con ruta correcta
+
 ### 1. Corrección de Errores Críticos
 
 #### Error de Recuperación de Contraseña
@@ -150,7 +170,7 @@ Se eliminaron 40 archivos de documentación que eran:
 
 | Categoría | Cantidad | Estado |
 |-----------|----------|--------|
-| Errores corregidos | 2 | ✅ |
+| Errores corregidos | 4 | ✅ |
 | Archivos movidos | 2 | ✅ |
 | Archivos de test organizados | 9 | ✅ |
 | Archivos de documentación eliminados | 40 | ✅ |

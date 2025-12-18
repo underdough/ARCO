@@ -67,12 +67,25 @@ $estadoInfo = $estadoLabels[$orden['estado']] ?? ['label' => $orden['estado'], '
         .firma { width: 200px; text-align: center; border-top: 1px solid #333; padding-top: 5px; }
         @media print { .no-print { display: none; } }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.print();
+        });
+    </script>
 </head>
-<body onload="window.print()">
+<body>
     <div class="header">
-        <h1>Empresa: <?= $empresa ? htmlspecialchars($empresa['nombre']) : 'ARCO' ?></h1>
+        <div style="display: flex; align-items: center; gap: 20px; justify-content: center; margin-bottom: 15px;">
+            <?php if ($empresa && !empty($empresa['logo'])): ?>
+            <img src="<?= htmlspecialchars($empresa['logo']) ?>" alt="Logo" style="max-height: 80px; max-width: 150px;">
+            <?php endif; ?>
+            <div>
+                <h1 style="margin: 0;"><?= $empresa ? htmlspecialchars($empresa['nombre']) : 'ARCO' ?></h1>
+                <p style="margin: 5px 0; color: #666;">NIT: <?= $empresa ? htmlspecialchars($empresa['nif']) : '' ?></p>
+            </div>
+        </div>
         <p><?= $empresa ? htmlspecialchars($empresa['direccion']) : '' ?></p>
-        <p><?= $empresa ? htmlspecialchars($empresa['telefono']) : '' ?></p>
+        <p><?= $empresa ? htmlspecialchars($empresa['telefono']) : '' ?> | <?= $empresa ? htmlspecialchars($empresa['email']) : '' ?></p>
     </div>
     
     <h2 style="text-align: center;">ORDEN DE COMPRA</h2>

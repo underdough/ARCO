@@ -40,7 +40,8 @@ $empresa = [
     'direccion' => '',
     'ciudad' => '',
     'telefono' => '',
-    'email' => ''
+    'email' => '',
+    'logo' => ''
 ];
 
 $sql = "SELECT * FROM empresa WHERE id = 2";
@@ -88,8 +89,7 @@ if ($result && $result->num_rows > 0) {
         </div>
 
 
-       <form action="../servicios/guardar_empresa.php" method="POST" enctype="multipart/form-data"
-            id="companyInfoForm">
+       <form id="companyInfoForm" enctype="multipart/form-data">
             <div class="config-section">
                 <h3><i class="fas fa-building"></i> Información de la Empresa</h3>
 
@@ -97,7 +97,7 @@ if ($result && $result->num_rows > 0) {
                     <div class="form-group">
                         <label for="companyName">Nombre de la Empresa</label>
                         <input type="text" class="form-control" id="companyName" name="companyName" 
-                            value="<?= htmlspecialchars($empresa['nombre']) ?>">
+                            value="<?= htmlspecialchars($empresa['nombre']) ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="companyTaxId">NIT</label>
@@ -134,17 +134,92 @@ if ($result && $result->num_rows > 0) {
 
                 <div class="form-group">
                     <label for="companyLogo">Logo de la Empresa</label>
-                    <input type="file" class="form-control" id="companyLogo" name="companyLogo">
-                    <small>Tamaño recomendado: 200x200px. Formatos: JPG, PNG</small>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="flex: 1;">
+                            <input type="file" class="form-control" id="companyLogo" name="companyLogo" accept="image/*">
+                            <small style="color: #666; display: block; margin-top: 8px;">
+                                ✓ Formatos: JPG, PNG, GIF, WebP<br>
+                                ✓ Tamaño máximo: 5MB<br>
+                                ✓ Se redimensionará automáticamente a 500x500px
+                            </small>
+                        </div>
+                        <?php if (!empty($empresa['logo'])): ?>
+                        <div style="text-align: center;">
+                            <img src="<?= htmlspecialchars($empresa['logo']) ?>" 
+                                 alt="Logo de empresa" 
+                                 style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 1px solid #ddd; padding: 5px;">
+                            <p style="font-size: 12px; color: #666; margin-top: 8px;">Logo actual</p>
+                        </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="section-actions">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="btnGuardarEmpresa">
                         <i class="fas fa-save"></i> Guardar Información
                     </button>
                 </div>
             </div>
         </form>
+
+        <script>
+        document.getElementById('companyInfoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const btnGuardar = document.getElementById('btnGuardarEmpresa');
+            const btnText = btnGuardar.innerHTML;
+            
+            try {
+                btnGuardar.disabled = true;
+                btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                
+                const response = await fetch('../servicios/guardar_empresa_mejorado.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('Información de empresa guardada correctamente', 'success');
+                    if (data.logo_path) {
+                        setTimeout(() => location.reload(), 1500);
+                    }
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showNotification('Error al guardar: ' + error.message, 'error');
+            } finally {
+                btnGuardar.disabled = false;
+                btnGuardar.innerHTML = btnText;
+            }
+        });
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        </script>
 
         <?php
         $usuarioId = $_SESSION['usuario_id'] ?? null;
