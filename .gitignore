@@ -7,7 +7,6 @@
 Thumbs.db
 
 # Composer
-composer.lock
 composer.phar
 
 # Logs
@@ -65,3 +64,4 @@ Thumbs.db
 test.php
 prueba.php
 debug.php
+/.vscode

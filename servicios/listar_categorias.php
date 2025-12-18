@@ -23,13 +23,76 @@ try {
     $limite = isset($_GET['limite']) ? (int)$_GET['limite'] : 10;
     $offset = ($pagina - 1) * $limite;
     
+    // Parámetros de filtro
+    $estado = isset($_GET['estado']) ? $_GET['estado'] : '';
+    $orden = isset($_GET['orden']) ? $_GET['orden'] : 'id_desc';
+    $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+    
     // Validar parámetros
     if ($pagina < 1) $pagina = 1;
     if ($limite < 1 || $limite > 100) $limite = 10;
     
-    // Obtener total de registros
-    $queryTotal = "SELECT COUNT(*) as total FROM categorias";
-    $resultTotal = $conexion->query($queryTotal);
+    // Construir condiciones WHERE
+    $whereConditions = [];
+    $params = [];
+    $types = '';
+    
+    if ($estado !== '') {
+        $whereConditions[] = "c.estado = ?";
+        $params[] = (int)$estado;
+        $types .= 'i';
+    }
+    
+    if ($busqueda !== '') {
+        $whereConditions[] = "(c.nombre_cat LIKE ? OR c.subcategorias LIKE ?)";
+        $searchTerm = "%{$busqueda}%";
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+        $types .= 'ss';
+    }
+    
+    $whereClause = count($whereConditions) > 0 ? 'WHERE ' . implode(' AND ', $whereConditions) : '';
+    
+    // Determinar ORDER BY
+    $orderBy = 'c.id_categorias DESC';
+    switch ($orden) {
+        case 'id_asc':
+            $orderBy = 'c.id_categorias ASC';
+            break;
+        case 'id_desc':
+            $orderBy = 'c.id_categorias DESC';
+            break;
+        case 'nombre_asc':
+            $orderBy = 'c.nombre_cat ASC';
+            break;
+        case 'nombre_desc':
+            $orderBy = 'c.nombre_cat DESC';
+            break;
+        case 'productos_asc':
+            $orderBy = 'productos ASC';
+            break;
+        case 'productos_desc':
+            $orderBy = 'productos DESC';
+            break;
+    }
+    
+    // Obtener total de registros con filtros
+    $queryTotal = "SELECT COUNT(DISTINCT c.id_categorias) as total 
+                   FROM categorias c 
+                   LEFT JOIN materiales m ON c.id_categorias = m.id_categorias 
+                   {$whereClause}";
+    
+    if (count($params) > 0) {
+        $stmtTotal = $conexion->prepare($queryTotal);
+        if (!$stmtTotal) {
+            throw new Exception("Error preparando consulta de total: " . $conexion->error);
+        }
+        $stmtTotal->bind_param($types, ...$params);
+        $stmtTotal->execute();
+        $resultTotal = $stmtTotal->get_result();
+    } else {
+        $resultTotal = $conexion->query($queryTotal);
+    }
     
     if (!$resultTotal) {
         throw new Exception("Error en consulta de total: " . $conexion->error);
@@ -38,7 +101,7 @@ try {
     $row = $resultTotal->fetch_assoc();
     $total = $row ? $row['total'] : 0;
     
-    // Obtener categorías con paginación
+    // Obtener categorías con paginación y filtros
     $query = "SELECT 
                 c.id_categorias,
                 c.nombre_cat,
@@ -47,8 +110,9 @@ try {
                 COUNT(m.id_material) as productos
               FROM categorias c
               LEFT JOIN materiales m ON c.id_categorias = m.id_categorias
+              {$whereClause}
               GROUP BY c.id_categorias, c.nombre_cat, c.subcategorias, c.estado
-              ORDER BY c.id_categorias DESC
+              ORDER BY {$orderBy}
               LIMIT ? OFFSET ?";
     
     $stmt = $conexion->prepare($query);
@@ -56,7 +120,12 @@ try {
         throw new Exception("Error preparando consulta: " . $conexion->error);
     }
     
-    $stmt->bind_param("ii", $limite, $offset);
+    // Agregar parámetros de límite y offset
+    $params[] = $limite;
+    $params[] = $offset;
+    $types .= 'ii';
+    
+    $stmt->bind_param($types, ...$params);
     
     if (!$stmt->execute()) {
         throw new Exception("Error ejecutando consulta: " . $stmt->error);

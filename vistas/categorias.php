@@ -74,7 +74,7 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
                 <input type="text" placeholder="Buscar categorías...">
             </div>
             <div class="action-buttons">
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" id="btnToggleFilter">
                     <i class="fas fa-filter"></i> Filtrar
                 </button>
                 <?php if ($puedeCrear): ?>
@@ -86,6 +86,42 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
                     <i class="fas fa-plus"></i> Nueva Categoría
                 </button>
                 <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Panel de Filtros -->
+        <div class="filter-panel" id="filterPanel" style="display: none; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #333;">
+                <i class="fas fa-filter"></i> Filtros
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #666;">Estado</label>
+                    <select id="filterEstado" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="">Todos</option>
+                        <option value="1">Activas</option>
+                        <option value="0">Inactivas</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; font-size: 14px; color: #666;">Ordenar por</label>
+                    <select id="filterOrden" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="id_desc">Más recientes</option>
+                        <option value="id_asc">Más antiguos</option>
+                        <option value="nombre_asc">Nombre (A-Z)</option>
+                        <option value="nombre_desc">Nombre (Z-A)</option>
+                        <option value="productos_desc">Más productos</option>
+                        <option value="productos_asc">Menos productos</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button id="btnAplicarFiltros" class="btn btn-primary" style="padding: 8px 20px;">
+                    <i class="fas fa-check"></i> Aplicar
+                </button>
+                <button id="btnLimpiarFiltros" class="btn btn-secondary" style="padding: 8px 20px;">
+                    <i class="fas fa-times"></i> Limpiar
+                </button>
             </div>
         </div>
 
@@ -183,6 +219,11 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
     let totalPaginas = 1;
     const registrosPorPagina = 10;
 
+    // Variables de filtro
+    let filtroEstado = '';
+    let filtroOrden = 'id_desc';
+    let busqueda = '';
+
     cargarCategorias();
 
     sidebarToggle.addEventListener('click', () => {
@@ -275,7 +316,22 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
     function cargarCategorias(pagina = 1) {
         paginaActual = pagina;
         
-        fetch(`../servicios/listar_categorias.php?pagina=${pagina}&limite=${registrosPorPagina}`)
+        // Construir URL con parámetros de filtro
+        let url = `../servicios/listar_categorias.php?pagina=${pagina}&limite=${registrosPorPagina}`;
+        
+        if (filtroEstado !== '') {
+            url += `&estado=${filtroEstado}`;
+        }
+        
+        if (filtroOrden) {
+            url += `&orden=${filtroOrden}`;
+        }
+        
+        if (busqueda) {
+            url += `&busqueda=${encodeURIComponent(busqueda)}`;
+        }
+        
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 console.log('Datos recibidos:', data);
@@ -442,15 +498,50 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
 
     // Paginación manejada por actualizarPaginacion()
 
-    searchInput.addEventListener('input', function () {
-        const searchTerm = this.value.toLowerCase();
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        tableRows.forEach(row => {
-            const categoryName = row.cells[1].textContent.toLowerCase();
-            const categoryDesc = row.cells[2].textContent.toLowerCase();
-            row.style.display = (categoryName.includes(searchTerm) || categoryDesc.includes(searchTerm)) ? '' : 'none';
+    // Toggle panel de filtros
+    const btnToggleFilter = document.getElementById('btnToggleFilter');
+    const filterPanel = document.getElementById('filterPanel');
+    
+    if (btnToggleFilter) {
+        btnToggleFilter.addEventListener('click', function() {
+            if (filterPanel.style.display === 'none') {
+                filterPanel.style.display = 'block';
+                filterPanel.style.animation = 'fadeIn 0.3s ease';
+            } else {
+                filterPanel.style.display = 'none';
+            }
         });
+    }
+
+    // Aplicar filtros
+    const btnAplicarFiltros = document.getElementById('btnAplicarFiltros');
+    if (btnAplicarFiltros) {
+        btnAplicarFiltros.addEventListener('click', function() {
+            filtroEstado = document.getElementById('filterEstado').value;
+            filtroOrden = document.getElementById('filterOrden').value;
+            cargarCategorias(1);
+            showNotification('Filtros aplicados', 'success');
+        });
+    }
+
+    // Limpiar filtros
+    const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
+    if (btnLimpiarFiltros) {
+        btnLimpiarFiltros.addEventListener('click', function() {
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterOrden').value = 'id_desc';
+            filtroEstado = '';
+            filtroOrden = 'id_desc';
+            busqueda = '';
+            searchInput.value = '';
+            cargarCategorias(1);
+            showNotification('Filtros limpiados', 'info');
+        });
+    }
+
+    searchInput.addEventListener('input', function () {
+        busqueda = this.value.trim();
+        cargarCategorias(1);
     });
 
     function showNotification(message, type = 'info') {

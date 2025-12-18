@@ -56,7 +56,7 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
                 <i class="fas fa-user-circle"></i>
                 <div style="display: flex; flex-direction: column; gap: 2px; flex-wrap:wrap;">
                     <span>Hola, <?php echo htmlspecialchars($nombreCompleto); ?></span>
-                    <span style="font-size: 12px; color: rgba(255,255,255,0.7);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
+                    <span style="font-size: 12px; color: rgba(0,0,0,0.7);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
                 </div>
             </div>
         </div>
