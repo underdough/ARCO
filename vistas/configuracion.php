@@ -100,7 +100,7 @@ if ($result && $result->num_rows > 0) {
                             value="<?= htmlspecialchars($empresa['nombre']) ?>">
                     </div>
                     <div class="form-group">
-                        <label for="companyTaxId">NIF/CIF</label>
+                        <label for="companyTaxId">NIT</label>
                         <input type="text" class="form-control" id="companyTaxId" name="companyTaxId"
                             value="<?= htmlspecialchars($empresa['nif']) ?>">
                     </div>

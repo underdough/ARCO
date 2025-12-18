@@ -24,6 +24,7 @@ Navegación rápida por toda la documentación del sistema ARCO.
 
 ## 📖 Guías de Uso
 
+- **[Guía de Módulos](GUIA_MODULOS.md)** - Explicación detallada de cada módulo del sistema 📚
 - **[Guía General del Sistema](SISTEMA_ARCO_GUIA.md)** - Guía completa de uso
 - **[Solución de Problemas](SOLUCION_PROBLEMAS.md)** - Troubleshooting y soluciones
 
@@ -41,6 +42,7 @@ Ver carpeta `/tests` para archivos de prueba:
 ```
 /documentacion/
 ├── INDICE_DOCUMENTACION.md          # Este archivo
+├── GUIA_MODULOS.md                  # Guía de módulos (NUEVO)
 ├── INICIO_RAPIDO.md                 # Configuración rápida
 ├── INSTRUCCIONES_INSTALACION_MVP.md # Instalación completa
 ├── COMO_CONFIGURAR_EMAIL.md         # Guía de email
@@ -51,6 +53,7 @@ Ver carpeta `/tests` para archivos de prueba:
 ├── SISTEMA_PERMISOS.md              # Gestión de permisos
 ├── SISTEMA_ARCO_GUIA.md             # Guía general
 ├── SOLUCION_PROBLEMAS.md            # Troubleshooting
+├── INFORMACION_EMPRESA_COMPROBANTES.md # Datos de empresa
 ├── instalar_estadisticas.sql        # Script de BD
 └── proyecto_requerimientos_faltantes.txt # Requerimientos
 ```
@@ -59,21 +62,28 @@ Ver carpeta `/tests` para archivos de prueba:
 
 ### Administrador del Sistema
 1. [Inicio Rápido](INICIO_RAPIDO.md)
-2. [Arquitectura del Sistema](arquitectura_sistema.md)
-3. [Sistema de Permisos](SISTEMA_PERMISOS.md)
-4. [Configuración Email Producción](configuracion_email_produccion.md)
+2. [Guía de Módulos](GUIA_MODULOS.md)
+3. [Arquitectura del Sistema](arquitectura_sistema.md)
+4. [Sistema de Permisos](SISTEMA_PERMISOS.md)
+5. [Configuración Email Producción](configuracion_email_produccion.md)
 
 ### Gerente de Almacén
-1. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
-2. [Inicio Rápido](INICIO_RAPIDO.md)
-3. [Solución de Problemas](SOLUCION_PROBLEMAS.md)
+1. [Guía de Módulos](GUIA_MODULOS.md)
+2. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
+3. [Inicio Rápido](INICIO_RAPIDO.md)
+4. [Solución de Problemas](SOLUCION_PROBLEMAS.md)
 
 ### Supervisor
-1. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
-2. [Sistema de Permisos](SISTEMA_PERMISOS.md)
+1. [Guía de Módulos](GUIA_MODULOS.md)
+2. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
+3. [Sistema de Permisos](SISTEMA_PERMISOS.md)
 
 ### Almacenista
-1. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
+1. [Guía de Módulos](GUIA_MODULOS.md)
+2. [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
+
+### Funcionario
+1. [Guía de Módulos](GUIA_MODULOS.md) - Módulos de lectura
 
 ## 🔍 Búsqueda por Tema
 
@@ -89,6 +99,7 @@ Ver carpeta `/tests` para archivos de prueba:
 - [Especificación de Requerimientos](especificacion_requerimientos_software.md)
 
 ### Operación
+- [Guía de Módulos](GUIA_MODULOS.md)
 - [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
 - [Solución de Problemas](SOLUCION_PROBLEMAS.md)
 
