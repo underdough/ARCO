@@ -557,5 +557,9 @@ $rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
             console.error('Error en el dashboard:', e.error);
         });
     </script>
+    
+    <!-- Chatbot Widget -->
+    <link rel="stylesheet" href="../componentes/chatbot.css">
+    <script src="../componentes/chatbot.js"></script>
 </body>
 </html>

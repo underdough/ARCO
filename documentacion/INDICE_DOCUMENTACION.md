@@ -25,6 +25,7 @@ Navegación rápida por toda la documentación del sistema ARCO.
 ## 📖 Guías de Uso
 
 - **[Guía de Módulos](GUIA_MODULOS.md)** - Explicación detallada de cada módulo del sistema 📚
+- **[Guía del Chatbot](CHATBOT_GUIA.md)** - Asistente virtual del sistema 🤖
 - **[Guía General del Sistema](SISTEMA_ARCO_GUIA.md)** - Guía completa de uso
 - **[Solución de Problemas](SOLUCION_PROBLEMAS.md)** - Troubleshooting y soluciones
 
@@ -42,7 +43,8 @@ Ver carpeta `/tests` para archivos de prueba:
 ```
 /documentacion/
 ├── INDICE_DOCUMENTACION.md          # Este archivo
-├── GUIA_MODULOS.md                  # Guía de módulos (NUEVO)
+├── GUIA_MODULOS.md                  # Guía de módulos
+├── CHATBOT_GUIA.md                  # Guía del chatbot (NUEVO)
 ├── INICIO_RAPIDO.md                 # Configuración rápida
 ├── INSTRUCCIONES_INSTALACION_MVP.md # Instalación completa
 ├── COMO_CONFIGURAR_EMAIL.md         # Guía de email
@@ -100,6 +102,7 @@ Ver carpeta `/tests` para archivos de prueba:
 
 ### Operación
 - [Guía de Módulos](GUIA_MODULOS.md)
+- [Guía del Chatbot](CHATBOT_GUIA.md)
 - [Guía General del Sistema](SISTEMA_ARCO_GUIA.md)
 - [Solución de Problemas](SOLUCION_PROBLEMAS.md)
 
