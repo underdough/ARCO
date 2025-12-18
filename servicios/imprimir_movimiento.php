@@ -9,9 +9,9 @@ $id = (int) $_GET['id'];
 $conexion = ConectarDB();
 
 // Obtener datos de empresa
-$sqlEmpresa = "SELECT * FROM empresa LIMIT 1";
+$sqlEmpresa = "SELECT * FROM empresa WHERE id = 2";
 $resEmpresa = $conexion->query($sqlEmpresa);
-$empresa = $resEmpresa ? $resEmpresa->fetch_assoc() : null;
+$empresa = $resEmpresa && $resEmpresa->num_rows > 0 ? $resEmpresa->fetch_assoc() : null;
 
 $sql = "SELECT 
             m.id, 
@@ -76,7 +76,7 @@ $tipoLabel = isset($tipoLabels[$mov['tipo']]) ? $tipoLabels[$mov['tipo']] : ucfi
 </head>
 <body onload="window.print()">
     <div class="header">
-        <h1><?= $empresa ? htmlspecialchars($empresa['nombre']) : 'ARCO' ?></h1>
+        <h1>Empresa: <?= $empresa ? htmlspecialchars($empresa['nombre']) : 'ARCO' ?></h1>
         <p><?= $empresa ? htmlspecialchars($empresa['direccion']) : '' ?></p>
         <p><?= $empresa ? htmlspecialchars($empresa['telefono']) : '' ?></p>
     </div>

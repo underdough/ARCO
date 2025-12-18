@@ -34,3 +34,30 @@ function ConectarDB() {
     error_log("Error de conexión MySQL: Acceso denegado para usuario 'root'@'localhost'. Verifique la contraseña del usuario root en MySQL/XAMPP.");
     die("Error de conexión a la base de datos. Por favor configure correctamente la contraseña de MySQL en servicios/conexion.php.");
 }
+
+/**
+ * Obtiene la información de la empresa desde la base de datos
+ * @return array Información de la empresa
+ */
+function obtenerInfoEmpresa() {
+    $conexion = ConectarDB();
+    
+    $empresa = [
+        'nombre' => 'ARCO',
+        'nif' => '',
+        'direccion' => '',
+        'ciudad' => '',
+        'telefono' => '',
+        'email' => ''
+    ];
+    
+    $sql = "SELECT * FROM empresa WHERE id = 2";
+    $result = $conexion->query($sql);
+    
+    if ($result && $result->num_rows > 0) {
+        $empresa = $result->fetch_assoc();
+    }
+    
+    $conexion->close();
+    return $empresa;
+}
