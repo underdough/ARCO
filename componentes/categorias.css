@@ -20,6 +20,7 @@
 
 * {
     scroll-behavior: smooth;
+    font-family: 'Poppins';
 }
 
 body {
@@ -33,7 +34,7 @@ body {
 
 /* Proteger fuente de íconos */
 i, .fas, .fa, .far, .fab, .fal, .fad {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 .sidebar {
@@ -424,6 +425,12 @@ tr:hover {
     border-color: var(--primary-color);
 }
 
+.page-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /* Modal mejorado manteniendo el diseño existente */
 .modal {
     display: none;
@@ -620,4 +627,178 @@ select.form-control {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+
+/* ========== RESPONSIVE PARA MÓVILES Y TABLETS ========== */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+        padding-top: 70px;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        position: relative;
+        top: 0;
+        margin-bottom: 20px;
+    }
+    
+    .header h2 {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    
+    .search-bar {
+        width: 100%;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .action-buttons .btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    /* Tabla responsive - convertir a tarjetas */
+    .categories-table {
+        max-height: none;
+        overflow: visible;
+        background: transparent;
+        box-shadow: none;
+    }
+    
+    table {
+        box-shadow: none;
+    }
+    
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tbody tr {
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    tbody tr:hover {
+        background: white;
+    }
+    
+    td {
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+        padding: 12px 10px 12px 45%;
+        text-align: right;
+        font-size: 14px;
+    }
+    
+    td:last-child {
+        border-bottom: none;
+        text-align: center;
+        padding-left: 10px;
+        padding-top: 15px;
+    }
+    
+    td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 40%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    
+    /* Etiquetas para las tarjetas móviles */
+    td:nth-of-type(1):before { content: "ID"; }
+    td:nth-of-type(2):before { content: "Nombre"; }
+    td:nth-of-type(3):before { content: "Descripción"; }
+    td:nth-of-type(4):before { content: "Acciones"; }
+    
+    .actions {
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .action-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Modal responsive */
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header {
+        padding: 15px;
+    }
+    
+    .modal form {
+        padding: 15px;
+    }
+    
+    .modal-footer {
+        padding: 15px;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .main-content {
+        margin-left: 250px;
+        padding: 15px;
+    }
+    
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        width: 250px;
+    }
 }

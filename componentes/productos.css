@@ -31,7 +31,7 @@ body {
 
 /* Proteger fuente de íconos */
 i, .fas, .fa, .far, .fab, .fal, .fad {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 .sidebar {
@@ -531,6 +531,12 @@ tbody tr:hover {
 }
 
 .page-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.page-item.disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
@@ -563,31 +569,41 @@ tbody tr:hover {
 
 @media (max-width: 768px) {
     .sidebar {
-        width: 70px;
+        width: 250px;
         transform: translateX(-100%);
     }
     
-    .sidebar.collapsed {
+    .sidebar.collapsed,
+    .sidebar.mobile-open {
         transform: translateX(0);
     }
     
-    .sidebar-header h1, .menu-text {
-        opacity: 0;
-        pointer-events: none;
+    .sidebar.mobile-open .sidebar-header h1,
+    .sidebar.mobile-open .menu-text {
+        opacity: 1;
+        pointer-events: auto;
     }
     
     .main-content {
         margin-left: 0;
+        padding: 15px;
+        padding-top: 70px;
     }
     
     .sidebar-toggle {
-        display: block;
+        display: none;
     }
     
     .header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 15px;
+        padding: 15px;
+    }
+    
+    .header h2 {
+        font-size: 1.2rem;
+        text-align: center;
     }
     
     .search-bar {
@@ -596,17 +612,25 @@ tbody tr:hover {
     
     .filter-controls {
         width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
     }
     
     .filter-controls select {
-        min-width: 120px;
-        flex: 1;
+        width: 100%;
     }
     
     .action-buttons {
         width: 100%;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .action-buttons .btn,
+    #btnAddProduct,
+    #sortSelect {
+        width: 100%;
+        justify-content: center;
     }
     
     /* Convertir tabla en tarjetas para móvil */
@@ -627,115 +651,92 @@ tbody tr:hover {
     }
     
     tbody tr {
-        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        border-radius: 16px;
-        margin-bottom: 20px;
-        padding: 24px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        border: 2px solid #e9ecef;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--primary-color);
         position: relative;
-        overflow: hidden;
-    }
-    
-    tbody tr::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: linear-gradient(180deg, var(--primary-color) 0%, #2d7a00 100%);
-        border-radius: 0 2px 2px 0;
     }
     
     tbody tr:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-        border-color: var(--primary-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     
     td {
         border: none;
         border-bottom: 1px solid #f0f0f0;
         position: relative;
-        padding: 14px 0;
+        padding: 12px 10px 12px 45%;
         text-align: right;
-        padding-left: 50%;
-        white-space: nowrap;
-        font-size: 14px;
+        white-space: normal;
+        font-size: 13px;
         line-height: 1.4;
-    }
-    
-    td:last-child {
-        border-bottom: none;
-        text-align: center;
-        padding-left: 0;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 2px solid #f0f0f0;
+        word-break: break-word;
     }
     
     td:before {
         content: attr(data-label);
         position: absolute;
         left: 8px;
-        width: 45%;
-        padding-right: 12px;
+        width: 40%;
+        padding-right: 10px;
         white-space: nowrap;
         text-align: left;
-        font-weight: 700;
+        font-weight: 600;
         color: var(--primary-color);
-        font-size: 13px;
+        font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
     
     /* Etiquetas para las tarjetas móviles */
-    td:nth-of-type(1):before { content: "ID:"; }
-    td:nth-of-type(2):before { content: "Nombre:"; }
-    td:nth-of-type(3):before { content: "Categoría:"; }
-    td:nth-of-type(4):before { content: "Stock:"; }
-    td:nth-of-type(5):before { content: "Mín. Alarma:"; }
-    td:nth-of-type(6):before { content: "Estado:"; }
-    td:nth-of-type(7):before { content: "Acciones:"; }
+    td:nth-of-type(1):before { content: "ID"; }
+    td:nth-of-type(2):before { content: "Nombre"; }
+    td:nth-of-type(3):before { content: "Categoría"; }
+    td:nth-of-type(4):before { content: "Stock"; }
+    td:nth-of-type(5):before { content: "Precio"; }
+    td:nth-of-type(6):before { content: "Estado"; }
+    
+    /* Celda de acciones - clase específica */
+    td.td-acciones {
+        border-bottom: none;
+        border-top: 1px solid #f0f0f0;
+        text-align: center;
+        padding: 15px 10px;
+        display: block;
+        width: 100%;
+    }
+    
+    td.td-acciones:before {
+        display: none;
+    }
+    
+    td.td-acciones .actions {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+    }
+    
+    td.td-acciones .action-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 6px;
+        flex-shrink: 0;
+    }
+    
+    td.td-acciones .action-icon i {
+        font-size: 12px;
+    }
     
     .modal-content {
         width: 95%;
         margin: 10px;
-    }
-    
-    /* Responsive para botones de acción */
-    .actions {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .action-icon {
-        width: 32px;
-        height: 32px;
-    }
-    
-    .products-table th:last-child,
-    .products-table td:last-child {
-        width: 70px;
-        min-width: 70px;
-    }
-    
-    .actions {
-        gap: 15px;
-        margin-top: 10px;
-        justify-content: center;
-    }
-    
-    .action-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-    }
-    
-    .action-icon:hover {
-        transform: translateY(-2px) scale(1.1);
     }
 }
 

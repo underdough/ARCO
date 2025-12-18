@@ -220,6 +220,8 @@ $puedeExportar = in_array('exportar', $permisos);
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let movimientosData = []; // Variable para almacenar todos los movimientos
+            let paginaActual = 1;
+            const itemsPorPagina = 20; // 10 items por página para mejor visualización
 
             function cargarMovimientos(filtros = {}) {
                 // Mostrar indicador de carga
@@ -245,7 +247,8 @@ $puedeExportar = in_array('exportar', $permisos);
                     .then(res => res.json())
                     .then(data => {
                         movimientosData = data;
-                        mostrarMovimientos(data);
+                        paginaActual = 1; // Reset a página 1 cuando se cargan nuevos datos
+                        mostrarMovimientos();
                     })
                     .catch(err => {
                         console.error('Error al cargar movimientos:', err);
@@ -253,16 +256,22 @@ $puedeExportar = in_array('exportar', $permisos);
                     });
             }
 
-            function mostrarMovimientos(movimientos) {
+            function mostrarMovimientos() {
                 const tbody = document.querySelector('.movements-table tbody');
                 tbody.innerHTML = '';
 
-                if (movimientos.length === 0) {
+                if (movimientosData.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">No se encontraron movimientos</td></tr>';
+                    actualizarPaginacion(0);
                     return;
                 }
 
-                movimientos.forEach(mov => {
+                // Calcular índices de paginación
+                const inicio = (paginaActual - 1) * itemsPorPagina;
+                const fin = inicio + itemsPorPagina;
+                const movimientosPagina = movimientosData.slice(inicio, fin);
+
+                movimientosPagina.forEach(mov => {
                     const fila = document.createElement('tr');
                     fila.innerHTML = `
                         <td>${mov.id}</td>
@@ -307,75 +316,184 @@ $puedeExportar = in_array('exportar', $permisos);
                         window.location.href = `../servicios/imprimir_movimiento.php?id=${mov.id}`;
                     });
                 });
+
+                actualizarPaginacion(movimientosData.length);
+            }
+
+            function actualizarPaginacion(totalItems) {
+                const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+                const paginationDiv = document.querySelector('.pagination');
+                paginationDiv.innerHTML = '';
+
+                if (totalPaginas <= 1) {
+                    paginationDiv.style.display = 'none';
+                    return;
+                }
+
+                paginationDiv.style.display = 'flex';
+
+                // Botón anterior
+                const btnAnterior = document.createElement('div');
+                btnAnterior.className = 'page-item' + (paginaActual === 1 ? ' disabled' : '');
+                btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                btnAnterior.addEventListener('click', () => {
+                    if (paginaActual > 1) {
+                        paginaActual--;
+                        mostrarMovimientos();
+                    }
+                });
+                paginationDiv.appendChild(btnAnterior);
+
+                // Páginas
+                let inicio = Math.max(1, paginaActual - 2);
+                let fin = Math.min(totalPaginas, paginaActual + 2);
+
+                if (inicio > 1) {
+                    const primera = document.createElement('div');
+                    primera.className = 'page-item';
+                    primera.textContent = '1';
+                    primera.addEventListener('click', () => {
+                        paginaActual = 1;
+                        mostrarMovimientos();
+                    });
+                    paginationDiv.appendChild(primera);
+
+                    if (inicio > 2) {
+                        const puntos = document.createElement('div');
+                        puntos.className = 'page-item disabled';
+                        puntos.textContent = '...';
+                        paginationDiv.appendChild(puntos);
+                    }
+                }
+
+                for (let i = inicio; i <= fin; i++) {
+                    const pageItem = document.createElement('div');
+                    pageItem.className = 'page-item' + (i === paginaActual ? ' active' : '');
+                    pageItem.textContent = i;
+                    pageItem.addEventListener('click', () => {
+                        paginaActual = i;
+                        mostrarMovimientos();
+                    });
+                    paginationDiv.appendChild(pageItem);
+                }
+
+                if (fin < totalPaginas) {
+                    if (fin < totalPaginas - 1) {
+                        const puntos = document.createElement('div');
+                        puntos.className = 'page-item disabled';
+                        puntos.textContent = '...';
+                        paginationDiv.appendChild(puntos);
+                    }
+
+                    const ultima = document.createElement('div');
+                    ultima.className = 'page-item';
+                    ultima.textContent = totalPaginas;
+                    ultima.addEventListener('click', () => {
+                        paginaActual = totalPaginas;
+                        mostrarMovimientos();
+                    });
+                    paginationDiv.appendChild(ultima);
+                }
+
+                // Botón siguiente
+                const btnSiguiente = document.createElement('div');
+                btnSiguiente.className = 'page-item' + (paginaActual === totalPaginas ? ' disabled' : '');
+                btnSiguiente.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                btnSiguiente.addEventListener('click', () => {
+                    if (paginaActual < totalPaginas) {
+                        paginaActual++;
+                        mostrarMovimientos();
+                    }
+                });
+                paginationDiv.appendChild(btnSiguiente);
             }
 
             // Funcionalidad del botón de filtrar
             const filterBtn = document.querySelector('.btn-secondary');
             const filterPanel = document.getElementById('filterPanel');
 
-            filterBtn.addEventListener('click', function() {
-                if (filterPanel.style.display === 'none' || filterPanel.style.display === '') {
-                    filterPanel.style.display = 'block';
-                } else {
-                    filterPanel.style.display = 'none';
-                }
-            });
+            if (filterBtn && filterPanel) {
+                filterBtn.addEventListener('click', function() {
+                    if (filterPanel.style.display === 'none' || filterPanel.style.display === '') {
+                        filterPanel.style.display = 'block';
+                    } else {
+                        filterPanel.style.display = 'none';
+                    }
+                });
+            }
 
             // Funcionalidad del formulario de filtros
-            document.getElementById('filterForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+            const filterForm = document.getElementById('filterForm');
+            if (filterForm) {
+                filterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-                const filtros = {
-                    tipo: document.getElementById('filterTipo').value,
-                    usuario: document.getElementById('filterUsuario').value,
-                    fecha: document.getElementById('filterFecha').value
-                };
+                    const filtros = {
+                        tipo: document.getElementById('filterTipo').value,
+                        usuario: document.getElementById('filterUsuario').value,
+                        fecha: document.getElementById('filterFecha').value
+                    };
 
-                cargarMovimientos(filtros);
-            });
+                    cargarMovimientos(filtros);
+                });
+            }
 
             // Funcionalidad del botón restablecer
-            document.getElementById('btnResetFilter').addEventListener('click', function() {
-                document.getElementById('filterForm').reset();
-                cargarMovimientos(); // Cargar todos los movimientos
-            });
+            const btnResetFilter = document.getElementById('btnResetFilter');
+            if (btnResetFilter) {
+                btnResetFilter.addEventListener('click', function() {
+                    if (filterForm) {
+                        filterForm.reset();
+                    }
+                    cargarMovimientos(); // Cargar todos los movimientos
+                });
+            }
 
             // Funcionalidad de la barra de búsqueda
             const searchInput = document.getElementById('searchInput');
             let searchTimeout;
 
-            searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    const busqueda = this.value.trim();
-                    console.log('Buscando:', busqueda); // Para debug
-                    if (busqueda.length >= 1 || busqueda.length === 0) {
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const busqueda = this.value.trim();
+                        console.log('Buscando:', busqueda); // Para debug
+                        if (busqueda.length >= 1 || busqueda.length === 0) {
+                            cargarMovimientos({
+                                busqueda: busqueda
+                            });
+                        }
+                    }, 300); // Reducido a 300ms para respuesta más rápida
+                });
+
+                // También agregar evento para búsqueda al presionar Enter
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        clearTimeout(searchTimeout);
+                        const busqueda = this.value.trim();
                         cargarMovimientos({
                             busqueda: busqueda
                         });
                     }
-                }, 300); // Reducido a 300ms para respuesta más rápida
-            });
-
-            // También agregar evento para búsqueda al presionar Enter
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    clearTimeout(searchTimeout);
-                    const busqueda = this.value.trim();
-                    cargarMovimientos({
-                        busqueda: busqueda
-                    });
-                }
-            });
+                });
+            }
 
             // Mostrar modal al hacer clic en "Nuevo Movimiento"
-            document.getElementById('btnAddMovement').addEventListener('click', function() {
-                document.getElementById('movementModal').style.display = 'flex';
-            });
+            const btnAddMovement = document.getElementById('btnAddMovement');
+            if (btnAddMovement) {
+                btnAddMovement.addEventListener('click', function() {
+                    document.getElementById('movementModal').style.display = 'flex';
+                });
+            }
+            
             // Cerrar modal al hacer clic en "Cancelar" o la X
-            document.querySelector('#movementModal .close-modal').addEventListener('click', () => {
-                document.getElementById('movementModal').style.display = 'none';
-            });
+            const closeModalBtn = document.querySelector('#movementModal .close-modal');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => {
+                    document.getElementById('movementModal').style.display = 'none';
+                });
+            }
 
             // MANTENER ESTE BLOQUE (funcionalidad Escape):
             document.addEventListener('keydown', function(event) {
@@ -394,41 +512,44 @@ $puedeExportar = in_array('exportar', $permisos);
                 }
             });
 
-            document.getElementById('movementForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+            const movementForm = document.getElementById('movementForm');
+            if (movementForm) {
+                movementForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-                const tipo = document.getElementById('movementType').value;
-                const fecha = document.getElementById('movementDate').value;
-                const producto = document.getElementById('movementProduct').value;
-                const cantidad = document.getElementById('movementQuantity').value;
-                const notas = document.getElementById('movementNotes').value;
+                    const tipo = document.getElementById('movementType').value;
+                    const fecha = document.getElementById('movementDate').value;
+                    const producto = document.getElementById('movementProduct').value;
+                    const cantidad = document.getElementById('movementQuantity').value;
+                    const notas = document.getElementById('movementNotes').value;
 
-                const formData = new FormData();
-                formData.append('tipo', tipo);
-                formData.append('fecha', fecha);
-                formData.append('producto', producto);
-                formData.append('cantidad', cantidad);
-                formData.append('notas', notas);
+                    const formData = new FormData();
+                    formData.append('tipo', tipo);
+                    formData.append('fecha', fecha);
+                    formData.append('producto', producto);
+                    formData.append('cantidad', cantidad);
+                    formData.append('notas', notas);
 
-                fetch('../servicios/guardar_movimiento.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            alert('✅ ' + data.message);
-                            document.getElementById('movementModal').style.display = 'none';
-                            cargarMovimientos(); // vuelve a cargar la tabla
-                        } else {
-                            alert('❌ ' + data.message);
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Error al guardar movimiento:', err);
-                        alert('❌ Error al enviar los datos');
-                    });
-            });
+                    fetch('../servicios/guardar_movimiento.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert('✅ ' + data.message);
+                                document.getElementById('movementModal').style.display = 'none';
+                                cargarMovimientos(); // vuelve a cargar la tabla
+                            } else {
+                                alert('❌ ' + data.message);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error al guardar movimiento:', err);
+                            alert('❌ Error al enviar los datos');
+                        });
+                });
+            }
 
             function cargarProductos() {
                 fetch('../servicios/obtener_productos.php')
@@ -462,13 +583,19 @@ $puedeExportar = in_array('exportar', $permisos);
                 document.getElementById('viewMovementModal').style.display = 'flex';
             }
 
-            document.getElementById('closeViewModal').addEventListener('click', () => {
-                document.getElementById('viewMovementModal').style.display = 'none';
-            });
+            const closeViewModal = document.getElementById('closeViewModal');
+            if (closeViewModal) {
+                closeViewModal.addEventListener('click', () => {
+                    document.getElementById('viewMovementModal').style.display = 'none';
+                });
+            }
 
-            document.getElementById('cerrarDetalleBtn').addEventListener('click', () => {
-                document.getElementById('viewMovementModal').style.display = 'none';
-            });
+            const cerrarDetalleBtn = document.getElementById('cerrarDetalleBtn');
+            if (cerrarDetalleBtn) {
+                cerrarDetalleBtn.addEventListener('click', () => {
+                    document.getElementById('viewMovementModal').style.display = 'none';
+                });
+            }
 
             cargarProductos();
 

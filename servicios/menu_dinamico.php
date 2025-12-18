@@ -22,6 +22,7 @@ function obtenerMenuUsuario($rol) {
         'movimientos' => 'movimientos.php',
         'usuarios' => 'gestion_usuarios.php',
         'reportes' => 'reportes.php',
+        'estadisticas' => 'estadisticas.php',
         'configuracion' => 'configuracion.php',
         'ordenes_compra' => 'ordenes_compra.php',
         'devoluciones' => 'devoluciones.php',
@@ -38,6 +39,7 @@ function obtenerMenuUsuario($rol) {
         'movimientos' => 'Movimientos de Inventario',
         'usuarios' => 'Gestión de Usuarios',
         'reportes' => 'Reportes y Estadísticas',
+        'estadisticas' => 'Estadísticas',
         'configuracion' => 'Configuración del Sistema',
         'ordenes_compra' => 'Órdenes de Compra',
         'devoluciones' => 'Gestión de Devoluciones',
@@ -54,18 +56,19 @@ function obtenerMenuUsuario($rol) {
         'movimientos' => 'fa-exchange-alt',
         'usuarios' => 'fa-users',
         'reportes' => 'fa-chart-bar',
+        'estadisticas' => 'fa-chart-line',
         'configuracion' => 'fa-cog',
         'ordenes_compra' => 'fa-shopping-cart',
         'devoluciones' => 'fa-undo',
         'permisos' => 'fa-user-shield',
         'anomalias' => 'fa-exclamation-circle',
-        'anomalias_reportes' => 'fa-chart-line'
+        'anomalias_reportes' => 'fa-chart-pie'
     ];
     
     // Módulos que existen actualmente en el sistema
     $modulosExistentes = [
         'dashboard', 'productos', 'categorias', 'movimientos', 
-        'usuarios', 'reportes', 'configuracion',
+        'usuarios', 'reportes', 'estadisticas', 'configuracion',
         'ordenes_compra', 'devoluciones', 'anomalias', 'anomalias_reportes'
     ];
     
@@ -127,94 +130,102 @@ function generarMenuHTML($paginaActual = '') {
         
         /* Estilos base del sidebar */
         .sidebar {
-            display: flex !important;
-            flex-direction: column !important;
-            height: 100vh !important;
-            position: fixed !important;
-            overflow: hidden !important;
-            z-index: 1000 !important;
-            transition: transform 0.3s ease !important;
-            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            overflow: hidden;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         .sidebar *:not(i):not(.fas):not(.fa):not(.far):not(.fab) {
-            font-family: inherit !important;
+            font-family: inherit;
         }
         .sidebar i,
         .sidebar .fas,
         .sidebar .fa,
         .sidebar .far,
         .sidebar .fab {
-            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free" !important;
+            font-family: "Font Awesome 6 Free", "Font Awesome 5 Free";
         }
         .sidebar-header {
-            flex-shrink: 0 !important;
+            flex-shrink: 0;
         }
         .sidebar-menu {
-            display: flex !important;
-            flex-direction: column !important;
-            flex: 1 !important;
-            min-height: 0 !important;
-            overflow: hidden !important;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
         }
         .sidebar-menu .menu-items-container {
-            flex: 1 !important;
-            overflow-y: auto !important;
-            padding: 5px 0 !important;
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px 0;
+            /* Scroll invisible pero funcional */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE y Edge */
+        }
+        .sidebar-menu .menu-items-container::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
         }
         .sidebar-menu .menu-item {
-            display: flex !important;
-            align-items: center !important;
-            padding: 8px 15px !important;
-            margin: 1px 6px !important;
-            border-radius: 5px !important;
-            font-size: 12px !important;
-            text-decoration: none !important;
-            color: inherit !important;
-            transition: background 0.2s !important;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            margin: 1px 6px;
+            border-radius: 5px;
+            font-size: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: background 0.2s;
         }
         .sidebar-menu .menu-item i {
-            width: 20px !important;
-            margin-right: 10px !important;
-            text-align: center !important;
+            width: 20px;
+            margin-right: 10px;
+            text-align: center;
         }
         .sidebar-menu .menu-separator {
-            height: 1px !important;
-            background: rgba(255,255,255,0.15) !important;
-            margin: 6px 6px !important;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+            margin: 6px 6px;
         }
         .sidebar-menu .menu-footer {
-            flex-shrink: 0 !important;
-            padding: 10px 6px 10px 6px !important;
-            margin: 0 !important;
-            border-top: 1px solid rgba(255,255,255,0.15) !important;
-            background: inherit !important;
-            box-sizing: border-box !important;
+            flex-shrink: 0;
+            padding: 10px 6px 10px 6px;
+            margin: 0;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            background: inherit;
+            box-sizing: border-box;
         }
         .sidebar-menu .menu-cerrar,
         .sidebar .menu-cerrar {
-            display: flex !important;
-            align-items: center !important;
-            padding: 8px 9px !important;
-            margin: 0 !important;
-            border-radius: 5px !important;
-            font-size: 12px !important;
-            text-decoration: none !important;
-            color: inherit !important;
-            background: rgba(255,255,255,0.05) !important;
-            box-sizing: border-box !important;
-            width: 100% !important;
+            display: flex;
+            align-items: center;
+            padding: 8px 9px;
+            margin: 0;
+            border-radius: 5px;
+            font-size: 12px;
+            text-decoration: none;
+            color: inherit;
+            background: rgba(255,255,255,0.05);
+            box-sizing: border-box;
+            width: 100%;
         }
         .sidebar-menu .menu-cerrar:hover,
         .sidebar .menu-cerrar:hover {
-            background: rgba(220,53,69,0.3) !important;
+            background: rgba(220,53,69,0.3);
         }
         .sidebar-menu .menu-cerrar i,
         .sidebar .menu-cerrar i {
-            width: 20px !important;
-            min-width: 20px !important;
-            margin-right: 10px !important;
-            text-align: center !important;
-            flex-shrink: 0 !important;
+            width: 20px;
+            min-width: 20px;
+            margin-right: 10px;
+            text-align: center;
+            flex-shrink: 0;
         }
         
         /* Botón flotante para móviles */
@@ -266,24 +277,24 @@ function generarMenuHTML($paginaActual = '') {
         /* Media query para móviles */
         @media (max-width: 768px) {
             .sidebar {
-                width: 250px !important;
-                transform: translateX(-100%) !important;
+                width: 250px;
+                transform: translateX(-100%);
             }
             .sidebar.mobile-open {
-                transform: translateX(0) !important;
-                width: 250px !important;
+                transform: translateX(0);
+                width: 250px;
             }
             .sidebar.mobile-open .sidebar-header h1,
             .sidebar.mobile-open .menu-text {
-                opacity: 1 !important;
-                pointer-events: auto !important;
+                opacity: 1;
+                pointer-events: auto;
             }
             /* Ocultar botón toggle original del dashboard */
             .sidebar-toggle {
-                display: none !important;
+                display: none;
             }
             .menu-toggle-btn {
-                display: flex !important;
+                display: flex;
                 align-items: center;
                 justify-content: center;
             }
@@ -303,7 +314,7 @@ function generarMenuHTML($paginaActual = '') {
     // Agrupar módulos por categoría
     $gruposPrincipales = ['dashboard', 'productos', 'categorias', 'movimientos'];
     $gruposGestion = ['usuarios', 'ordenes_compra', 'devoluciones'];
-    $gruposReportes = ['reportes', 'anomalias', 'anomalias_reportes'];
+    $gruposReportes = ['reportes', 'estadisticas', 'anomalias', 'anomalias_reportes'];
     $gruposConfig = ['configuracion'];
     
     $modulosRenderizados = [];

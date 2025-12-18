@@ -157,6 +157,11 @@ $puedeEliminar = in_array('eliminar', $permisos);
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const pageItems = document.querySelectorAll('.page-item');
+    
+    // Variables de paginación
+    let paginaActual = 1;
+    let totalPaginas = 1;
+    const registrosPorPagina = 10;
 
     cargarCategorias();
 
@@ -247,16 +252,39 @@ $puedeEliminar = in_array('eliminar', $permisos);
             });
     });
 
-    function cargarCategorias() {
-        fetch('../servicios/listar_categorias.php')
+    function cargarCategorias(pagina = 1) {
+        paginaActual = pagina;
+        
+        fetch(`../servicios/listar_categorias.php?pagina=${pagina}&limite=${registrosPorPagina}`)
             .then(res => res.json())
             .then(data => {
-
-                const categorias = data.data || data;
+                console.log('Datos recibidos:', data);
+                
+                // Validar que data sea un objeto
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Respuesta inválida del servidor');
+                }
+                
+                // Obtener array de categorías
+                let categorias = data.data || data.categorias || [];
+                
+                // Asegurarse de que sea un array
+                if (!Array.isArray(categorias)) {
+                    console.error('categorias no es un array:', categorias);
+                    categorias = [];
+                }
+                
+                const total = data.total || categorias.length;
+                totalPaginas = Math.ceil(total / registrosPorPagina);
 
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = '';
 
+                if (categorias.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #999;">No se encontraron categorías</td></tr>';
+                    actualizarPaginacion();
+                    return;
+                }
 
                 categorias.forEach(cat => {
                     const tr = document.createElement('tr');
@@ -298,17 +326,101 @@ $puedeEliminar = in_array('eliminar', $permisos);
 
                     tbody.appendChild(tr);
                 });
+                
+                actualizarPaginacion();
+            })
+            .catch(error => {
+                console.error('Error cargando categorías:', error);
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: #ef4444;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    Error al cargar las categorías<br>
+                    <small style="color: #999; margin-top: 5px; display: block;">${error.message}</small>
+                    <button onclick="cargarCategorias()" style="margin-top: 15px; padding: 8px 16px; background: #395886; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-sync-alt"></i> Reintentar
+                    </button>
+                </td></tr>`;
             });
     }
-
-    pageItems.forEach(item => {
-        item.addEventListener('click', function () {
-            if (!this.classList.contains('active')) {
-                pageItems.forEach(p => p.classList.remove('active'));
-                this.classList.add('active');
+    
+    function actualizarPaginacion() {
+        const paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = '';
+        
+        // Botón anterior
+        const btnPrev = document.createElement('div');
+        btnPrev.className = 'page-item' + (paginaActual === 1 ? ' disabled' : '');
+        btnPrev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        btnPrev.addEventListener('click', () => {
+            if (paginaActual > 1) {
+                cargarCategorias(paginaActual - 1);
             }
         });
-    });
+        paginationContainer.appendChild(btnPrev);
+        
+        // Páginas
+        const maxBotones = 5;
+        let inicio = Math.max(1, paginaActual - Math.floor(maxBotones / 2));
+        let fin = Math.min(totalPaginas, inicio + maxBotones - 1);
+        
+        if (fin - inicio < maxBotones - 1) {
+            inicio = Math.max(1, fin - maxBotones + 1);
+        }
+        
+        // Primera página
+        if (inicio > 1) {
+            const btn1 = document.createElement('div');
+            btn1.className = 'page-item';
+            btn1.textContent = '1';
+            btn1.addEventListener('click', () => cargarCategorias(1));
+            paginationContainer.appendChild(btn1);
+            
+            if (inicio > 2) {
+                const dots = document.createElement('div');
+                dots.className = 'page-item disabled';
+                dots.textContent = '...';
+                paginationContainer.appendChild(dots);
+            }
+        }
+        
+        // Páginas intermedias
+        for (let i = inicio; i <= fin; i++) {
+            const btn = document.createElement('div');
+            btn.className = 'page-item' + (i === paginaActual ? ' active' : '');
+            btn.textContent = i;
+            btn.addEventListener('click', () => cargarCategorias(i));
+            paginationContainer.appendChild(btn);
+        }
+        
+        // Última página
+        if (fin < totalPaginas) {
+            if (fin < totalPaginas - 1) {
+                const dots = document.createElement('div');
+                dots.className = 'page-item disabled';
+                dots.textContent = '...';
+                paginationContainer.appendChild(dots);
+            }
+            
+            const btnLast = document.createElement('div');
+            btnLast.className = 'page-item';
+            btnLast.textContent = totalPaginas;
+            btnLast.addEventListener('click', () => cargarCategorias(totalPaginas));
+            paginationContainer.appendChild(btnLast);
+        }
+        
+        // Botón siguiente
+        const btnNext = document.createElement('div');
+        btnNext.className = 'page-item' + (paginaActual === totalPaginas ? ' disabled' : '');
+        btnNext.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        btnNext.addEventListener('click', () => {
+            if (paginaActual < totalPaginas) {
+                cargarCategorias(paginaActual + 1);
+            }
+        });
+        paginationContainer.appendChild(btnNext);
+    }
+
+    // Paginación manejada por actualizarPaginacion()
 
     searchInput.addEventListener('input', function () {
         const searchTerm = this.value.toLowerCase();

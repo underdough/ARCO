@@ -23,9 +23,259 @@ $puedeAprobar = in_array('aprobar', $permisos);
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .status-pendiente { background: #ffc107; color: #333; }
-        .status-procesada { background: #28a745; color: white; }
-        .status-rechazada { background: #dc3545; color: white; }
+        /* Mejorar espaciado general */
+        .main-content {
+            padding: 25px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 100%;
+        }
+        
+        .header h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+        
+        /* Mejorar tabla */
+        .movements-table {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .movements-table table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        
+        .movements-table thead th {
+            background: #395886;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            border: none;
+            white-space: nowrap;
+        }
+        
+        .movements-table thead th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        
+        .movements-table thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        
+        .movements-table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            white-space: nowrap;
+        }
+        
+        .movements-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Estados */
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-pendiente { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .status-procesada { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-rechazada { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* Acciones */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .action-icon.view {
+            color: #2196F3;
+        }
+        
+        .action-icon.view:hover {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .action-icon.print {
+            color: #4CAF50;
+        }
+        
+        .action-icon.print:hover {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        /* Evitar scroll vertical en main-content */
+        body {
+            overflow-x: hidden;
+        }
+        
+        .main-content {
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: calc(100vh - 20px);
+            box-sizing: border-box;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 20px;
+            }
+            
+            .movements-table {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .header h2 {
+                font-size: 1.4rem;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                flex-direction: column;
+            }
+            
+            .action-buttons select,
+            .action-buttons button {
+                width: 100%;
+            }
+            
+            .movements-table {
+                padding: 10px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }
+            
+            /* Diseño de tarjetas para móviles */
+            .movements-table table {
+                display: block;
+                min-width: auto;
+            }
+            
+            .movements-table thead {
+                display: none;
+            }
+            
+            .movements-table tbody {
+                display: block;
+            }
+            
+            .movements-table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #e9ecef;
+                border-radius: 8px;
+                padding: 15px;
+                background: white;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+            
+            .movements-table tbody td {
+                display: block;
+                text-align: right;
+                padding: 8px 0;
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                white-space: normal;
+            }
+            
+            .movements-table tbody td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 45%;
+                padding-right: 10px;
+                text-align: left;
+                font-weight: 600;
+                color: #395886;
+            }
+            
+            .movements-table tbody td:last-child {
+                text-align: center;
+                padding-left: 0;
+                padding-top: 15px;
+                border-top: 1px solid #e9ecef;
+                margin-top: 10px;
+                display: flex;
+                flex-direction: row;
+            }
+            
+            .movements-table tbody td:last-child::before {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 12px;
+            }
+            
+            .movements-table {
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -212,16 +462,16 @@ $puedeAprobar = in_array('aprobar', $permisos);
                 
                 tbody.innerHTML = devoluciones.map(d => `
                     <tr>
-                        <td>${d.numero_devolucion}</td>
-                        <td>${d.nombre_material || 'N/A'}</td>
-                        <td>${d.cantidad}</td>
-                        <td>${motivoLabels[d.motivo] || d.motivo}</td>
-                        <td>${d.solicitante_nombre || 'N/A'}</td>
-                        <td>${new Date(d.fecha_solicitud).toLocaleDateString()}</td>
-                        <td><span class="status status-${d.estado}">${d.estado}</span></td>
+                        <td data-label="N° Devolución">${d.numero_devolucion}</td>
+                        <td data-label="Producto">${d.nombre_material || 'N/A'}</td>
+                        <td data-label="Cantidad">${d.cantidad}</td>
+                        <td data-label="Motivo">${motivoLabels[d.motivo] || d.motivo}</td>
+                        <td data-label="Solicitante">${d.solicitante_nombre || 'N/A'}</td>
+                        <td data-label="Fecha">${new Date(d.fecha_solicitud).toLocaleDateString()}</td>
+                        <td data-label="Estado"><span class="status status-${d.estado}">${d.estado}</span></td>
                         <td class="actions">
-                            <button class="action-icon view" onclick="verDevolucion(${d.id})"><i class="fas fa-eye"></i></button>
-                            <button class="action-icon print" onclick="window.open('../servicios/imprimir_devolucion.php?id=${d.id}', '_blank')"><i class="fas fa-print"></i></button>
+                            <button class="action-icon view" onclick="verDevolucion(${d.id})" title="Ver detalle"><i class="fas fa-eye"></i></button>
+                            <button class="action-icon print" onclick="window.open('../servicios/imprimir_devolucion.php?id=${d.id}', '_blank')" title="Imprimir"><i class="fas fa-print"></i></button>
                         </td>
                     </tr>
                 `).join('');

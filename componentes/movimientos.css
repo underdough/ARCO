@@ -27,7 +27,7 @@ body {
 
 /* Proteger fuente de íconos */
 i, .fas, .fa, .far, .fab, .fal, .fad {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 .sidebar {
@@ -176,15 +176,22 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     background: white;
-    padding: 15px 20px;
+    padding: 20px 15px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease;
     position: sticky;
     top: 20px;
     z-index: 100;
+    gap: 15px;
+}
+
+.header h2 {
+    font-size: 1.3rem;
+    margin: 0;
+    white-space: nowrap;
 }
 
 .movements-table{
@@ -203,9 +210,9 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     display: flex;
     align-items: center;
     background: #f5f5f5;
-    border-radius: 25px; /* Increased border radius for more rounded corners */
-    padding: 8px 15px;
-    width: 300px;
+    border-radius: 20px;
+    padding: 6px 12px;
+    width: 200px;
     transition: opacity 0.3s ease;
 }
 
@@ -216,11 +223,12 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
 .search-bar input {
     border: none;
     background: transparent;
-    padding: 5px;
+    padding: 4px;
     flex: 1;
     outline: none;
     transition: background-color 0.3s ease;
-    border-radius: 25px; /* Matching border radius for input */
+    border-radius: 20px;
+    font-size: 13px;
 }
 
 .search-bar input:focus {
@@ -229,7 +237,8 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
 
 .search-bar i {
     color: #666;
-    margin-right: 10px;
+    margin-right: 8px;
+    font-size: 13px;
 }
 
 .action-buttons {
@@ -238,7 +247,7 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
 }
 
 .btn {
-    padding: 8px 15px;
+    padding: 6px 12px;
     border-radius: 4px;
     border: none;
     cursor: pointer;
@@ -249,6 +258,11 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     transition: opacity 0.3s ease;
     position: relative;
     overflow: hidden;
+    font-size: 13px;
+}
+
+.btn i {
+    font-size: 13px;
 }
 
 .btn::before {
@@ -681,5 +695,176 @@ tr:hover {
     
     .form-row .form-group {
         margin-bottom: 15px;
+    }
+}
+
+
+/* ========== MEJORAS RESPONSIVE PARA MÓVILES Y TABLETS ========== */
+@media (max-width: 768px) {
+    /* Ajustes generales */
+    .main-content {
+        padding: 15px;
+        padding-top: 70px;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    /* Header responsive */
+    .header {
+        padding: 15px;
+        padding-left: 15px;
+    }
+    
+    .header h2 {
+        font-size: 1.2rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .search-bar{
+        width: 96%;
+    }
+    
+    /* Tabla responsive - convertir a tarjetas */
+    .movements-table,
+    .categories-table,
+    table {
+        display: block;
+        overflow: visible;
+    }
+    
+    table thead {
+        display: none;
+    }
+    
+    table tbody {
+        display: block;
+    }
+    
+    table tbody tr {
+        display: block;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    table tbody tr:hover {
+        background: white;
+    }
+    
+    table tbody td {
+        display: block;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+        padding: 10px 10px 10px 45%;
+        text-align: right;
+        font-size: 14px;
+    }
+    
+    table tbody td:last-child {
+        border-bottom: none;
+        text-align: center;
+        padding-left: 10px;
+        padding-top: 15px;
+    }
+    
+    table tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 40%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    
+    /* Botones de acción */
+    .actions {
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .action-icon {
+        width: 38px;
+        height: 38px;
+    }
+    
+    /* Paginación */
+    .pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    /* Modal responsive */
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        margin: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header {
+        padding: 15px;
+    }
+    
+    .modal-body,
+    .modal form {
+        padding: 15px;
+    }
+    
+    .modal-footer {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Filtros responsive */
+    .filter-controls {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .filter-controls select,
+    .filter-controls input {
+        width: 100%;
+    }
+}
+
+/* Tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .main-content {
+        padding: 15px;
+    }
+    
+    .header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        width: 200px;
+    }
+    
+    table th,
+    table td {
+        padding: 10px 8px;
+        font-size: 13px;
     }
 }

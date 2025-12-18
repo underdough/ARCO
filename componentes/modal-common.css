@@ -19,7 +19,7 @@
 
 /* Proteger fuente de íconos */
 .modal i, .modal .fas, .modal .fa, .modal .far, .modal .fab {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 /* Modal base */
@@ -109,7 +109,7 @@
 
 /* Formularios en modales */
 .modal form {
-    padding: 4px;
+    padding: 20px;
     margin: 0;
 }
 
@@ -269,7 +269,7 @@ select.form-control {
     
     .modal form,
     .modal-body {
-        padding: 13px;
+        padding: 20px;
     }
     
     .modal-footer {

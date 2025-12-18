@@ -15,7 +15,7 @@ $sql = "SELECT
 FROM movimientos m
 LEFT JOIN usuarios u ON m.usuario_id = u.id_usuarios
 LEFT JOIN materiales p ON m.producto_id = p.id_material
-ORDER BY m.fecha DESC";
+ORDER BY m.id DESC";
 
 
 $resultado = $conexion->query($sql);

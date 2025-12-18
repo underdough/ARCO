@@ -4,6 +4,9 @@
         let idProductoEditando = null;
         let ordenActual = { campo: 'nombre', direccion: 'ASC' };
         let busquedaActual = '';
+        let paginaActual = 1;
+        let totalPaginas = 1;
+        const registrosPorPagina = 10;
 
         // Formatear precio en pesos colombianos
         function formatearPrecio(precio) {
@@ -29,26 +32,134 @@
         }
 
         // Cargar productos desde la base de datos
-        async function cargarProductos() {
+        async function cargarProductos(pagina = 1) {
             try {
+                paginaActual = pagina;
+                
                 const params = new URLSearchParams({
                     orden: ordenActual.campo,
                     direccion: ordenActual.direccion,
-                    busqueda: busquedaActual
+                    busqueda: busquedaActual,
+                    pagina: pagina,
+                    limite: registrosPorPagina
                 });
                 
                 const response = await fetch(`../servicios/listar_productos.php?${params}`);
                 const data = await response.json();
+                console.log('Datos recibidos:', data);
                 
                 if (data.success) {
-                    productos = data.data;
+                    // Obtener array de productos
+                    productos = data.data || data.productos || [];
+                    
+                    // Asegurarse de que sea un array
+                    if (!Array.isArray(productos)) {
+                        console.error('productos no es un array:', productos);
+                        productos = [];
+                    }
+                    
+                    const total = data.total || productos.length;
+                    totalPaginas = Math.ceil(total / registrosPorPagina);
+                    
                     renderizarTablaProductos();
+                    actualizarPaginacion();
                 } else {
-                    mostrarNotificacion('Error al cargar productos: ' + data.error, 'error');
+                    mostrarNotificacion('Error al cargar productos: ' + (data.error || data.message), 'error');
                 }
             } catch (error) {
+                console.error('Error cargando productos:', error);
                 mostrarNotificacion('Error de conexión: ' + error.message, 'error');
+                
+                const tbody = document.getElementById('productTableBody');
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                    Error al cargar los productos<br>
+                    <small style="color: #999; margin-top: 5px; display: block;">${error.message}</small>
+                    <button onclick="cargarProductos()" style="margin-top: 15px; padding: 8px 16px; background: #395886; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        <i class="fas fa-sync-alt"></i> Reintentar
+                    </button>
+                </td></tr>`;
             }
+        }
+        
+        // Actualizar paginación
+        function actualizarPaginacion() {
+            const paginationContainer = document.querySelector('.pagination');
+            if (!paginationContainer) return;
+            
+            paginationContainer.innerHTML = '';
+            
+            // Botón anterior
+            const btnPrev = document.createElement('div');
+            btnPrev.className = 'page-item' + (paginaActual === 1 ? ' disabled' : '');
+            btnPrev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            btnPrev.addEventListener('click', () => {
+                if (paginaActual > 1) {
+                    cargarProductos(paginaActual - 1);
+                }
+            });
+            paginationContainer.appendChild(btnPrev);
+            
+            // Páginas
+            const maxBotones = 5;
+            let inicio = Math.max(1, paginaActual - Math.floor(maxBotones / 2));
+            let fin = Math.min(totalPaginas, inicio + maxBotones - 1);
+            
+            if (fin - inicio < maxBotones - 1) {
+                inicio = Math.max(1, fin - maxBotones + 1);
+            }
+            
+            // Primera página
+            if (inicio > 1) {
+                const btn1 = document.createElement('div');
+                btn1.className = 'page-item';
+                btn1.textContent = '1';
+                btn1.addEventListener('click', () => cargarProductos(1));
+                paginationContainer.appendChild(btn1);
+                
+                if (inicio > 2) {
+                    const dots = document.createElement('div');
+                    dots.className = 'page-item disabled';
+                    dots.textContent = '...';
+                    paginationContainer.appendChild(dots);
+                }
+            }
+            
+            // Páginas intermedias
+            for (let i = inicio; i <= fin; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'page-item' + (i === paginaActual ? ' active' : '');
+                btn.textContent = i;
+                btn.addEventListener('click', () => cargarProductos(i));
+                paginationContainer.appendChild(btn);
+            }
+            
+            // Última página
+            if (fin < totalPaginas) {
+                if (fin < totalPaginas - 1) {
+                    const dots = document.createElement('div');
+                    dots.className = 'page-item disabled';
+                    dots.textContent = '...';
+                    paginationContainer.appendChild(dots);
+                }
+                
+                const btnLast = document.createElement('div');
+                btnLast.className = 'page-item';
+                btnLast.textContent = totalPaginas;
+                btnLast.addEventListener('click', () => cargarProductos(totalPaginas));
+                paginationContainer.appendChild(btnLast);
+            }
+            
+            // Botón siguiente
+            const btnNext = document.createElement('div');
+            btnNext.className = 'page-item' + (paginaActual === totalPaginas ? ' disabled' : '');
+            btnNext.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            btnNext.addEventListener('click', () => {
+                if (paginaActual < totalPaginas) {
+                    cargarProductos(paginaActual + 1);
+                }
+            });
+            paginationContainer.appendChild(btnNext);
         }
 
         // Cargar categorías desde la base de datos
@@ -105,21 +216,21 @@
                     <td>${producto.stock}</td>
                     <td>${formatearPrecio(producto.precio)}</td>
                     <td><span class="status ${estadoClass}">${producto.estado}</span></td>
-                    <td>
-                        <div class="actions">
-                            <a href="#" class="action-icon btn-entrada" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'entrada')" title="Entrada de stock" style="color: #28a745;">
+                    <td class="td-acciones" style="text-align: center; padding: 15px 10px; display: block; width: 100%;">
+                        <div class="actions" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 6px; width: 100%;">
+                            <a href="#" class="action-icon btn-entrada" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'entrada')" title="Entrada de stock" style="color: #28a745; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-plus-circle"></i>
                             </a>
-                            <a href="#" class="action-icon btn-salida" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'salida')" title="Salida de stock" style="color: #dc3545;">
+                            <a href="#" class="action-icon btn-salida" onclick="movimientoRapido(${producto.id}, '${producto.nombre}', 'salida')" title="Salida de stock" style="color: #dc3545; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-minus-circle"></i>
                             </a>
-                            <a href="#" class="action-icon btn-historial" onclick="verHistorialProducto(${producto.id}, '${producto.nombre}')" title="Ver historial">
+                            <a href="#" class="action-icon btn-historial" onclick="verHistorialProducto(${producto.id}, '${producto.nombre}')" title="Ver historial" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-history"></i>
                             </a>
-                            <a href="#" class="action-icon btn-editar" onclick="editarProducto(${producto.id})" title="Editar producto">
+                            <a href="#" class="action-icon btn-editar" onclick="editarProducto(${producto.id})" title="Editar producto" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="#" class="action-icon btn-eliminar" onclick="eliminarProducto(${producto.id}, '${producto.nombre}')" title="Eliminar producto">
+                            <a href="#" class="action-icon btn-eliminar" onclick="eliminarProducto(${producto.id}, '${producto.nombre}')" title="Eliminar producto" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </div>

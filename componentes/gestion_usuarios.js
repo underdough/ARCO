@@ -225,7 +225,9 @@ async function abrirModalEditar(userId) {
     document.getElementById('edit_cargos').value = usuario.cargos;
     document.getElementById('edit_estado').value = usuario.estado;
     
-    document.getElementById('editarModal').style.display = 'flex';
+    const modal = document.getElementById('editarModal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 // ===== ACTUALIZAR USUARIO =====
@@ -399,19 +401,25 @@ async function eliminarUsuario(userId, nombreCompleto) {
 
 // ===== MODALES =====
 function abrirModalCrearUsuario() {
-    document.getElementById('crearUsuarioModal').style.display = 'flex';
+    const modal = document.getElementById('crearUsuarioModal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function cerrarModalCrear() {
-    document.getElementById('crearUsuarioModal').style.display = 'none';
+    const modal = document.getElementById('crearUsuarioModal');
+    modal.style.display = 'none';
     document.getElementById('formCrearUsuario').reset();
     document.getElementById('alertContainer').innerHTML = '';
+    document.body.style.overflow = 'auto';
 }
 
 function cerrarModalEditar() {
-    document.getElementById('editarModal').style.display = 'none';
+    const modal = document.getElementById('editarModal');
+    modal.style.display = 'none';
     document.getElementById('formEditarUsuario').reset();
     document.getElementById('alertContainerEdit').innerHTML = '';
+    document.body.style.overflow = 'auto';
 }
 
 // ===== UTILIDADES =====

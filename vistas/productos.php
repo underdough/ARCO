@@ -140,7 +140,6 @@ $puedeExportar = in_array('exportar', $permisos);
     </button>
     
     <script src="../SOLOjavascript/productos.js"></script>
-    <script src="../public/js/admin-verification.js"></script>
     <?php echo generarScriptPermisos('productos'); ?>
     <script>
         // Aplicar permisos a botones de acción en la tabla

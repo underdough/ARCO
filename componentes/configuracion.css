@@ -29,7 +29,7 @@ body {
 
 /* Proteger fuente de íconos */
 i, .fas, .fa, .far, .fab, .fal, .fad {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 .sidebar {

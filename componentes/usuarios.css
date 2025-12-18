@@ -29,7 +29,7 @@ body {
 
 /* Proteger fuente de íconos */
 i, .fas, .fa, .far, .fab, .fal, .fad {
-    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
 .transition-all {
@@ -326,17 +326,22 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
 
 /* Modal editar usuario */
 .modal {
+    display: none !important; /* Forzar que esté oculto por defecto */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.6);
-    display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    display: none; /* oculto por defecto */
+    overflow-y: auto;
+}
+
+/* Solo mostrar cuando se active explícitamente */
+.modal[style*="display: flex"] {
+    display: flex !important;
 }
 
 .modal-content {
@@ -344,10 +349,26 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     background-color: #fff;
     border-radius: 10px;
     width: 90%;
-    max-width: 500px;
+    max-width: 800px; /* Aumentado para pantallas grandes */
+    max-height: 90vh;
+    overflow-y: auto;
     position: relative;
-    box-shadow: var(--shadow-md);
-    animation: fadeInUp 0.4s var(--transition-timing);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: fadeInUp 0.3s ease;
+    margin: 20px;
+}
+
+/* Tamaño específico para pantallas grandes */
+@media (min-width: 1200px) {
+    .modal-content {
+        max-width: 900px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .modal-content {
+        max-width: 1000px;
+    }
 }
 
 .close-btn {
@@ -678,84 +699,6 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
 }
 
-/* Ajustar el modal para que sea un poco más ancho si es necesario */
-.modal-content {
-    background-color: #fff;
-    padding: 0px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 550px; /* Aumentado de 500px a 550px */
-    position: relative;
-    box-shadow: var(--shadow-md);
-    animation: fadeInUp 0.4s var(--transition-timing);
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #555;
-    transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-    color: var(--danger-color);
-}
-
-.modal-content form {
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-content label {
-    margin-top: 0;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
-}
-
-.modal-content input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.modal-content input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(57, 88, 134, 0.1);
-}
-
-/* Ajustar el modal para que sea un poco más ancho si es necesario */
-.modal-content {
-    background-color: #fff;
-    padding: 0px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 550px; /* Aumentado de 500px a 550px */
-    position: relative;
-    box-shadow: var(--shadow-md);
-    animation: fadeInUp 0.4s var(--transition-timing);
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #555;
-    transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-    color: var(--danger-color);
-}
-
 .modal-content form {
     display: flex;
     flex-direction: column;
@@ -934,37 +877,176 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
         will-change: transform;
     }
     
-    .sidebar.active {
+    .sidebar.active,
+    .sidebar.mobile-open {
         transform: translateX(0);
+        width: 250px;
     }
     
     .main-content {
         margin-left: 0;
         width: 100%;
+        padding: 15px;
+        padding-top: 70px;
     }
     
     .header {
-        padding-left: 60px;
+        padding: 15px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .header h2 {
+        font-size: 1.2rem;
+        text-align: center;
     }
     
     .sidebar-toggle {
-        display: block;
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1001;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all var(--transition-speed) var(--transition-timing);
-        will-change: transform;
+        display: none;
     }
     
-    .sidebar-toggle:hover {
-        background: var(--secondary-color);
-        transform: scale(1.1);
+    /* Tabla de usuarios responsive */
+    .users-table {
+        overflow: visible;
+    }
+    
+    .users-table table {
+        display: block;
+    }
+    
+    .users-table thead {
+        display: none;
+    }
+    
+    .users-table tbody {
+        display: block;
+    }
+    
+    .users-table tbody tr {
+        display: block;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .users-table tbody td {
+        display: block;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+        padding: 10px 10px 10px 45%;
+        text-align: right;
+        font-size: 14px;
+    }
+    
+    .users-table tbody td:last-child {
+        border-bottom: none;
+        text-align: center;
+        padding-left: 10px;
+        padding-top: 15px;
+    }
+    
+    .users-table tbody td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 40%;
+        padding-right: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary-color);
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    
+    /* Modal responsive */
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        margin: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* ========== MEJORAS RESPONSIVE ADICIONALES ========== */
+@media (max-width: 768px) {
+    /* Filtros responsive */
+    .filters-container {
+        padding: 15px;
+    }
+    
+    .filters-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .filter-input,
+    .filter-select {
+        width: 100%;
+    }
+    
+    .btn-filter,
+    .btn-clear {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Acciones de usuarios */
+    .users-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .users-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Etiquetas para tarjetas móviles de usuarios */
+    .users-table tbody td:nth-of-type(1):before { content: "ID"; }
+    .users-table tbody td:nth-of-type(2):before { content: "Documento"; }
+    .users-table tbody td:nth-of-type(3):before { content: "Nombre"; }
+    .users-table tbody td:nth-of-type(4):before { content: "Email"; }
+    .users-table tbody td:nth-of-type(5):before { content: "Rol"; }
+    .users-table tbody td:nth-of-type(6):before { content: "Estado"; }
+    .users-table tbody td:nth-of-type(7):before { content: "Acciones"; }
+    
+    /* Evitar desbordamiento del correo en móviles */
+    .modal-content input[type="email"] {
+        word-break: break-all;
+        overflow-wrap: break-word;
+        font-size: 14px;
+    }
+    
+    /* Ajustar el ancho del modal en móviles */
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        padding: 0;
+    }
+    
+    /* Ajustar form-row en móviles */
+    .form-row {
+        grid-template-columns: 1fr !important;
     }
 }

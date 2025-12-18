@@ -66,7 +66,7 @@ if (!empty($busqueda)) {
     $types .= "ssssssss";
 }
 
-$sql .= " ORDER BY m.fecha DESC";
+$sql .= " ORDER BY m.id DESC";
 
 $movimientos = [];
 
