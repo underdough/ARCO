@@ -278,6 +278,7 @@
             document.getElementById('productName').value = producto.nombre;
             document.getElementById('productCategory').value = getCategoriaIdByName(producto.categoria);
             document.getElementById('productStock').value = producto.stock;
+            document.getElementById('productPrice').value = producto.precio;
             document.getElementById('productDescription').value = '';
         }
 
@@ -495,6 +496,7 @@
                     nombre: document.getElementById('productName').value.trim(),
                     categoria_id: parseInt(document.getElementById('productCategory').value),
                     stock: parseInt(document.getElementById('productStock').value),
+                    precio: parseFloat(document.getElementById('productPrice').value) || 0,
                     descripcion: document.getElementById('productDescription').value.trim()
                 };
                 
@@ -511,6 +513,11 @@
                 
                 if (formData.stock < 0) {
                     mostrarNotificacion('El stock no puede ser negativo', 'error');
+                    return;
+                }
+                
+                if (formData.precio < 0) {
+                    mostrarNotificacion('El precio no puede ser negativo', 'error');
                     return;
                 }
                 

@@ -31,6 +31,7 @@ try {
     $nombre = isset($input['nombre']) ? trim($input['nombre']) : '';
     $categoria_id = isset($input['categoria_id']) ? (int)$input['categoria_id'] : 0;
     $stock = isset($input['stock']) ? (int)$input['stock'] : 0;
+    $precio = isset($input['precio']) ? (float)$input['precio'] : 0;
     $descripcion = isset($input['descripcion']) ? trim($input['descripcion']) : '';
     
     // Validaciones
@@ -48,6 +49,10 @@ try {
     
     if ($stock < 0) {
         throw new Exception('El stock no puede ser negativo');
+    }
+    
+    if ($precio < 0) {
+        throw new Exception('El precio no puede ser negativo');
     }
     
     // Verificar que el producto existe
@@ -77,11 +82,12 @@ try {
             nombre_material = ?, 
             id_categorias = ?, 
             stock = ?,
+            precio = ?,
             disponibilidad = CASE WHEN ? > 0 THEN 1 ELSE 0 END
             WHERE id_material = ?";
     
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param('siiii', $nombre, $categoria_id, $stock, $stock, $id);
+    $stmt->bind_param('siidii', $nombre, $categoria_id, $stock, $precio, $stock, $id);
     
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
