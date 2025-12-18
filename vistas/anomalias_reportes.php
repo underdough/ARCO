@@ -10,6 +10,15 @@ require_once '../servicios/menu_dinamico.php';
 $nombre = $_SESSION['nombre'] ?? '';
 $apellido = $_SESSION['apellido'] ?? '';
 $nombreCompleto = $nombre . ' ' . $apellido;
+$rol = $_SESSION['rol'] ?? 'usuario';
+$rolesLegibles = [
+    'administrador' => 'Administrador',
+    'gerente' => 'Gerente',
+    'supervisor' => 'Supervisor',
+    'almacenista' => 'Almacenista',
+    'funcionario' => 'Funcionario'
+];
+$rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
 ?>
 
 <!DOCTYPE html>
@@ -227,7 +236,10 @@ $nombreCompleto = $nombre . ' ' . $apellido;
             <h2>Reportes de Anomalías</h2>
             <div class="user-info">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
-                <span>Hola, <strong><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <span>Hola, <strong><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
+                    <span style="font-size: 12px; color: rgba(0,0,0,0.7);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
+                </div>
             </div>
         </div>
         

@@ -18,6 +18,15 @@ require_once '../servicios/menu_dinamico.php';
 $nombre = $_SESSION['nombre'] ?? '';
 $apellido = $_SESSION['apellido'] ?? '';
 $nombreCompleto = $nombre . ' ' . $apellido;
+$rol = $_SESSION['rol'] ?? 'usuario';
+$rolesLegibles = [
+    'administrador' => 'Administrador',
+    'gerente' => 'Gerente',
+    'supervisor' => 'Supervisor',
+    'almacenista' => 'Almacenista',
+    'funcionario' => 'Funcionario'
+];
+$rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
 ?>
 
 <!DOCTYPE html>
@@ -407,7 +416,13 @@ $nombreCompleto = $nombre . ' ' . $apellido;
 
     <div class="main-content" id="mainContent">
         <div class="header">
-            <h2><i class="fas fa-users-cog"></i> Gestión Avanzada de Usuarios</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <h2><i class="fas fa-users-cog"></i> Gestión Avanzada de Usuarios</h2>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12px; margin-right:20px;">
+                    <span><strong><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
+                    <span style="color: rgb(0 0 0 / 70%);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
+                </div>
+            </div>
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="abrirModalCrearUsuario()">
                     <i class="fas fa-user-plus"></i> Nuevo Usuario

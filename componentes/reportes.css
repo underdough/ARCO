@@ -26,6 +26,12 @@ i, .fas, .fa, .far, .fab, .fal, .fad {
     font-family: 'Font Awesome 6 Free', 'Font Awesome 5 Free';
 }
 
+.user-info{
+    display:flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 .sidebar {
     width: 250px;
     background-color: var(--primary-color);

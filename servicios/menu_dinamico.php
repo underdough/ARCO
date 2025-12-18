@@ -491,16 +491,73 @@ function generarMenuHTML($paginaActual = '') {
  * @return string HTML del sidebar completo
  */
 function generarSidebarCompleto($paginaActual = '') {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    $nombreUsuario = $_SESSION['nombre'] ?? 'Usuario';
+    $apellidoUsuario = $_SESSION['apellido'] ?? '';
+    $rolUsuario = $_SESSION['rol'] ?? 'usuario';
+    
+    // Mapeo de roles a etiquetas legibles
+    $rolesLegibles = [
+        'administrador' => 'Administrador',
+        'gerente' => 'Gerente',
+        'supervisor' => 'Supervisor',
+        'almacenista' => 'Almacenista',
+        'funcionario' => 'Funcionario'
+    ];
+    
+    $rolLegible = $rolesLegibles[$rolUsuario] ?? ucfirst($rolUsuario);
+    
     $html = '<div class="sidebar">
         <div class="sidebar-header">
             <h1>ARCO</h1>
             <p class="subtlo">Gestión de Inventario</p>
+            <div class="user-info" style="
+                margin-top: 15px;
+                padding: 10px;
+                background: rgba(255,255,255,0.1);
+                border-radius: 5px;
+                font-size: 11px;
+                text-align: center;
+                border-top: 1px solid rgba(255,255,255,0.2);
+            ">
+                <p style="margin: 0 0 5px 0; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ' . htmlspecialchars($nombreUsuario . ' ' . $apellidoUsuario) . '
+                </p>
+                <p style="margin: 0; color: rgba(255,255,255,0.8); font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">
+                    ' . htmlspecialchars($rolLegible) . '
+                </p>
+            </div>
         </div>';
     
     $html .= generarMenuHTML($paginaActual);
     $html .= '</div>';
     
     return $html;
+}
+
+/**
+ * Obtiene el rol legible del usuario
+ * @return string Rol legible
+ */
+function obtenerRolLegible() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    $rolUsuario = $_SESSION['rol'] ?? 'usuario';
+    
+    $rolesLegibles = [
+        'administrador' => 'Administrador',
+        'gerente' => 'Gerente',
+        'supervisor' => 'Supervisor',
+        'almacenista' => 'Almacenista',
+        'funcionario' => 'Funcionario'
+    ];
+    
+    return $rolesLegibles[$rolUsuario] ?? ucfirst($rolUsuario);
 }
 
 /**
@@ -524,10 +581,12 @@ function generarScriptPermisos($modulo) {
     }
     
     $json = json_encode($permisosObj);
+    $rolLegible = obtenerRolLegible();
     
     return "<script>
         window.PERMISOS_USUARIO = $json;
         window.ROL_USUARIO = '" . htmlspecialchars($rol) . "';
+        window.ROL_LEGIBLE = '" . htmlspecialchars($rolLegible) . "';
         
         // Funciones helper para verificar permisos en JS
         function tienePermiso(permiso) {

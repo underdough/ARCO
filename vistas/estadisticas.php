@@ -22,6 +22,16 @@ $nombre = $_SESSION['nombre'] ?? '';
 $apellido = $_SESSION['apellido'] ?? '';
 $nombreCompleto = $nombre . ' ' . $apellido;
 $rol = $_SESSION['rol'] ?? '';
+
+// Mapeo de roles a etiquetas legibles
+$rolesLegibles = [
+    'administrador' => 'Administrador',
+    'gerente' => 'Gerente',
+    'supervisor' => 'Supervisor',
+    'almacenista' => 'Almacenista',
+    'funcionario' => 'Funcionario'
+];
+$rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -44,7 +54,10 @@ $rol = $_SESSION['rol'] ?? '';
             <h2><i class="fas fa-chart-bar"></i> Estadísticas del Sistema</h2>
             <div class="user-info">
                 <i class="fas fa-user-circle"></i>
-                <span>Hola, <?php echo htmlspecialchars($nombreCompleto); ?></span>
+                <div style="display: flex; flex-direction: column; gap: 2px; flex-wrap:wrap;">
+                    <span>Hola, <?php echo htmlspecialchars($nombreCompleto); ?></span>
+                    <span style="font-size: 12px; color: rgba(255,255,255,0.7);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
+                </div>
             </div>
         </div>
         

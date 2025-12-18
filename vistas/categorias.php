@@ -17,6 +17,20 @@ $permisos = obtenerPermisosUsuario('categorias');
 $puedeCrear = in_array('crear', $permisos);
 $puedeEditar = in_array('editar', $permisos);
 $puedeEliminar = in_array('eliminar', $permisos);
+
+// Obtener información del usuario
+$nombre = $_SESSION['nombre'] ?? '';
+$apellido = $_SESSION['apellido'] ?? '';
+$nombreCompleto = $nombre . ' ' . $apellido;
+$rol = $_SESSION['rol'] ?? 'usuario';
+$rolesLegibles = [
+    'administrador' => 'Administrador',
+    'gerente' => 'Gerente',
+    'supervisor' => 'Supervisor',
+    'almacenista' => 'Almacenista',
+    'funcionario' => 'Funcionario'
+];
+$rolLegible = $rolesLegibles[$rol] ?? ucfirst($rol);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -48,7 +62,13 @@ $puedeEliminar = in_array('eliminar', $permisos);
 
     <div class="main-content">
         <div class="header">
-            <h2>Gestión de Categorías</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <h2>Gestión de Categorías</h2>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12px;">
+                    <span><strong><?php echo htmlspecialchars($nombreCompleto); ?></strong></span>
+                    <span style="color: rgb(0 0 0 / 70%);">Rol: <strong><?php echo htmlspecialchars($rolLegible); ?></strong></span>
+                </div>
+            </div>
             <div class="search-bar">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Buscar categorías...">
